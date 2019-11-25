@@ -1,0 +1,32 @@
+image: golang:latest
+
+variables:
+  BIN_NAME: game-service
+  ARTIFACTS_DIR: artifacts
+  GO_PROJECT: gitlab.com/pokesync/game-service
+
+stages:
+  - build
+  - test
+
+before_script:
+  - mkdir -p ${GOPATH}/src/${GO_PROJECT}
+  - mkdir -p ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}
+  - go get -u github.com/golang/dep/cmd/dep
+  - cp -r ${CI_PROJECT_DIR}/* ${GOPATH}/src/${GO_PROJECT}/
+  - cd ${GOPATH}/src/${GO_PROJECT}
+
+build-game-service:
+  stage: build
+  script:
+    - dep ensure
+    - go build -o ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}/${BIN_NAME}/cmd/${ARTIFACTS_DIR}
+  artifacts:
+    paths:
+      - ${ARTIFACTS_DIR}
+
+test-game-service:
+  stage: test
+  script:
+    - dep ensure
+    - go test -v -cover ./...
