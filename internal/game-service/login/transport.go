@@ -1,7 +1,7 @@
 package login
 
 import (
-	"gitlab.com/pokesync/game-service/internal/pokesync/client"
+	"gitlab.com/pokesync/game-service/internal/game-service/client"
 	"gitlab.com/pokesync/game-service/pkg/bytes"
 )
 

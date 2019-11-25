@@ -1,7 +1,7 @@
 package server
 
 import (
-	"gitlab.com/pokesync/game-service/internal/pokesync/client"
+	"gitlab.com/pokesync/game-service/internal/game-service/client"
 	"go.uber.org/zap"
 	"net"
 	"strconv"

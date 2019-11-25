@@ -2,9 +2,9 @@ package game
 
 import (
 	"fmt"
-	"gitlab.com/pokesync/game-service/internal/pokesync/account"
-	"gitlab.com/pokesync/game-service/internal/pokesync/character"
-	"gitlab.com/pokesync/game-service/internal/pokesync/client"
+	"gitlab.com/pokesync/game-service/internal/game-service/account"
+	"gitlab.com/pokesync/game-service/internal/game-service/character"
+	"gitlab.com/pokesync/game-service/internal/game-service/client"
 	"time"
 )
 

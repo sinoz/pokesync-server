@@ -1,13 +1,13 @@
 package main
 
 import (
-	"gitlab.com/pokesync/game-service/internal/pokesync/account"
-	"gitlab.com/pokesync/game-service/internal/pokesync/character"
-	"gitlab.com/pokesync/game-service/internal/pokesync/chat"
-	"gitlab.com/pokesync/game-service/internal/pokesync/client"
-	"gitlab.com/pokesync/game-service/internal/pokesync/game"
-	"gitlab.com/pokesync/game-service/internal/pokesync/login"
-	"gitlab.com/pokesync/game-service/internal/pokesync/server"
+	"gitlab.com/pokesync/game-service/internal/game-service/account"
+	"gitlab.com/pokesync/game-service/internal/game-service/character"
+	"gitlab.com/pokesync/game-service/internal/game-service/chat"
+	"gitlab.com/pokesync/game-service/internal/game-service/client"
+	"gitlab.com/pokesync/game-service/internal/game-service/game"
+	"gitlab.com/pokesync/game-service/internal/game-service/login"
+	"gitlab.com/pokesync/game-service/internal/game-service/server"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"

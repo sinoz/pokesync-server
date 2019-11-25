@@ -1,6 +1,6 @@
 package login
 
-import "gitlab.com/pokesync/game-service/internal/pokesync/account"
+import "gitlab.com/pokesync/game-service/internal/game-service/account"
 
 // Authenticator authenticates users.
 type Authenticator struct {

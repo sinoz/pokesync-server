@@ -1,7 +1,7 @@
 package character
 
 import (
-	"gitlab.com/pokesync/game-service/internal/pokesync/account"
+	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"sync"
 )
 

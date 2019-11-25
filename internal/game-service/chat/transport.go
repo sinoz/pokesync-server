@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"gitlab.com/pokesync/game-service/internal/pokesync/character"
+	"gitlab.com/pokesync/game-service/internal/game-service/character"
 )
 
 // ChannelId is an alias of an int that represents the channel id.

@@ -1,6 +1,6 @@
 package character
 
-import "gitlab.com/pokesync/game-service/internal/pokesync/client"
+import "gitlab.com/pokesync/game-service/internal/game-service/client"
 
 type Config struct {
 	WorkerCount int
