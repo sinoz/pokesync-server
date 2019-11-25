@@ -1,0 +1,27 @@
+{
+  "id" : 4,
+  "name" : "CHARMANDER",
+  "nitroLabelId" : 4,
+  "height" : 6,
+  "weight" : 85,
+  "baseExperience" : 62,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 39, 52, 43, 60, 50, 65 ],
+  "abilities" : [ "BLAZE", "SOLAR-POWER" ],
+  "previousEvolution" : null,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 301,
+    "maleFrontSpriteGraphicFileId" : 27,
+    "maleBackSpriteGraphicFileId" : 25,
+    "femaleFrontSpriteGraphicFileId" : 26,
+    "femaleBackSpriteGraphicFileId" : 24,
+    "regularPaletteFileId" : 28,
+    "shinyPaletteFileId" : 29
+  }
+}

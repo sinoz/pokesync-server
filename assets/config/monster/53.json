@@ -1,0 +1,27 @@
+{
+  "id" : 53,
+  "name" : "PERSIAN",
+  "nitroLabelId" : 53,
+  "height" : 10,
+  "weight" : 320,
+  "baseExperience" : 154,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 65, 70, 60, 65, 65, 115 ],
+  "abilities" : [ "LIMBER", "TECHNICIAN", "UNNERVE" ],
+  "previousEvolution" : 52,
+  "genderRate" : 4,
+  "captureRate" : 90,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 351,
+    "maleFrontSpriteGraphicFileId" : 321,
+    "maleBackSpriteGraphicFileId" : 319,
+    "femaleFrontSpriteGraphicFileId" : 320,
+    "femaleBackSpriteGraphicFileId" : 318,
+    "regularPaletteFileId" : 322,
+    "shinyPaletteFileId" : 323
+  }
+}

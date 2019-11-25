@@ -1,0 +1,27 @@
+{
+  "id" : 116,
+  "name" : "HORSEA",
+  "nitroLabelId" : 116,
+  "height" : 4,
+  "weight" : 80,
+  "baseExperience" : 59,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 30, 40, 70, 70, 25, 60 ],
+  "abilities" : [ "SWIFT-SWIM", "SNIPER", "DAMP" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 225,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 414,
+    "maleFrontSpriteGraphicFileId" : 699,
+    "maleBackSpriteGraphicFileId" : 697,
+    "femaleFrontSpriteGraphicFileId" : 698,
+    "femaleBackSpriteGraphicFileId" : 696,
+    "regularPaletteFileId" : 700,
+    "shinyPaletteFileId" : 701
+  }
+}

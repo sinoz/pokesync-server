@@ -1,0 +1,27 @@
+{
+  "id" : 146,
+  "name" : "MOLTRES",
+  "nitroLabelId" : 146,
+  "height" : 20,
+  "weight" : 600,
+  "baseExperience" : 261,
+  "types" : {
+    "first" : "FIRE",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 90, 100, 90, 125, 85, 90 ],
+  "abilities" : [ "PRESSURE", "FLAME-BODY" ],
+  "previousEvolution" : null,
+  "genderRate" : -1,
+  "captureRate" : 3,
+  "baseHappiness" : 35,
+  "visuals" : {
+    "overworldFileId" : 444,
+    "maleFrontSpriteGraphicFileId" : 879,
+    "maleBackSpriteGraphicFileId" : 877,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 880,
+    "shinyPaletteFileId" : 881
+  }
+}

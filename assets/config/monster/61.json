@@ -1,0 +1,27 @@
+{
+  "id" : 61,
+  "name" : "POLIWHIRL",
+  "nitroLabelId" : 61,
+  "height" : 10,
+  "weight" : 200,
+  "baseExperience" : 135,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 65, 65, 65, 50, 50, 90 ],
+  "abilities" : [ "WATER-ABSORB", "DAMP", "SWIFT-SWIM" ],
+  "previousEvolution" : 60,
+  "genderRate" : 4,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 359,
+    "maleFrontSpriteGraphicFileId" : 369,
+    "maleBackSpriteGraphicFileId" : 367,
+    "femaleFrontSpriteGraphicFileId" : 368,
+    "femaleBackSpriteGraphicFileId" : 366,
+    "regularPaletteFileId" : 370,
+    "shinyPaletteFileId" : 371
+  }
+}

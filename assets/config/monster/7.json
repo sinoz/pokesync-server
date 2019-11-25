@@ -1,0 +1,27 @@
+{
+  "id" : 7,
+  "name" : "SQUIRTLE",
+  "nitroLabelId" : 7,
+  "height" : 5,
+  "weight" : 90,
+  "baseExperience" : 63,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 44, 48, 65, 50, 64, 43 ],
+  "abilities" : [ "TORRENT", "RAIN-DISH" ],
+  "previousEvolution" : null,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 304,
+    "maleFrontSpriteGraphicFileId" : 45,
+    "maleBackSpriteGraphicFileId" : 43,
+    "femaleFrontSpriteGraphicFileId" : 44,
+    "femaleBackSpriteGraphicFileId" : 42,
+    "regularPaletteFileId" : 46,
+    "shinyPaletteFileId" : 47
+  }
+}

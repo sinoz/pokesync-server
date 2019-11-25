@@ -1,0 +1,27 @@
+{
+  "id" : 50,
+  "name" : "DIGLETT",
+  "nitroLabelId" : 50,
+  "height" : 2,
+  "weight" : 8,
+  "baseExperience" : 53,
+  "types" : {
+    "first" : "GROUND",
+    "second" : null
+  },
+  "baseStats" : [ 10, 55, 25, 35, 45, 95 ],
+  "abilities" : [ "SAND-VEIL", "ARENA-TRAP", "SAND-FORCE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 348,
+    "maleFrontSpriteGraphicFileId" : 303,
+    "maleBackSpriteGraphicFileId" : 301,
+    "femaleFrontSpriteGraphicFileId" : 302,
+    "femaleBackSpriteGraphicFileId" : 300,
+    "regularPaletteFileId" : 304,
+    "shinyPaletteFileId" : 305
+  }
+}

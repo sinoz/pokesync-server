@@ -1,0 +1,27 @@
+{
+  "id" : 93,
+  "name" : "HAUNTER",
+  "nitroLabelId" : 93,
+  "height" : 16,
+  "weight" : 1,
+  "baseExperience" : 142,
+  "types" : {
+    "first" : "GHOST",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 45, 50, 45, 115, 55, 95 ],
+  "abilities" : [ "LEVITATE" ],
+  "previousEvolution" : 92,
+  "genderRate" : 4,
+  "captureRate" : 90,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 391,
+    "maleFrontSpriteGraphicFileId" : 561,
+    "maleBackSpriteGraphicFileId" : 559,
+    "femaleFrontSpriteGraphicFileId" : 560,
+    "femaleBackSpriteGraphicFileId" : 558,
+    "regularPaletteFileId" : 562,
+    "shinyPaletteFileId" : 563
+  }
+}

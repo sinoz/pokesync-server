@@ -1,0 +1,27 @@
+{
+  "id" : 139,
+  "name" : "OMASTAR",
+  "nitroLabelId" : 139,
+  "height" : 10,
+  "weight" : 350,
+  "baseExperience" : 173,
+  "types" : {
+    "first" : "ROCK",
+    "second" : "WATER"
+  },
+  "baseStats" : [ 70, 60, 125, 115, 70, 55 ],
+  "abilities" : [ "SWIFT-SWIM", "SHELL-ARMOR", "WEAK-ARMOR" ],
+  "previousEvolution" : 138,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 437,
+    "maleFrontSpriteGraphicFileId" : 837,
+    "maleBackSpriteGraphicFileId" : 835,
+    "femaleFrontSpriteGraphicFileId" : 836,
+    "femaleBackSpriteGraphicFileId" : 834,
+    "regularPaletteFileId" : 838,
+    "shinyPaletteFileId" : 839
+  }
+}

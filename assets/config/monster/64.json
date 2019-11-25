@@ -1,0 +1,27 @@
+{
+  "id" : 64,
+  "name" : "KADABRA",
+  "nitroLabelId" : 64,
+  "height" : 13,
+  "weight" : 565,
+  "baseExperience" : 140,
+  "types" : {
+    "first" : "PSYCHIC",
+    "second" : null
+  },
+  "baseStats" : [ 40, 35, 30, 120, 70, 105 ],
+  "abilities" : [ "SYNCHRONIZE", "INNER-FOCUS", "MAGIC-GUARD" ],
+  "previousEvolution" : 63,
+  "genderRate" : 2,
+  "captureRate" : 100,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 362,
+    "maleFrontSpriteGraphicFileId" : 387,
+    "maleBackSpriteGraphicFileId" : 385,
+    "femaleFrontSpriteGraphicFileId" : 386,
+    "femaleBackSpriteGraphicFileId" : 384,
+    "regularPaletteFileId" : 388,
+    "shinyPaletteFileId" : 389
+  }
+}

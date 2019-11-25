@@ -1,0 +1,27 @@
+{
+  "id" : 91,
+  "name" : "CLOYSTER",
+  "nitroLabelId" : 91,
+  "height" : 15,
+  "weight" : 1325,
+  "baseExperience" : 184,
+  "types" : {
+    "first" : "WATER",
+    "second" : "ICE"
+  },
+  "baseStats" : [ 50, 95, 180, 85, 45, 70 ],
+  "abilities" : [ "SHELL-ARMOR", "SKILL-LINK", "OVERCOAT" ],
+  "previousEvolution" : 90,
+  "genderRate" : 4,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 389,
+    "maleFrontSpriteGraphicFileId" : 549,
+    "maleBackSpriteGraphicFileId" : 547,
+    "femaleFrontSpriteGraphicFileId" : 548,
+    "femaleBackSpriteGraphicFileId" : 546,
+    "regularPaletteFileId" : 550,
+    "shinyPaletteFileId" : 551
+  }
+}

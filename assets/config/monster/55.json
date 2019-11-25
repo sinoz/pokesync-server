@@ -1,0 +1,27 @@
+{
+  "id" : 55,
+  "name" : "GOLDUCK",
+  "nitroLabelId" : 55,
+  "height" : 17,
+  "weight" : 766,
+  "baseExperience" : 175,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 80, 82, 78, 95, 80, 85 ],
+  "abilities" : [ "DAMP", "CLOUD-NINE", "SWIFT-SWIM" ],
+  "previousEvolution" : 54,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 353,
+    "maleFrontSpriteGraphicFileId" : 333,
+    "maleBackSpriteGraphicFileId" : 331,
+    "femaleFrontSpriteGraphicFileId" : 332,
+    "femaleBackSpriteGraphicFileId" : 330,
+    "regularPaletteFileId" : 334,
+    "shinyPaletteFileId" : 335
+  }
+}

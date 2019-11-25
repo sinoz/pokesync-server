@@ -1,0 +1,27 @@
+{
+  "id" : 83,
+  "name" : "FARFETCHD",
+  "nitroLabelId" : 83,
+  "height" : 8,
+  "weight" : 150,
+  "baseExperience" : 132,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 52, 90, 55, 58, 62, 60 ],
+  "abilities" : [ "KEEN-EYE", "INNER-FOCUS", "DEFIANT" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 381,
+    "maleFrontSpriteGraphicFileId" : 501,
+    "maleBackSpriteGraphicFileId" : 499,
+    "femaleFrontSpriteGraphicFileId" : 500,
+    "femaleBackSpriteGraphicFileId" : 498,
+    "regularPaletteFileId" : 502,
+    "shinyPaletteFileId" : 503
+  }
+}

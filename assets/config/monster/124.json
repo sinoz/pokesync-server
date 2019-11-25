@@ -1,0 +1,27 @@
+{
+  "id" : 124,
+  "name" : "JYNX",
+  "nitroLabelId" : 124,
+  "height" : 14,
+  "weight" : 406,
+  "baseExperience" : 159,
+  "types" : {
+    "first" : "ICE",
+    "second" : "PSYCHIC"
+  },
+  "baseStats" : [ 65, 50, 35, 115, 95, 95 ],
+  "abilities" : [ "OBLIVIOUS", "FOREWARN", "DRY-SKIN" ],
+  "previousEvolution" : 238,
+  "genderRate" : 8,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 422,
+    "maleFrontSpriteGraphicFileId" : -1,
+    "maleBackSpriteGraphicFileId" : -1,
+    "femaleFrontSpriteGraphicFileId" : 746,
+    "femaleBackSpriteGraphicFileId" : 744,
+    "regularPaletteFileId" : 748,
+    "shinyPaletteFileId" : 749
+  }
+}

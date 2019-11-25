@@ -1,0 +1,27 @@
+{
+  "id" : 147,
+  "name" : "DRATINI",
+  "nitroLabelId" : 147,
+  "height" : 18,
+  "weight" : 33,
+  "baseExperience" : 60,
+  "types" : {
+    "first" : "DRAGON",
+    "second" : null
+  },
+  "baseStats" : [ 41, 64, 45, 50, 50, 50 ],
+  "abilities" : [ "SHED-SKIN", "MARVEL-SCALE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 35,
+  "visuals" : {
+    "overworldFileId" : 445,
+    "maleFrontSpriteGraphicFileId" : 885,
+    "maleBackSpriteGraphicFileId" : 883,
+    "femaleFrontSpriteGraphicFileId" : 884,
+    "femaleBackSpriteGraphicFileId" : 882,
+    "regularPaletteFileId" : 886,
+    "shinyPaletteFileId" : 887
+  }
+}

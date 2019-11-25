@@ -1,0 +1,27 @@
+{
+  "id" : 94,
+  "name" : "GENGAR",
+  "nitroLabelId" : 94,
+  "height" : 15,
+  "weight" : 405,
+  "baseExperience" : 225,
+  "types" : {
+    "first" : "GHOST",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 60, 65, 60, 130, 75, 110 ],
+  "abilities" : [ "CURSED-BODY" ],
+  "previousEvolution" : 93,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 392,
+    "maleFrontSpriteGraphicFileId" : 567,
+    "maleBackSpriteGraphicFileId" : 565,
+    "femaleFrontSpriteGraphicFileId" : 566,
+    "femaleBackSpriteGraphicFileId" : 564,
+    "regularPaletteFileId" : 568,
+    "shinyPaletteFileId" : 569
+  }
+}

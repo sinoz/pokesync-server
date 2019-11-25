@@ -1,0 +1,27 @@
+{
+  "id" : 70,
+  "name" : "WEEPINBELL",
+  "nitroLabelId" : 70,
+  "height" : 10,
+  "weight" : 64,
+  "baseExperience" : 137,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 65, 90, 50, 85, 45, 55 ],
+  "abilities" : [ "CHLOROPHYLL", "GLUTTONY" ],
+  "previousEvolution" : 69,
+  "genderRate" : 4,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 368,
+    "maleFrontSpriteGraphicFileId" : 423,
+    "maleBackSpriteGraphicFileId" : 421,
+    "femaleFrontSpriteGraphicFileId" : 422,
+    "femaleBackSpriteGraphicFileId" : 420,
+    "regularPaletteFileId" : 424,
+    "shinyPaletteFileId" : 425
+  }
+}

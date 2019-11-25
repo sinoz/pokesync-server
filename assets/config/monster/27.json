@@ -1,0 +1,27 @@
+{
+  "id" : 27,
+  "name" : "SANDSHREW",
+  "nitroLabelId" : 27,
+  "height" : 6,
+  "weight" : 120,
+  "baseExperience" : 60,
+  "types" : {
+    "first" : "GROUND",
+    "second" : null
+  },
+  "baseStats" : [ 50, 75, 85, 20, 30, 40 ],
+  "abilities" : [ "SAND-VEIL", "SAND-RUSH" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 325,
+    "maleFrontSpriteGraphicFileId" : 165,
+    "maleBackSpriteGraphicFileId" : 163,
+    "femaleFrontSpriteGraphicFileId" : 164,
+    "femaleBackSpriteGraphicFileId" : 162,
+    "regularPaletteFileId" : 166,
+    "shinyPaletteFileId" : 167
+  }
+}

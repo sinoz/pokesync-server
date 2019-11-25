@@ -1,0 +1,27 @@
+{
+  "id" : 79,
+  "name" : "SLOWPOKE",
+  "nitroLabelId" : 79,
+  "height" : 12,
+  "weight" : 360,
+  "baseExperience" : 63,
+  "types" : {
+    "first" : "WATER",
+    "second" : "PSYCHIC"
+  },
+  "baseStats" : [ 90, 65, 65, 40, 40, 15 ],
+  "abilities" : [ "OBLIVIOUS", "OWN-TEMPO", "REGENERATOR" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 377,
+    "maleFrontSpriteGraphicFileId" : 477,
+    "maleBackSpriteGraphicFileId" : 475,
+    "femaleFrontSpriteGraphicFileId" : 476,
+    "femaleBackSpriteGraphicFileId" : 474,
+    "regularPaletteFileId" : 478,
+    "shinyPaletteFileId" : 479
+  }
+}

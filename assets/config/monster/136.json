@@ -1,0 +1,27 @@
+{
+  "id" : 136,
+  "name" : "FLAREON",
+  "nitroLabelId" : 136,
+  "height" : 9,
+  "weight" : 250,
+  "baseExperience" : 184,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 65, 130, 60, 95, 110, 65 ],
+  "abilities" : [ "FLASH-FIRE", "GUTS" ],
+  "previousEvolution" : 133,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 434,
+    "maleFrontSpriteGraphicFileId" : 819,
+    "maleBackSpriteGraphicFileId" : 817,
+    "femaleFrontSpriteGraphicFileId" : 818,
+    "femaleBackSpriteGraphicFileId" : 816,
+    "regularPaletteFileId" : 820,
+    "shinyPaletteFileId" : 821
+  }
+}

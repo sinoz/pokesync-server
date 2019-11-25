@@ -1,0 +1,27 @@
+{
+  "id" : 35,
+  "name" : "CLEFAIRY",
+  "nitroLabelId" : 35,
+  "height" : 6,
+  "weight" : 75,
+  "baseExperience" : 113,
+  "types" : {
+    "first" : "FAIRY",
+    "second" : null
+  },
+  "baseStats" : [ 70, 45, 48, 60, 65, 35 ],
+  "abilities" : [ "CUTE-CHARM", "MAGIC-GUARD", "FRIEND-GUARD" ],
+  "previousEvolution" : 173,
+  "genderRate" : 6,
+  "captureRate" : 150,
+  "baseHappiness" : 140,
+  "visuals" : {
+    "overworldFileId" : 333,
+    "maleFrontSpriteGraphicFileId" : 213,
+    "maleBackSpriteGraphicFileId" : 211,
+    "femaleFrontSpriteGraphicFileId" : 212,
+    "femaleBackSpriteGraphicFileId" : 210,
+    "regularPaletteFileId" : 214,
+    "shinyPaletteFileId" : 215
+  }
+}

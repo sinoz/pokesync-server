@@ -1,0 +1,27 @@
+{
+  "id" : 72,
+  "name" : "TENTACOOL",
+  "nitroLabelId" : 72,
+  "height" : 9,
+  "weight" : 455,
+  "baseExperience" : 67,
+  "types" : {
+    "first" : "WATER",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 40, 40, 35, 50, 100, 70 ],
+  "abilities" : [ "CLEAR-BODY", "LIQUID-OOZE", "RAIN-DISH" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 370,
+    "maleFrontSpriteGraphicFileId" : 435,
+    "maleBackSpriteGraphicFileId" : 433,
+    "femaleFrontSpriteGraphicFileId" : 434,
+    "femaleBackSpriteGraphicFileId" : 432,
+    "regularPaletteFileId" : 436,
+    "shinyPaletteFileId" : 437
+  }
+}

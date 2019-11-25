@@ -1,0 +1,27 @@
+{
+  "id" : 113,
+  "name" : "CHANSEY",
+  "nitroLabelId" : 113,
+  "height" : 11,
+  "weight" : 346,
+  "baseExperience" : 395,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 250, 5, 5, 35, 105, 50 ],
+  "abilities" : [ "NATURAL-CURE", "SERENE-GRACE", "HEALER" ],
+  "previousEvolution" : 440,
+  "genderRate" : 8,
+  "captureRate" : 30,
+  "baseHappiness" : 140,
+  "visuals" : {
+    "overworldFileId" : 411,
+    "maleFrontSpriteGraphicFileId" : -1,
+    "maleBackSpriteGraphicFileId" : -1,
+    "femaleFrontSpriteGraphicFileId" : 680,
+    "femaleBackSpriteGraphicFileId" : 678,
+    "regularPaletteFileId" : 682,
+    "shinyPaletteFileId" : 683
+  }
+}

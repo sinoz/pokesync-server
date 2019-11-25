@@ -1,0 +1,27 @@
+{
+  "id" : 133,
+  "name" : "EEVEE",
+  "nitroLabelId" : 133,
+  "height" : 3,
+  "weight" : 65,
+  "baseExperience" : 65,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 55, 55, 50, 45, 65, 55 ],
+  "abilities" : [ "RUN-AWAY", "ADAPTABILITY", "ANTICIPATION" ],
+  "previousEvolution" : null,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 431,
+    "maleFrontSpriteGraphicFileId" : 801,
+    "maleBackSpriteGraphicFileId" : 799,
+    "femaleFrontSpriteGraphicFileId" : 800,
+    "femaleBackSpriteGraphicFileId" : 798,
+    "regularPaletteFileId" : 802,
+    "shinyPaletteFileId" : 803
+  }
+}

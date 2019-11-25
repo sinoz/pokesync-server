@@ -1,0 +1,27 @@
+{
+  "id" : 67,
+  "name" : "MACHOKE",
+  "nitroLabelId" : 67,
+  "height" : 15,
+  "weight" : 705,
+  "baseExperience" : 142,
+  "types" : {
+    "first" : "FIGHTING",
+    "second" : null
+  },
+  "baseStats" : [ 80, 100, 70, 50, 60, 45 ],
+  "abilities" : [ "GUTS", "NO-GUARD", "STEADFAST" ],
+  "previousEvolution" : 66,
+  "genderRate" : 2,
+  "captureRate" : 90,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 365,
+    "maleFrontSpriteGraphicFileId" : 405,
+    "maleBackSpriteGraphicFileId" : 403,
+    "femaleFrontSpriteGraphicFileId" : 404,
+    "femaleBackSpriteGraphicFileId" : 402,
+    "regularPaletteFileId" : 406,
+    "shinyPaletteFileId" : 407
+  }
+}

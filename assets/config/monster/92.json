@@ -1,0 +1,27 @@
+{
+  "id" : 92,
+  "name" : "GASTLY",
+  "nitroLabelId" : 92,
+  "height" : 13,
+  "weight" : 1,
+  "baseExperience" : 62,
+  "types" : {
+    "first" : "GHOST",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 30, 35, 30, 100, 35, 80 ],
+  "abilities" : [ "LEVITATE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 390,
+    "maleFrontSpriteGraphicFileId" : 555,
+    "maleBackSpriteGraphicFileId" : 553,
+    "femaleFrontSpriteGraphicFileId" : 554,
+    "femaleBackSpriteGraphicFileId" : 552,
+    "regularPaletteFileId" : 556,
+    "shinyPaletteFileId" : 557
+  }
+}

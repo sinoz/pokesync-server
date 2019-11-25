@@ -1,0 +1,27 @@
+{
+  "id" : 42,
+  "name" : "GOLBAT",
+  "nitroLabelId" : 42,
+  "height" : 16,
+  "weight" : 550,
+  "baseExperience" : 159,
+  "types" : {
+    "first" : "POISON",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 75, 80, 70, 65, 75, 90 ],
+  "abilities" : [ "INNER-FOCUS", "INFILTRATOR" ],
+  "previousEvolution" : 41,
+  "genderRate" : 4,
+  "captureRate" : 90,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 340,
+    "maleFrontSpriteGraphicFileId" : 255,
+    "maleBackSpriteGraphicFileId" : 253,
+    "femaleFrontSpriteGraphicFileId" : 254,
+    "femaleBackSpriteGraphicFileId" : 252,
+    "regularPaletteFileId" : 256,
+    "shinyPaletteFileId" : 257
+  }
+}

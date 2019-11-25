@@ -1,0 +1,27 @@
+{
+  "id" : 39,
+  "name" : "JIGGLYPUFF",
+  "nitroLabelId" : 39,
+  "height" : 5,
+  "weight" : 55,
+  "baseExperience" : 95,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FAIRY"
+  },
+  "baseStats" : [ 115, 45, 20, 45, 25, 20 ],
+  "abilities" : [ "CUTE-CHARM", "COMPETITIVE", "FRIEND-GUARD" ],
+  "previousEvolution" : 174,
+  "genderRate" : 6,
+  "captureRate" : 170,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 337,
+    "maleFrontSpriteGraphicFileId" : 237,
+    "maleBackSpriteGraphicFileId" : 235,
+    "femaleFrontSpriteGraphicFileId" : 236,
+    "femaleBackSpriteGraphicFileId" : 234,
+    "regularPaletteFileId" : 238,
+    "shinyPaletteFileId" : 239
+  }
+}

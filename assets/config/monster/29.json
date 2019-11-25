@@ -1,0 +1,27 @@
+{
+  "id" : 29,
+  "name" : "NIDORAN-F",
+  "nitroLabelId" : 29,
+  "height" : 4,
+  "weight" : 70,
+  "baseExperience" : 55,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 55, 47, 52, 40, 40, 41 ],
+  "abilities" : [ "POISON-POINT", "RIVALRY", "HUSTLE" ],
+  "previousEvolution" : null,
+  "genderRate" : 8,
+  "captureRate" : 235,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 327,
+    "maleFrontSpriteGraphicFileId" : -1,
+    "maleBackSpriteGraphicFileId" : -1,
+    "femaleFrontSpriteGraphicFileId" : 176,
+    "femaleBackSpriteGraphicFileId" : 174,
+    "regularPaletteFileId" : 178,
+    "shinyPaletteFileId" : 179
+  }
+}

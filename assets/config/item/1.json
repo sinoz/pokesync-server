@@ -1,0 +1,10 @@
+{
+  "id" : 1,
+  "name" : "ultra-ball",
+  "nitroLabelId": 0,
+  "storePrice" : 800,
+  "itemVisuals" : {
+    "graphicFileId" : 4,
+    "paletteFileId" : 5
+  }
+}

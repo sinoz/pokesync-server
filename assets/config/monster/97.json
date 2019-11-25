@@ -1,0 +1,27 @@
+{
+  "id" : 97,
+  "name" : "HYPNO",
+  "nitroLabelId" : 97,
+  "height" : 16,
+  "weight" : 756,
+  "baseExperience" : 169,
+  "types" : {
+    "first" : "PSYCHIC",
+    "second" : null
+  },
+  "baseStats" : [ 85, 73, 70, 73, 115, 67 ],
+  "abilities" : [ "INSOMNIA", "FOREWARN", "INNER-FOCUS" ],
+  "previousEvolution" : 96,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 395,
+    "maleFrontSpriteGraphicFileId" : 585,
+    "maleBackSpriteGraphicFileId" : 583,
+    "femaleFrontSpriteGraphicFileId" : 584,
+    "femaleBackSpriteGraphicFileId" : 582,
+    "regularPaletteFileId" : 586,
+    "shinyPaletteFileId" : 587
+  }
+}

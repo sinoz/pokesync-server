@@ -1,0 +1,27 @@
+{
+  "id" : 128,
+  "name" : "TAUROS",
+  "nitroLabelId" : 128,
+  "height" : 14,
+  "weight" : 884,
+  "baseExperience" : 172,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 75, 100, 95, 40, 70, 110 ],
+  "abilities" : [ "INTIMIDATE", "ANGER-POINT", "SHEER-FORCE" ],
+  "previousEvolution" : null,
+  "genderRate" : 0,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 426,
+    "maleFrontSpriteGraphicFileId" : 771,
+    "maleBackSpriteGraphicFileId" : 769,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 772,
+    "shinyPaletteFileId" : 773
+  }
+}

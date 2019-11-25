@@ -1,0 +1,27 @@
+{
+  "id" : 149,
+  "name" : "DRAGONITE",
+  "nitroLabelId" : 149,
+  "height" : 22,
+  "weight" : 2100,
+  "baseExperience" : 270,
+  "types" : {
+    "first" : "DRAGON",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 91, 134, 95, 100, 100, 80 ],
+  "abilities" : [ "INNER-FOCUS", "MULTISCALE" ],
+  "previousEvolution" : 148,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 35,
+  "visuals" : {
+    "overworldFileId" : 447,
+    "maleFrontSpriteGraphicFileId" : 897,
+    "maleBackSpriteGraphicFileId" : 895,
+    "femaleFrontSpriteGraphicFileId" : 896,
+    "femaleBackSpriteGraphicFileId" : 894,
+    "regularPaletteFileId" : 898,
+    "shinyPaletteFileId" : 899
+  }
+}

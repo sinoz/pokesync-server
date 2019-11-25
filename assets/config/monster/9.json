@@ -1,0 +1,27 @@
+{
+  "id" : 9,
+  "name" : "BLASTOISE",
+  "nitroLabelId" : 9,
+  "height" : 16,
+  "weight" : 855,
+  "baseExperience" : 239,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 79, 83, 100, 85, 105, 78 ],
+  "abilities" : [ "TORRENT", "RAIN-DISH" ],
+  "previousEvolution" : 8,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 306,
+    "maleFrontSpriteGraphicFileId" : 57,
+    "maleBackSpriteGraphicFileId" : 55,
+    "femaleFrontSpriteGraphicFileId" : 56,
+    "femaleBackSpriteGraphicFileId" : 54,
+    "regularPaletteFileId" : 58,
+    "shinyPaletteFileId" : 59
+  }
+}

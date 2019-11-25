@@ -1,0 +1,27 @@
+{
+  "id" : 37,
+  "name" : "VULPIX",
+  "nitroLabelId" : 37,
+  "height" : 6,
+  "weight" : 99,
+  "baseExperience" : 60,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 38, 41, 40, 50, 65, 65 ],
+  "abilities" : [ "FLASH-FIRE", "DROUGHT" ],
+  "previousEvolution" : null,
+  "genderRate" : 6,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 335,
+    "maleFrontSpriteGraphicFileId" : 225,
+    "maleBackSpriteGraphicFileId" : 223,
+    "femaleFrontSpriteGraphicFileId" : 224,
+    "femaleBackSpriteGraphicFileId" : 222,
+    "regularPaletteFileId" : 226,
+    "shinyPaletteFileId" : 227
+  }
+}

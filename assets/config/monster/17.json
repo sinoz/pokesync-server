@@ -1,0 +1,27 @@
+{
+  "id" : 17,
+  "name" : "PIDGEOTTO",
+  "nitroLabelId" : 17,
+  "height" : 11,
+  "weight" : 300,
+  "baseExperience" : 122,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 63, 60, 55, 50, 50, 71 ],
+  "abilities" : [ "KEEN-EYE", "TANGLED-FEET", "BIG-PECKS" ],
+  "previousEvolution" : 16,
+  "genderRate" : 4,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 314,
+    "maleFrontSpriteGraphicFileId" : 105,
+    "maleBackSpriteGraphicFileId" : 103,
+    "femaleFrontSpriteGraphicFileId" : 104,
+    "femaleBackSpriteGraphicFileId" : 102,
+    "regularPaletteFileId" : 106,
+    "shinyPaletteFileId" : 107
+  }
+}

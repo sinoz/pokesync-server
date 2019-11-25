@@ -1,0 +1,27 @@
+{
+  "id" : 88,
+  "name" : "GRIMER",
+  "nitroLabelId" : 88,
+  "height" : 9,
+  "weight" : 300,
+  "baseExperience" : 65,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 80, 80, 50, 40, 50, 25 ],
+  "abilities" : [ "STENCH", "STICKY-HOLD", "POISON-TOUCH" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 386,
+    "maleFrontSpriteGraphicFileId" : 531,
+    "maleBackSpriteGraphicFileId" : 529,
+    "femaleFrontSpriteGraphicFileId" : 530,
+    "femaleBackSpriteGraphicFileId" : 528,
+    "regularPaletteFileId" : 532,
+    "shinyPaletteFileId" : 533
+  }
+}

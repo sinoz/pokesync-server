@@ -1,0 +1,27 @@
+{
+  "id" : 107,
+  "name" : "HITMONCHAN",
+  "nitroLabelId" : 107,
+  "height" : 14,
+  "weight" : 502,
+  "baseExperience" : 159,
+  "types" : {
+    "first" : "FIGHTING",
+    "second" : null
+  },
+  "baseStats" : [ 50, 105, 79, 35, 110, 76 ],
+  "abilities" : [ "KEEN-EYE", "IRON-FIST", "INNER-FOCUS" ],
+  "previousEvolution" : 236,
+  "genderRate" : 0,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 405,
+    "maleFrontSpriteGraphicFileId" : 645,
+    "maleBackSpriteGraphicFileId" : 643,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 646,
+    "shinyPaletteFileId" : 647
+  }
+}

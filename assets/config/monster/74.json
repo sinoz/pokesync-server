@@ -1,0 +1,27 @@
+{
+  "id" : 74,
+  "name" : "GEODUDE",
+  "nitroLabelId" : 74,
+  "height" : 4,
+  "weight" : 200,
+  "baseExperience" : 60,
+  "types" : {
+    "first" : "ROCK",
+    "second" : "GROUND"
+  },
+  "baseStats" : [ 40, 80, 100, 30, 30, 20 ],
+  "abilities" : [ "ROCK-HEAD", "STURDY", "SAND-VEIL" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 372,
+    "maleFrontSpriteGraphicFileId" : 447,
+    "maleBackSpriteGraphicFileId" : 445,
+    "femaleFrontSpriteGraphicFileId" : 446,
+    "femaleBackSpriteGraphicFileId" : 444,
+    "regularPaletteFileId" : 448,
+    "shinyPaletteFileId" : 449
+  }
+}

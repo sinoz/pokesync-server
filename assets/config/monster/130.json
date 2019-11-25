@@ -1,0 +1,27 @@
+{
+  "id" : 130,
+  "name" : "GYARADOS",
+  "nitroLabelId" : 130,
+  "height" : 65,
+  "weight" : 2350,
+  "baseExperience" : 189,
+  "types" : {
+    "first" : "WATER",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 95, 125, 79, 60, 100, 81 ],
+  "abilities" : [ "INTIMIDATE", "MOXIE" ],
+  "previousEvolution" : 129,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 428,
+    "maleFrontSpriteGraphicFileId" : 783,
+    "maleBackSpriteGraphicFileId" : 781,
+    "femaleFrontSpriteGraphicFileId" : 782,
+    "femaleBackSpriteGraphicFileId" : 780,
+    "regularPaletteFileId" : 784,
+    "shinyPaletteFileId" : 785
+  }
+}

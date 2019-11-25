@@ -1,0 +1,27 @@
+{
+  "id" : 31,
+  "name" : "NIDOQUEEN",
+  "nitroLabelId" : 31,
+  "height" : 13,
+  "weight" : 600,
+  "baseExperience" : 227,
+  "types" : {
+    "first" : "POISON",
+    "second" : "GROUND"
+  },
+  "baseStats" : [ 90, 92, 87, 75, 85, 76 ],
+  "abilities" : [ "POISON-POINT", "RIVALRY", "SHEER-FORCE" ],
+  "previousEvolution" : 30,
+  "genderRate" : 8,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 329,
+    "maleFrontSpriteGraphicFileId" : -1,
+    "maleBackSpriteGraphicFileId" : -1,
+    "femaleFrontSpriteGraphicFileId" : 188,
+    "femaleBackSpriteGraphicFileId" : 186,
+    "regularPaletteFileId" : 190,
+    "shinyPaletteFileId" : 191
+  }
+}

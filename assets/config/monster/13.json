@@ -1,0 +1,27 @@
+{
+  "id" : 13,
+  "name" : "WEEDLE",
+  "nitroLabelId" : 13,
+  "height" : 3,
+  "weight" : 32,
+  "baseExperience" : 39,
+  "types" : {
+    "first" : "BUG",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 40, 35, 30, 20, 20, 50 ],
+  "abilities" : [ "SHIELD-DUST", "RUN-AWAY" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 310,
+    "maleFrontSpriteGraphicFileId" : 81,
+    "maleBackSpriteGraphicFileId" : 79,
+    "femaleFrontSpriteGraphicFileId" : 80,
+    "femaleBackSpriteGraphicFileId" : 78,
+    "regularPaletteFileId" : 82,
+    "shinyPaletteFileId" : 83
+  }
+}

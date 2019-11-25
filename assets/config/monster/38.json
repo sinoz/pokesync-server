@@ -1,0 +1,27 @@
+{
+  "id" : 38,
+  "name" : "NINETALES",
+  "nitroLabelId" : 38,
+  "height" : 11,
+  "weight" : 199,
+  "baseExperience" : 177,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 73, 76, 75, 81, 100, 100 ],
+  "abilities" : [ "FLASH-FIRE", "DROUGHT" ],
+  "previousEvolution" : 37,
+  "genderRate" : 6,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 336,
+    "maleFrontSpriteGraphicFileId" : 231,
+    "maleBackSpriteGraphicFileId" : 229,
+    "femaleFrontSpriteGraphicFileId" : 230,
+    "femaleBackSpriteGraphicFileId" : 228,
+    "regularPaletteFileId" : 232,
+    "shinyPaletteFileId" : 233
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 105,
+  "name" : "MAROWAK",
+  "nitroLabelId" : 105,
+  "height" : 10,
+  "weight" : 450,
+  "baseExperience" : 149,
+  "types" : {
+    "first" : "GROUND",
+    "second" : null
+  },
+  "baseStats" : [ 60, 80, 110, 50, 80, 45 ],
+  "abilities" : [ "ROCK-HEAD", "LIGHTNING-ROD", "BATTLE-ARMOR" ],
+  "previousEvolution" : 104,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 403,
+    "maleFrontSpriteGraphicFileId" : 633,
+    "maleBackSpriteGraphicFileId" : 631,
+    "femaleFrontSpriteGraphicFileId" : 632,
+    "femaleBackSpriteGraphicFileId" : 630,
+    "regularPaletteFileId" : 634,
+    "shinyPaletteFileId" : 635
+  }
+}

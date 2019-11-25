@@ -1,0 +1,27 @@
+{
+  "id" : 121,
+  "name" : "STARMIE",
+  "nitroLabelId" : 121,
+  "height" : 11,
+  "weight" : 800,
+  "baseExperience" : 182,
+  "types" : {
+    "first" : "WATER",
+    "second" : "PSYCHIC"
+  },
+  "baseStats" : [ 60, 75, 85, 100, 85, 115 ],
+  "abilities" : [ "ILLUMINATE", "NATURAL-CURE", "ANALYTIC" ],
+  "previousEvolution" : 120,
+  "genderRate" : -1,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 419,
+    "maleFrontSpriteGraphicFileId" : 729,
+    "maleBackSpriteGraphicFileId" : 727,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 730,
+    "shinyPaletteFileId" : 731
+  }
+}

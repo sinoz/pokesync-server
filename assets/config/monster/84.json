@@ -1,0 +1,27 @@
+{
+  "id" : 84,
+  "name" : "DODUO",
+  "nitroLabelId" : 84,
+  "height" : 14,
+  "weight" : 392,
+  "baseExperience" : 62,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 35, 85, 45, 35, 35, 75 ],
+  "abilities" : [ "RUN-AWAY", "EARLY-BIRD", "TANGLED-FEET" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 382,
+    "maleFrontSpriteGraphicFileId" : 507,
+    "maleBackSpriteGraphicFileId" : 505,
+    "femaleFrontSpriteGraphicFileId" : 506,
+    "femaleBackSpriteGraphicFileId" : 504,
+    "regularPaletteFileId" : 508,
+    "shinyPaletteFileId" : 509
+  }
+}

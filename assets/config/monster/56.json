@@ -1,0 +1,27 @@
+{
+  "id" : 56,
+  "name" : "MANKEY",
+  "nitroLabelId" : 56,
+  "height" : 5,
+  "weight" : 280,
+  "baseExperience" : 61,
+  "types" : {
+    "first" : "FIGHTING",
+    "second" : null
+  },
+  "baseStats" : [ 40, 80, 35, 35, 45, 70 ],
+  "abilities" : [ "VITAL-SPIRIT", "ANGER-POINT", "DEFIANT" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 354,
+    "maleFrontSpriteGraphicFileId" : 339,
+    "maleBackSpriteGraphicFileId" : 337,
+    "femaleFrontSpriteGraphicFileId" : 338,
+    "femaleBackSpriteGraphicFileId" : 336,
+    "regularPaletteFileId" : 340,
+    "shinyPaletteFileId" : 341
+  }
+}

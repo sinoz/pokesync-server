@@ -1,0 +1,27 @@
+{
+  "id" : 12,
+  "name" : "BUTTERFREE",
+  "nitroLabelId" : 12,
+  "height" : 11,
+  "weight" : 320,
+  "baseExperience" : 178,
+  "types" : {
+    "first" : "BUG",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 60, 45, 50, 90, 80, 70 ],
+  "abilities" : [ "COMPOUND-EYES", "TINTED-LENS" ],
+  "previousEvolution" : 11,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 309,
+    "maleFrontSpriteGraphicFileId" : 75,
+    "maleBackSpriteGraphicFileId" : 73,
+    "femaleFrontSpriteGraphicFileId" : 74,
+    "femaleBackSpriteGraphicFileId" : 72,
+    "regularPaletteFileId" : 76,
+    "shinyPaletteFileId" : 77
+  }
+}

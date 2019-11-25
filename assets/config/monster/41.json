@@ -1,0 +1,27 @@
+{
+  "id" : 41,
+  "name" : "ZUBAT",
+  "nitroLabelId" : 41,
+  "height" : 8,
+  "weight" : 75,
+  "baseExperience" : 49,
+  "types" : {
+    "first" : "POISON",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 40, 45, 35, 30, 40, 55 ],
+  "abilities" : [ "INNER-FOCUS", "INFILTRATOR" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 339,
+    "maleFrontSpriteGraphicFileId" : 249,
+    "maleBackSpriteGraphicFileId" : 247,
+    "femaleFrontSpriteGraphicFileId" : 248,
+    "femaleBackSpriteGraphicFileId" : 246,
+    "regularPaletteFileId" : 250,
+    "shinyPaletteFileId" : 251
+  }
+}

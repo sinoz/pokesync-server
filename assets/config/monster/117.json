@@ -1,0 +1,27 @@
+{
+  "id" : 117,
+  "name" : "SEADRA",
+  "nitroLabelId" : 117,
+  "height" : 12,
+  "weight" : 250,
+  "baseExperience" : 154,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 55, 65, 95, 95, 45, 85 ],
+  "abilities" : [ "POISON-POINT", "SNIPER", "DAMP" ],
+  "previousEvolution" : 116,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 415,
+    "maleFrontSpriteGraphicFileId" : 705,
+    "maleBackSpriteGraphicFileId" : 703,
+    "femaleFrontSpriteGraphicFileId" : 704,
+    "femaleBackSpriteGraphicFileId" : 702,
+    "regularPaletteFileId" : 706,
+    "shinyPaletteFileId" : 707
+  }
+}

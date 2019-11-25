@@ -1,0 +1,27 @@
+{
+  "id" : 11,
+  "name" : "METAPOD",
+  "nitroLabelId" : 11,
+  "height" : 7,
+  "weight" : 99,
+  "baseExperience" : 72,
+  "types" : {
+    "first" : "BUG",
+    "second" : null
+  },
+  "baseStats" : [ 50, 20, 55, 25, 25, 30 ],
+  "abilities" : [ "SHED-SKIN" ],
+  "previousEvolution" : 10,
+  "genderRate" : 4,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 308,
+    "maleFrontSpriteGraphicFileId" : 69,
+    "maleBackSpriteGraphicFileId" : 67,
+    "femaleFrontSpriteGraphicFileId" : 68,
+    "femaleBackSpriteGraphicFileId" : 66,
+    "regularPaletteFileId" : 70,
+    "shinyPaletteFileId" : 71
+  }
+}

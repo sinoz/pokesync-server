@@ -1,0 +1,27 @@
+{
+  "id" : 106,
+  "name" : "HITMONLEE",
+  "nitroLabelId" : 106,
+  "height" : 15,
+  "weight" : 498,
+  "baseExperience" : 159,
+  "types" : {
+    "first" : "FIGHTING",
+    "second" : null
+  },
+  "baseStats" : [ 50, 120, 53, 35, 110, 87 ],
+  "abilities" : [ "LIMBER", "RECKLESS", "UNBURDEN" ],
+  "previousEvolution" : 236,
+  "genderRate" : 0,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 404,
+    "maleFrontSpriteGraphicFileId" : 639,
+    "maleBackSpriteGraphicFileId" : 637,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 640,
+    "shinyPaletteFileId" : 641
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 125,
+  "name" : "ELECTABUZZ",
+  "nitroLabelId" : 125,
+  "height" : 11,
+  "weight" : 300,
+  "baseExperience" : 172,
+  "types" : {
+    "first" : "ELECTRIC",
+    "second" : null
+  },
+  "baseStats" : [ 65, 83, 57, 95, 85, 105 ],
+  "abilities" : [ "STATIC", "VITAL-SPIRIT" ],
+  "previousEvolution" : 239,
+  "genderRate" : 2,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 423,
+    "maleFrontSpriteGraphicFileId" : 753,
+    "maleBackSpriteGraphicFileId" : 751,
+    "femaleFrontSpriteGraphicFileId" : 752,
+    "femaleBackSpriteGraphicFileId" : 750,
+    "regularPaletteFileId" : 754,
+    "shinyPaletteFileId" : 755
+  }
+}

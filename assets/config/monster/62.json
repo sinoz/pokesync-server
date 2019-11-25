@@ -1,0 +1,27 @@
+{
+  "id" : 62,
+  "name" : "POLIWRATH",
+  "nitroLabelId" : 62,
+  "height" : 13,
+  "weight" : 540,
+  "baseExperience" : 230,
+  "types" : {
+    "first" : "WATER",
+    "second" : "FIGHTING"
+  },
+  "baseStats" : [ 90, 95, 95, 70, 90, 70 ],
+  "abilities" : [ "WATER-ABSORB", "DAMP", "SWIFT-SWIM" ],
+  "previousEvolution" : 61,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 360,
+    "maleFrontSpriteGraphicFileId" : 375,
+    "maleBackSpriteGraphicFileId" : 373,
+    "femaleFrontSpriteGraphicFileId" : 374,
+    "femaleBackSpriteGraphicFileId" : 372,
+    "regularPaletteFileId" : 376,
+    "shinyPaletteFileId" : 377
+  }
+}

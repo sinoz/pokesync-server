@@ -1,0 +1,27 @@
+{
+  "id" : 28,
+  "name" : "SANDSLASH",
+  "nitroLabelId" : 28,
+  "height" : 10,
+  "weight" : 295,
+  "baseExperience" : 158,
+  "types" : {
+    "first" : "GROUND",
+    "second" : null
+  },
+  "baseStats" : [ 75, 100, 110, 45, 55, 65 ],
+  "abilities" : [ "SAND-VEIL", "SAND-RUSH" ],
+  "previousEvolution" : 27,
+  "genderRate" : 4,
+  "captureRate" : 90,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 326,
+    "maleFrontSpriteGraphicFileId" : 171,
+    "maleBackSpriteGraphicFileId" : 169,
+    "femaleFrontSpriteGraphicFileId" : 170,
+    "femaleBackSpriteGraphicFileId" : 168,
+    "regularPaletteFileId" : 172,
+    "shinyPaletteFileId" : 173
+  }
+}

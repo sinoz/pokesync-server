@@ -1,0 +1,27 @@
+{
+  "id" : 80,
+  "name" : "SLOWBRO",
+  "nitroLabelId" : 80,
+  "height" : 16,
+  "weight" : 785,
+  "baseExperience" : 172,
+  "types" : {
+    "first" : "WATER",
+    "second" : "PSYCHIC"
+  },
+  "baseStats" : [ 95, 75, 110, 100, 80, 30 ],
+  "abilities" : [ "OBLIVIOUS", "OWN-TEMPO", "REGENERATOR" ],
+  "previousEvolution" : 79,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 378,
+    "maleFrontSpriteGraphicFileId" : 483,
+    "maleBackSpriteGraphicFileId" : 481,
+    "femaleFrontSpriteGraphicFileId" : 482,
+    "femaleBackSpriteGraphicFileId" : 480,
+    "regularPaletteFileId" : 484,
+    "shinyPaletteFileId" : 485
+  }
+}

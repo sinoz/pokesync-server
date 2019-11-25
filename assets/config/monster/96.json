@@ -1,0 +1,27 @@
+{
+  "id" : 96,
+  "name" : "DROWZEE",
+  "nitroLabelId" : 96,
+  "height" : 10,
+  "weight" : 324,
+  "baseExperience" : 66,
+  "types" : {
+    "first" : "PSYCHIC",
+    "second" : null
+  },
+  "baseStats" : [ 60, 48, 45, 43, 90, 42 ],
+  "abilities" : [ "INSOMNIA", "FOREWARN", "INNER-FOCUS" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 394,
+    "maleFrontSpriteGraphicFileId" : 579,
+    "maleBackSpriteGraphicFileId" : 577,
+    "femaleFrontSpriteGraphicFileId" : 578,
+    "femaleBackSpriteGraphicFileId" : 576,
+    "regularPaletteFileId" : 580,
+    "shinyPaletteFileId" : 581
+  }
+}

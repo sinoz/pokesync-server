@@ -1,0 +1,27 @@
+{
+  "id" : 102,
+  "name" : "EXEGGCUTE",
+  "nitroLabelId" : 102,
+  "height" : 4,
+  "weight" : 25,
+  "baseExperience" : 65,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "PSYCHIC"
+  },
+  "baseStats" : [ 60, 40, 80, 60, 45, 40 ],
+  "abilities" : [ "CHLOROPHYLL", "HARVEST" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 90,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 400,
+    "maleFrontSpriteGraphicFileId" : 615,
+    "maleBackSpriteGraphicFileId" : 613,
+    "femaleFrontSpriteGraphicFileId" : 614,
+    "femaleBackSpriteGraphicFileId" : 612,
+    "regularPaletteFileId" : 616,
+    "shinyPaletteFileId" : 617
+  }
+}

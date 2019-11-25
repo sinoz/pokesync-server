@@ -1,0 +1,27 @@
+{
+  "id" : 36,
+  "name" : "CLEFABLE",
+  "nitroLabelId" : 36,
+  "height" : 13,
+  "weight" : 400,
+  "baseExperience" : 217,
+  "types" : {
+    "first" : "FAIRY",
+    "second" : null
+  },
+  "baseStats" : [ 95, 70, 73, 95, 90, 60 ],
+  "abilities" : [ "CUTE-CHARM", "MAGIC-GUARD", "UNAWARE" ],
+  "previousEvolution" : 35,
+  "genderRate" : 6,
+  "captureRate" : 25,
+  "baseHappiness" : 140,
+  "visuals" : {
+    "overworldFileId" : 334,
+    "maleFrontSpriteGraphicFileId" : 219,
+    "maleBackSpriteGraphicFileId" : 217,
+    "femaleFrontSpriteGraphicFileId" : 218,
+    "femaleBackSpriteGraphicFileId" : 216,
+    "regularPaletteFileId" : 220,
+    "shinyPaletteFileId" : 221
+  }
+}

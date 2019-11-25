@@ -1,0 +1,27 @@
+{
+  "id" : 5,
+  "name" : "CHARMELEON",
+  "nitroLabelId" : 5,
+  "height" : 11,
+  "weight" : 190,
+  "baseExperience" : 142,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 58, 64, 58, 80, 65, 80 ],
+  "abilities" : [ "BLAZE", "SOLAR-POWER" ],
+  "previousEvolution" : 4,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 302,
+    "maleFrontSpriteGraphicFileId" : 33,
+    "maleBackSpriteGraphicFileId" : 31,
+    "femaleFrontSpriteGraphicFileId" : 32,
+    "femaleBackSpriteGraphicFileId" : 30,
+    "regularPaletteFileId" : 34,
+    "shinyPaletteFileId" : 35
+  }
+}

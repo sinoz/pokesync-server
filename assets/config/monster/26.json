@@ -1,0 +1,27 @@
+{
+  "id" : 26,
+  "name" : "RAICHU",
+  "nitroLabelId" : 26,
+  "height" : 8,
+  "weight" : 300,
+  "baseExperience" : 218,
+  "types" : {
+    "first" : "ELECTRIC",
+    "second" : null
+  },
+  "baseStats" : [ 60, 90, 55, 90, 80, 110 ],
+  "abilities" : [ "STATIC", "LIGHTNING-ROD" ],
+  "previousEvolution" : 25,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 324,
+    "maleFrontSpriteGraphicFileId" : 159,
+    "maleBackSpriteGraphicFileId" : 157,
+    "femaleFrontSpriteGraphicFileId" : 158,
+    "femaleBackSpriteGraphicFileId" : 156,
+    "regularPaletteFileId" : 160,
+    "shinyPaletteFileId" : 161
+  }
+}

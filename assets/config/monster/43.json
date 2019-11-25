@@ -1,0 +1,27 @@
+{
+  "id" : 43,
+  "name" : "ODDISH",
+  "nitroLabelId" : 43,
+  "height" : 5,
+  "weight" : 54,
+  "baseExperience" : 64,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 45, 50, 55, 75, 65, 30 ],
+  "abilities" : [ "CHLOROPHYLL", "RUN-AWAY" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 341,
+    "maleFrontSpriteGraphicFileId" : 261,
+    "maleBackSpriteGraphicFileId" : 259,
+    "femaleFrontSpriteGraphicFileId" : 260,
+    "femaleBackSpriteGraphicFileId" : 258,
+    "regularPaletteFileId" : 262,
+    "shinyPaletteFileId" : 263
+  }
+}

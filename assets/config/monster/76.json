@@ -1,0 +1,27 @@
+{
+  "id" : 76,
+  "name" : "GOLEM",
+  "nitroLabelId" : 76,
+  "height" : 14,
+  "weight" : 3000,
+  "baseExperience" : 223,
+  "types" : {
+    "first" : "ROCK",
+    "second" : "GROUND"
+  },
+  "baseStats" : [ 80, 120, 130, 55, 65, 45 ],
+  "abilities" : [ "ROCK-HEAD", "STURDY", "SAND-VEIL" ],
+  "previousEvolution" : 75,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 374,
+    "maleFrontSpriteGraphicFileId" : 459,
+    "maleBackSpriteGraphicFileId" : 457,
+    "femaleFrontSpriteGraphicFileId" : 458,
+    "femaleBackSpriteGraphicFileId" : 456,
+    "regularPaletteFileId" : 460,
+    "shinyPaletteFileId" : 461
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 148,
+  "name" : "DRAGONAIR",
+  "nitroLabelId" : 148,
+  "height" : 40,
+  "weight" : 165,
+  "baseExperience" : 147,
+  "types" : {
+    "first" : "DRAGON",
+    "second" : null
+  },
+  "baseStats" : [ 61, 84, 65, 70, 70, 70 ],
+  "abilities" : [ "SHED-SKIN", "MARVEL-SCALE" ],
+  "previousEvolution" : 147,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 35,
+  "visuals" : {
+    "overworldFileId" : 446,
+    "maleFrontSpriteGraphicFileId" : 891,
+    "maleBackSpriteGraphicFileId" : 889,
+    "femaleFrontSpriteGraphicFileId" : 890,
+    "femaleBackSpriteGraphicFileId" : 888,
+    "regularPaletteFileId" : 892,
+    "shinyPaletteFileId" : 893
+  }
+}

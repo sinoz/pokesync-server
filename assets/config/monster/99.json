@@ -1,0 +1,27 @@
+{
+  "id" : 99,
+  "name" : "KINGLER",
+  "nitroLabelId" : 99,
+  "height" : 13,
+  "weight" : 600,
+  "baseExperience" : 166,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 55, 130, 115, 50, 50, 75 ],
+  "abilities" : [ "HYPER-CUTTER", "SHELL-ARMOR", "SHEER-FORCE" ],
+  "previousEvolution" : 98,
+  "genderRate" : 4,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 397,
+    "maleFrontSpriteGraphicFileId" : 597,
+    "maleBackSpriteGraphicFileId" : 595,
+    "femaleFrontSpriteGraphicFileId" : 596,
+    "femaleBackSpriteGraphicFileId" : 594,
+    "regularPaletteFileId" : 598,
+    "shinyPaletteFileId" : 599
+  }
+}

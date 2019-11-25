@@ -1,0 +1,27 @@
+{
+  "id" : 1,
+  "name" : "BULBASAUR",
+  "nitroLabelId" : 1,
+  "height" : 7,
+  "weight" : 69,
+  "baseExperience" : 64,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 45, 49, 49, 65, 65, 45 ],
+  "abilities" : [ "OVERGROW", "CHLOROPHYLL" ],
+  "previousEvolution" : null,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 297,
+    "maleFrontSpriteGraphicFileId" : 9,
+    "maleBackSpriteGraphicFileId" : 7,
+    "femaleFrontSpriteGraphicFileId" : 8,
+    "femaleBackSpriteGraphicFileId" : 6,
+    "regularPaletteFileId" : 10,
+    "shinyPaletteFileId" : 11
+  }
+}

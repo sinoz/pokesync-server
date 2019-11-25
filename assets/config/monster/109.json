@@ -1,0 +1,27 @@
+{
+  "id" : 109,
+  "name" : "KOFFING",
+  "nitroLabelId" : 109,
+  "height" : 6,
+  "weight" : 10,
+  "baseExperience" : 68,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 40, 65, 95, 60, 45, 35 ],
+  "abilities" : [ "LEVITATE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 407,
+    "maleFrontSpriteGraphicFileId" : 657,
+    "maleBackSpriteGraphicFileId" : 655,
+    "femaleFrontSpriteGraphicFileId" : 656,
+    "femaleBackSpriteGraphicFileId" : 654,
+    "regularPaletteFileId" : 658,
+    "shinyPaletteFileId" : 659
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 22,
+  "name" : "FEAROW",
+  "nitroLabelId" : 22,
+  "height" : 12,
+  "weight" : 380,
+  "baseExperience" : 155,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 65, 90, 65, 61, 61, 100 ],
+  "abilities" : [ "KEEN-EYE", "SNIPER" ],
+  "previousEvolution" : 21,
+  "genderRate" : 4,
+  "captureRate" : 90,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 319,
+    "maleFrontSpriteGraphicFileId" : 135,
+    "maleBackSpriteGraphicFileId" : 133,
+    "femaleFrontSpriteGraphicFileId" : 134,
+    "femaleBackSpriteGraphicFileId" : 132,
+    "regularPaletteFileId" : 136,
+    "shinyPaletteFileId" : 137
+  }
+}

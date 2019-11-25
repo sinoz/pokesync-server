@@ -1,0 +1,27 @@
+{
+  "id" : 132,
+  "name" : "DITTO",
+  "nitroLabelId" : 132,
+  "height" : 3,
+  "weight" : 40,
+  "baseExperience" : 101,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 48, 48, 48, 48, 48, 48 ],
+  "abilities" : [ "LIMBER", "IMPOSTER" ],
+  "previousEvolution" : null,
+  "genderRate" : -1,
+  "captureRate" : 35,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 430,
+    "maleFrontSpriteGraphicFileId" : 795,
+    "maleBackSpriteGraphicFileId" : 793,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 796,
+    "shinyPaletteFileId" : 797
+  }
+}

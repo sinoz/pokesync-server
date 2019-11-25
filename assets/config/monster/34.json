@@ -1,0 +1,27 @@
+{
+  "id" : 34,
+  "name" : "NIDOKING",
+  "nitroLabelId" : 34,
+  "height" : 14,
+  "weight" : 620,
+  "baseExperience" : 227,
+  "types" : {
+    "first" : "POISON",
+    "second" : "GROUND"
+  },
+  "baseStats" : [ 81, 102, 77, 85, 75, 85 ],
+  "abilities" : [ "POISON-POINT", "RIVALRY", "SHEER-FORCE" ],
+  "previousEvolution" : 33,
+  "genderRate" : 0,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 332,
+    "maleFrontSpriteGraphicFileId" : 207,
+    "maleBackSpriteGraphicFileId" : 205,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 208,
+    "shinyPaletteFileId" : 209
+  }
+}

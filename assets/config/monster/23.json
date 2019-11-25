@@ -1,0 +1,27 @@
+{
+  "id" : 23,
+  "name" : "EKANS",
+  "nitroLabelId" : 23,
+  "height" : 20,
+  "weight" : 69,
+  "baseExperience" : 58,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 35, 60, 44, 40, 54, 55 ],
+  "abilities" : [ "INTIMIDATE", "SHED-SKIN", "UNNERVE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 320,
+    "maleFrontSpriteGraphicFileId" : 141,
+    "maleBackSpriteGraphicFileId" : 139,
+    "femaleFrontSpriteGraphicFileId" : 140,
+    "femaleBackSpriteGraphicFileId" : 138,
+    "regularPaletteFileId" : 142,
+    "shinyPaletteFileId" : 143
+  }
+}

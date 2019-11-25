@@ -1,0 +1,27 @@
+{
+  "id" : 20,
+  "name" : "RATICATE",
+  "nitroLabelId" : 20,
+  "height" : 7,
+  "weight" : 185,
+  "baseExperience" : 145,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 55, 81, 60, 50, 70, 97 ],
+  "abilities" : [ "RUN-AWAY", "GUTS", "HUSTLE" ],
+  "previousEvolution" : 19,
+  "genderRate" : 4,
+  "captureRate" : 127,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 317,
+    "maleFrontSpriteGraphicFileId" : 123,
+    "maleBackSpriteGraphicFileId" : 121,
+    "femaleFrontSpriteGraphicFileId" : 122,
+    "femaleBackSpriteGraphicFileId" : 120,
+    "regularPaletteFileId" : 124,
+    "shinyPaletteFileId" : 125
+  }
+}

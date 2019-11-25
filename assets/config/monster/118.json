@@ -1,0 +1,27 @@
+{
+  "id" : 118,
+  "name" : "GOLDEEN",
+  "nitroLabelId" : 118,
+  "height" : 6,
+  "weight" : 150,
+  "baseExperience" : 64,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 45, 67, 60, 35, 50, 63 ],
+  "abilities" : [ "SWIFT-SWIM", "WATER-VEIL", "LIGHTNING-ROD" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 225,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 416,
+    "maleFrontSpriteGraphicFileId" : 711,
+    "maleBackSpriteGraphicFileId" : 709,
+    "femaleFrontSpriteGraphicFileId" : 710,
+    "femaleBackSpriteGraphicFileId" : 708,
+    "regularPaletteFileId" : 712,
+    "shinyPaletteFileId" : 713
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 60,
+  "name" : "POLIWAG",
+  "nitroLabelId" : 60,
+  "height" : 6,
+  "weight" : 124,
+  "baseExperience" : 60,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 40, 50, 40, 40, 40, 90 ],
+  "abilities" : [ "WATER-ABSORB", "DAMP", "SWIFT-SWIM" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 358,
+    "maleFrontSpriteGraphicFileId" : 363,
+    "maleBackSpriteGraphicFileId" : 361,
+    "femaleFrontSpriteGraphicFileId" : 362,
+    "femaleBackSpriteGraphicFileId" : 360,
+    "regularPaletteFileId" : 364,
+    "shinyPaletteFileId" : 365
+  }
+}

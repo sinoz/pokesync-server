@@ -1,0 +1,27 @@
+{
+  "id" : 127,
+  "name" : "PINSIR",
+  "nitroLabelId" : 127,
+  "height" : 15,
+  "weight" : 550,
+  "baseExperience" : 175,
+  "types" : {
+    "first" : "BUG",
+    "second" : null
+  },
+  "baseStats" : [ 65, 125, 100, 55, 70, 85 ],
+  "abilities" : [ "HYPER-CUTTER", "MOLD-BREAKER", "MOXIE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 425,
+    "maleFrontSpriteGraphicFileId" : 765,
+    "maleBackSpriteGraphicFileId" : 763,
+    "femaleFrontSpriteGraphicFileId" : 764,
+    "femaleBackSpriteGraphicFileId" : 762,
+    "regularPaletteFileId" : 766,
+    "shinyPaletteFileId" : 767
+  }
+}

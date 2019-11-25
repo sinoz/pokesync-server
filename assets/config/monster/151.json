@@ -1,0 +1,27 @@
+{
+  "id" : 151,
+  "name" : "MEW",
+  "nitroLabelId" : 151,
+  "height" : 4,
+  "weight" : 40,
+  "baseExperience" : 270,
+  "types" : {
+    "first" : "PSYCHIC",
+    "second" : null
+  },
+  "baseStats" : [ 100, 100, 100, 100, 100, 100 ],
+  "abilities" : [ "SYNCHRONIZE" ],
+  "previousEvolution" : null,
+  "genderRate" : -1,
+  "captureRate" : 45,
+  "baseHappiness" : 100,
+  "visuals" : {
+    "overworldFileId" : 449,
+    "maleFrontSpriteGraphicFileId" : 909,
+    "maleBackSpriteGraphicFileId" : 907,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 910,
+    "shinyPaletteFileId" : 911
+  }
+}

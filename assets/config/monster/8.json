@@ -1,0 +1,27 @@
+{
+  "id" : 8,
+  "name" : "WARTORTLE",
+  "nitroLabelId" : 8,
+  "height" : 10,
+  "weight" : 225,
+  "baseExperience" : 142,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 59, 63, 80, 65, 80, 58 ],
+  "abilities" : [ "TORRENT", "RAIN-DISH" ],
+  "previousEvolution" : 7,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 305,
+    "maleFrontSpriteGraphicFileId" : 51,
+    "maleBackSpriteGraphicFileId" : 49,
+    "femaleFrontSpriteGraphicFileId" : 50,
+    "femaleBackSpriteGraphicFileId" : 48,
+    "regularPaletteFileId" : 52,
+    "shinyPaletteFileId" : 53
+  }
+}

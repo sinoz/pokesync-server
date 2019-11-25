@@ -1,0 +1,27 @@
+{
+  "id" : 150,
+  "name" : "MEWTWO",
+  "nitroLabelId" : 150,
+  "height" : 20,
+  "weight" : 1220,
+  "baseExperience" : 306,
+  "types" : {
+    "first" : "PSYCHIC",
+    "second" : null
+  },
+  "baseStats" : [ 106, 110, 90, 154, 90, 130 ],
+  "abilities" : [ "PRESSURE", "UNNERVE" ],
+  "previousEvolution" : null,
+  "genderRate" : -1,
+  "captureRate" : 3,
+  "baseHappiness" : 0,
+  "visuals" : {
+    "overworldFileId" : 448,
+    "maleFrontSpriteGraphicFileId" : 903,
+    "maleBackSpriteGraphicFileId" : 901,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 904,
+    "shinyPaletteFileId" : 905
+  }
+}

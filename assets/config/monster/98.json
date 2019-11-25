@@ -1,0 +1,27 @@
+{
+  "id" : 98,
+  "name" : "KRABBY",
+  "nitroLabelId" : 98,
+  "height" : 4,
+  "weight" : 65,
+  "baseExperience" : 65,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 30, 105, 90, 25, 25, 50 ],
+  "abilities" : [ "HYPER-CUTTER", "SHELL-ARMOR", "SHEER-FORCE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 225,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 396,
+    "maleFrontSpriteGraphicFileId" : 591,
+    "maleBackSpriteGraphicFileId" : 589,
+    "femaleFrontSpriteGraphicFileId" : 590,
+    "femaleBackSpriteGraphicFileId" : 588,
+    "regularPaletteFileId" : 592,
+    "shinyPaletteFileId" : 593
+  }
+}

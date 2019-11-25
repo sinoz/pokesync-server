@@ -1,0 +1,27 @@
+{
+  "id" : 122,
+  "name" : "MR-MIME",
+  "nitroLabelId" : 122,
+  "height" : 13,
+  "weight" : 545,
+  "baseExperience" : 161,
+  "types" : {
+    "first" : "PSYCHIC",
+    "second" : "FAIRY"
+  },
+  "baseStats" : [ 40, 45, 65, 100, 120, 90 ],
+  "abilities" : [ "SOUNDPROOF", "FILTER", "TECHNICIAN" ],
+  "previousEvolution" : 439,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 420,
+    "maleFrontSpriteGraphicFileId" : 735,
+    "maleBackSpriteGraphicFileId" : 733,
+    "femaleFrontSpriteGraphicFileId" : 734,
+    "femaleBackSpriteGraphicFileId" : 732,
+    "regularPaletteFileId" : 736,
+    "shinyPaletteFileId" : 737
+  }
+}

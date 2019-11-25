@@ -1,0 +1,27 @@
+{
+  "id" : 47,
+  "name" : "PARASECT",
+  "nitroLabelId" : 47,
+  "height" : 10,
+  "weight" : 295,
+  "baseExperience" : 142,
+  "types" : {
+    "first" : "BUG",
+    "second" : "GRASS"
+  },
+  "baseStats" : [ 60, 95, 80, 60, 80, 30 ],
+  "abilities" : [ "EFFECT-SPORE", "DRY-SKIN", "DAMP" ],
+  "previousEvolution" : 46,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 345,
+    "maleFrontSpriteGraphicFileId" : 285,
+    "maleBackSpriteGraphicFileId" : 283,
+    "femaleFrontSpriteGraphicFileId" : 284,
+    "femaleBackSpriteGraphicFileId" : 282,
+    "regularPaletteFileId" : 286,
+    "shinyPaletteFileId" : 287
+  }
+}

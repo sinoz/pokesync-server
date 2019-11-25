@@ -1,0 +1,27 @@
+{
+  "id" : 87,
+  "name" : "DEWGONG",
+  "nitroLabelId" : 87,
+  "height" : 17,
+  "weight" : 1200,
+  "baseExperience" : 166,
+  "types" : {
+    "first" : "WATER",
+    "second" : "ICE"
+  },
+  "baseStats" : [ 90, 70, 80, 70, 95, 70 ],
+  "abilities" : [ "THICK-FAT", "HYDRATION", "ICE-BODY" ],
+  "previousEvolution" : 86,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 385,
+    "maleFrontSpriteGraphicFileId" : 525,
+    "maleBackSpriteGraphicFileId" : 523,
+    "femaleFrontSpriteGraphicFileId" : 524,
+    "femaleBackSpriteGraphicFileId" : 522,
+    "regularPaletteFileId" : 526,
+    "shinyPaletteFileId" : 527
+  }
+}

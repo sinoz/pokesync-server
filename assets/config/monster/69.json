@@ -1,0 +1,27 @@
+{
+  "id" : 69,
+  "name" : "BELLSPROUT",
+  "nitroLabelId" : 69,
+  "height" : 7,
+  "weight" : 40,
+  "baseExperience" : 60,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 50, 75, 35, 70, 30, 40 ],
+  "abilities" : [ "CHLOROPHYLL", "GLUTTONY" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 367,
+    "maleFrontSpriteGraphicFileId" : 417,
+    "maleBackSpriteGraphicFileId" : 415,
+    "femaleFrontSpriteGraphicFileId" : 416,
+    "femaleBackSpriteGraphicFileId" : 414,
+    "regularPaletteFileId" : 418,
+    "shinyPaletteFileId" : 419
+  }
+}

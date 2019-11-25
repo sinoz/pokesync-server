@@ -1,0 +1,27 @@
+{
+  "id" : 115,
+  "name" : "KANGASKHAN",
+  "nitroLabelId" : 115,
+  "height" : 22,
+  "weight" : 800,
+  "baseExperience" : 172,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 105, 95, 80, 40, 80, 90 ],
+  "abilities" : [ "EARLY-BIRD", "SCRAPPY", "INNER-FOCUS" ],
+  "previousEvolution" : null,
+  "genderRate" : 8,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 413,
+    "maleFrontSpriteGraphicFileId" : -1,
+    "maleBackSpriteGraphicFileId" : -1,
+    "femaleFrontSpriteGraphicFileId" : 692,
+    "femaleBackSpriteGraphicFileId" : 690,
+    "regularPaletteFileId" : 694,
+    "shinyPaletteFileId" : 695
+  }
+}

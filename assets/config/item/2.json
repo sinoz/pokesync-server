@@ -1,0 +1,10 @@
+{
+  "id" : 2,
+  "name" : "great-ball",
+  "nitroLabelId": 0,
+  "storePrice" : 600,
+  "itemVisuals" : {
+    "graphicFileId" : 6,
+    "paletteFileId" : 7
+  }
+}

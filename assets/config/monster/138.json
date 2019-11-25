@@ -1,0 +1,27 @@
+{
+  "id" : 138,
+  "name" : "OMANYTE",
+  "nitroLabelId" : 138,
+  "height" : 4,
+  "weight" : 75,
+  "baseExperience" : 71,
+  "types" : {
+    "first" : "ROCK",
+    "second" : "WATER"
+  },
+  "baseStats" : [ 35, 40, 100, 90, 55, 35 ],
+  "abilities" : [ "SWIFT-SWIM", "SHELL-ARMOR", "WEAK-ARMOR" ],
+  "previousEvolution" : null,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 436,
+    "maleFrontSpriteGraphicFileId" : 831,
+    "maleBackSpriteGraphicFileId" : 829,
+    "femaleFrontSpriteGraphicFileId" : 830,
+    "femaleBackSpriteGraphicFileId" : 828,
+    "regularPaletteFileId" : 832,
+    "shinyPaletteFileId" : 833
+  }
+}

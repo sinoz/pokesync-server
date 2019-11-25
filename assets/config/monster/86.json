@@ -1,0 +1,27 @@
+{
+  "id" : 86,
+  "name" : "SEEL",
+  "nitroLabelId" : 86,
+  "height" : 11,
+  "weight" : 900,
+  "baseExperience" : 65,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 65, 45, 55, 45, 70, 45 ],
+  "abilities" : [ "THICK-FAT", "HYDRATION", "ICE-BODY" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 384,
+    "maleFrontSpriteGraphicFileId" : 519,
+    "maleBackSpriteGraphicFileId" : 517,
+    "femaleFrontSpriteGraphicFileId" : 518,
+    "femaleBackSpriteGraphicFileId" : 516,
+    "regularPaletteFileId" : 520,
+    "shinyPaletteFileId" : 521
+  }
+}

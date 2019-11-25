@@ -1,0 +1,27 @@
+{
+  "id" : 111,
+  "name" : "RHYHORN",
+  "nitroLabelId" : 111,
+  "height" : 10,
+  "weight" : 1150,
+  "baseExperience" : 69,
+  "types" : {
+    "first" : "GROUND",
+    "second" : "ROCK"
+  },
+  "baseStats" : [ 80, 85, 95, 30, 30, 25 ],
+  "abilities" : [ "LIGHTNING-ROD", "ROCK-HEAD", "RECKLESS" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 409,
+    "maleFrontSpriteGraphicFileId" : 669,
+    "maleBackSpriteGraphicFileId" : 667,
+    "femaleFrontSpriteGraphicFileId" : 668,
+    "femaleBackSpriteGraphicFileId" : 666,
+    "regularPaletteFileId" : 670,
+    "shinyPaletteFileId" : 671
+  }
+}

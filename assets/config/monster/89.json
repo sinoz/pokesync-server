@@ -1,0 +1,27 @@
+{
+  "id" : 89,
+  "name" : "MUK",
+  "nitroLabelId" : 89,
+  "height" : 12,
+  "weight" : 300,
+  "baseExperience" : 175,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 105, 105, 75, 65, 100, 50 ],
+  "abilities" : [ "STENCH", "STICKY-HOLD", "POISON-TOUCH" ],
+  "previousEvolution" : 88,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 387,
+    "maleFrontSpriteGraphicFileId" : 537,
+    "maleBackSpriteGraphicFileId" : 535,
+    "femaleFrontSpriteGraphicFileId" : 536,
+    "femaleBackSpriteGraphicFileId" : 534,
+    "regularPaletteFileId" : 538,
+    "shinyPaletteFileId" : 539
+  }
+}

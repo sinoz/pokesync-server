@@ -1,0 +1,27 @@
+{
+  "id" : 140,
+  "name" : "KABUTO",
+  "nitroLabelId" : 140,
+  "height" : 5,
+  "weight" : 115,
+  "baseExperience" : 71,
+  "types" : {
+    "first" : "ROCK",
+    "second" : "WATER"
+  },
+  "baseStats" : [ 30, 80, 90, 55, 45, 55 ],
+  "abilities" : [ "SWIFT-SWIM", "BATTLE-ARMOR", "WEAK-ARMOR" ],
+  "previousEvolution" : null,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 438,
+    "maleFrontSpriteGraphicFileId" : 843,
+    "maleBackSpriteGraphicFileId" : 841,
+    "femaleFrontSpriteGraphicFileId" : 842,
+    "femaleBackSpriteGraphicFileId" : 840,
+    "regularPaletteFileId" : 844,
+    "shinyPaletteFileId" : 845
+  }
+}

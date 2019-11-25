@@ -1,0 +1,27 @@
+{
+  "id" : 48,
+  "name" : "VENONAT",
+  "nitroLabelId" : 48,
+  "height" : 10,
+  "weight" : 300,
+  "baseExperience" : 61,
+  "types" : {
+    "first" : "BUG",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 60, 55, 50, 40, 55, 45 ],
+  "abilities" : [ "COMPOUND-EYES", "TINTED-LENS", "RUN-AWAY" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 346,
+    "maleFrontSpriteGraphicFileId" : 291,
+    "maleBackSpriteGraphicFileId" : 289,
+    "femaleFrontSpriteGraphicFileId" : 290,
+    "femaleBackSpriteGraphicFileId" : 288,
+    "regularPaletteFileId" : 292,
+    "shinyPaletteFileId" : 293
+  }
+}

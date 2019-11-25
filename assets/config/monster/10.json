@@ -1,0 +1,27 @@
+{
+  "id" : 10,
+  "name" : "CATERPIE",
+  "nitroLabelId" : 10,
+  "height" : 3,
+  "weight" : 29,
+  "baseExperience" : 39,
+  "types" : {
+    "first" : "BUG",
+    "second" : null
+  },
+  "baseStats" : [ 45, 30, 35, 20, 20, 45 ],
+  "abilities" : [ "SHIELD-DUST", "RUN-AWAY" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 307,
+    "maleFrontSpriteGraphicFileId" : 63,
+    "maleBackSpriteGraphicFileId" : 61,
+    "femaleFrontSpriteGraphicFileId" : 62,
+    "femaleBackSpriteGraphicFileId" : 60,
+    "regularPaletteFileId" : 64,
+    "shinyPaletteFileId" : 65
+  }
+}

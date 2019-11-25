@@ -1,0 +1,27 @@
+{
+  "id" : 30,
+  "name" : "NIDORINA",
+  "nitroLabelId" : 30,
+  "height" : 8,
+  "weight" : 200,
+  "baseExperience" : 128,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 70, 62, 67, 55, 55, 56 ],
+  "abilities" : [ "POISON-POINT", "RIVALRY", "HUSTLE" ],
+  "previousEvolution" : 29,
+  "genderRate" : 8,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 328,
+    "maleFrontSpriteGraphicFileId" : -1,
+    "maleBackSpriteGraphicFileId" : -1,
+    "femaleFrontSpriteGraphicFileId" : 182,
+    "femaleBackSpriteGraphicFileId" : 180,
+    "regularPaletteFileId" : 184,
+    "shinyPaletteFileId" : 185
+  }
+}

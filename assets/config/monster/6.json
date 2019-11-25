@@ -1,0 +1,27 @@
+{
+  "id" : 6,
+  "name" : "CHARIZARD",
+  "nitroLabelId" : 6,
+  "height" : 17,
+  "weight" : 905,
+  "baseExperience" : 240,
+  "types" : {
+    "first" : "FIRE",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 78, 84, 78, 109, 85, 100 ],
+  "abilities" : [ "BLAZE", "SOLAR-POWER" ],
+  "previousEvolution" : 5,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 303,
+    "maleFrontSpriteGraphicFileId" : 39,
+    "maleBackSpriteGraphicFileId" : 37,
+    "femaleFrontSpriteGraphicFileId" : 38,
+    "femaleBackSpriteGraphicFileId" : 36,
+    "regularPaletteFileId" : 40,
+    "shinyPaletteFileId" : 41
+  }
+}

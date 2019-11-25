@@ -1,0 +1,27 @@
+{
+  "id" : 71,
+  "name" : "VICTREEBEL",
+  "nitroLabelId" : 71,
+  "height" : 17,
+  "weight" : 155,
+  "baseExperience" : 221,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 80, 105, 65, 100, 70, 70 ],
+  "abilities" : [ "CHLOROPHYLL", "GLUTTONY" ],
+  "previousEvolution" : 70,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 369,
+    "maleFrontSpriteGraphicFileId" : 429,
+    "maleBackSpriteGraphicFileId" : 427,
+    "femaleFrontSpriteGraphicFileId" : 428,
+    "femaleBackSpriteGraphicFileId" : 426,
+    "regularPaletteFileId" : 430,
+    "shinyPaletteFileId" : 431
+  }
+}

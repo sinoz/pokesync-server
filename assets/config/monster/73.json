@@ -1,0 +1,27 @@
+{
+  "id" : 73,
+  "name" : "TENTACRUEL",
+  "nitroLabelId" : 73,
+  "height" : 16,
+  "weight" : 550,
+  "baseExperience" : 180,
+  "types" : {
+    "first" : "WATER",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 80, 70, 65, 80, 120, 100 ],
+  "abilities" : [ "CLEAR-BODY", "LIQUID-OOZE", "RAIN-DISH" ],
+  "previousEvolution" : 72,
+  "genderRate" : 4,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 371,
+    "maleFrontSpriteGraphicFileId" : 441,
+    "maleBackSpriteGraphicFileId" : 439,
+    "femaleFrontSpriteGraphicFileId" : 440,
+    "femaleBackSpriteGraphicFileId" : 438,
+    "regularPaletteFileId" : 442,
+    "shinyPaletteFileId" : 443
+  }
+}

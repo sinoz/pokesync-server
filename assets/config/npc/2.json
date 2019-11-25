@@ -1,0 +1,8 @@
+{
+  "id" : 2,
+  "name" : "Steven",
+  "nitroLabelId": 0,
+  "npcVisuals" : {
+    "overworldFileId" : 59
+  }
+}

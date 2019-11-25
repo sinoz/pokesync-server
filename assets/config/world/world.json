@@ -1,0 +1,37 @@
+{
+  "width" : 1024,
+  "length" : 1024,
+
+  "regions": [
+    {
+      "label": "KANTO",
+
+      "maps": [
+        {
+          "mapX": 0,
+          "mapZ": 0,
+          "renderX": 0,
+          "renderY": 0
+        },
+        {
+          "mapX": 0,
+          "mapZ": 1,
+          "renderX": 0,
+          "renderY": 64
+        },
+        {
+          "mapX": 0,
+          "mapZ": 2,
+          "renderX": 0,
+          "renderY": 148
+        },
+        {
+          "mapX": 0,
+          "mapZ": 3,
+          "renderX": 0,
+          "renderY": 233
+        }
+      ]
+    }
+  ]
+}

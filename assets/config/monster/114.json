@@ -1,0 +1,27 @@
+{
+  "id" : 114,
+  "name" : "TANGELA",
+  "nitroLabelId" : 114,
+  "height" : 10,
+  "weight" : 350,
+  "baseExperience" : 87,
+  "types" : {
+    "first" : "GRASS",
+    "second" : null
+  },
+  "baseStats" : [ 65, 55, 115, 100, 40, 60 ],
+  "abilities" : [ "CHLOROPHYLL", "LEAF-GUARD", "REGENERATOR" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 412,
+    "maleFrontSpriteGraphicFileId" : 687,
+    "maleBackSpriteGraphicFileId" : 685,
+    "femaleFrontSpriteGraphicFileId" : 686,
+    "femaleBackSpriteGraphicFileId" : 684,
+    "regularPaletteFileId" : 688,
+    "shinyPaletteFileId" : 689
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 16,
+  "name" : "PIDGEY",
+  "nitroLabelId" : 16,
+  "height" : 3,
+  "weight" : 18,
+  "baseExperience" : 50,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 40, 45, 40, 35, 35, 56 ],
+  "abilities" : [ "KEEN-EYE", "TANGLED-FEET", "BIG-PECKS" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 313,
+    "maleFrontSpriteGraphicFileId" : 99,
+    "maleBackSpriteGraphicFileId" : 97,
+    "femaleFrontSpriteGraphicFileId" : 98,
+    "femaleBackSpriteGraphicFileId" : 96,
+    "regularPaletteFileId" : 100,
+    "shinyPaletteFileId" : 101
+  }
+}

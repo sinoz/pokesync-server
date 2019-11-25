@@ -1,0 +1,27 @@
+{
+  "id" : 103,
+  "name" : "EXEGGUTOR",
+  "nitroLabelId" : 103,
+  "height" : 20,
+  "weight" : 1200,
+  "baseExperience" : 186,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "PSYCHIC"
+  },
+  "baseStats" : [ 95, 95, 85, 125, 75, 55 ],
+  "abilities" : [ "CHLOROPHYLL", "HARVEST" ],
+  "previousEvolution" : 102,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 401,
+    "maleFrontSpriteGraphicFileId" : 621,
+    "maleBackSpriteGraphicFileId" : 619,
+    "femaleFrontSpriteGraphicFileId" : 620,
+    "femaleBackSpriteGraphicFileId" : 618,
+    "regularPaletteFileId" : 622,
+    "shinyPaletteFileId" : 623
+  }
+}

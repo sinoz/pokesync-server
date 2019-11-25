@@ -1,0 +1,27 @@
+{
+  "id" : 44,
+  "name" : "GLOOM",
+  "nitroLabelId" : 44,
+  "height" : 8,
+  "weight" : 86,
+  "baseExperience" : 138,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 60, 65, 70, 85, 75, 40 ],
+  "abilities" : [ "CHLOROPHYLL", "STENCH" ],
+  "previousEvolution" : 43,
+  "genderRate" : 4,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 342,
+    "maleFrontSpriteGraphicFileId" : 267,
+    "maleBackSpriteGraphicFileId" : 265,
+    "femaleFrontSpriteGraphicFileId" : 266,
+    "femaleBackSpriteGraphicFileId" : 264,
+    "regularPaletteFileId" : 268,
+    "shinyPaletteFileId" : 269
+  }
+}

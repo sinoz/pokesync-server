@@ -1,0 +1,27 @@
+{
+  "id" : 63,
+  "name" : "ABRA",
+  "nitroLabelId" : 63,
+  "height" : 9,
+  "weight" : 195,
+  "baseExperience" : 62,
+  "types" : {
+    "first" : "PSYCHIC",
+    "second" : null
+  },
+  "baseStats" : [ 25, 20, 15, 105, 55, 90 ],
+  "abilities" : [ "SYNCHRONIZE", "INNER-FOCUS", "MAGIC-GUARD" ],
+  "previousEvolution" : null,
+  "genderRate" : 2,
+  "captureRate" : 200,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 361,
+    "maleFrontSpriteGraphicFileId" : 381,
+    "maleBackSpriteGraphicFileId" : 379,
+    "femaleFrontSpriteGraphicFileId" : 380,
+    "femaleBackSpriteGraphicFileId" : 378,
+    "regularPaletteFileId" : 382,
+    "shinyPaletteFileId" : 383
+  }
+}

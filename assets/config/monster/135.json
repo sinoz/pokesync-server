@@ -1,0 +1,27 @@
+{
+  "id" : 135,
+  "name" : "JOLTEON",
+  "nitroLabelId" : 135,
+  "height" : 8,
+  "weight" : 245,
+  "baseExperience" : 184,
+  "types" : {
+    "first" : "ELECTRIC",
+    "second" : null
+  },
+  "baseStats" : [ 65, 65, 60, 110, 95, 130 ],
+  "abilities" : [ "VOLT-ABSORB", "QUICK-FEET" ],
+  "previousEvolution" : 133,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 433,
+    "maleFrontSpriteGraphicFileId" : 813,
+    "maleBackSpriteGraphicFileId" : 811,
+    "femaleFrontSpriteGraphicFileId" : 812,
+    "femaleBackSpriteGraphicFileId" : 810,
+    "regularPaletteFileId" : 814,
+    "shinyPaletteFileId" : 815
+  }
+}

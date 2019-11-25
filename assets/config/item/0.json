@@ -1,0 +1,10 @@
+{
+  "id" : 0,
+  "name" : "poke-ball",
+  "nitroLabelId": 0,
+  "storePrice" : 200,
+  "itemVisuals" : {
+    "graphicFileId" : 8,
+    "paletteFileId" : 9
+  }
+}

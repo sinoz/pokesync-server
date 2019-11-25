@@ -1,0 +1,27 @@
+{
+  "id" : 49,
+  "name" : "VENOMOTH",
+  "nitroLabelId" : 49,
+  "height" : 15,
+  "weight" : 125,
+  "baseExperience" : 158,
+  "types" : {
+    "first" : "BUG",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 70, 65, 60, 90, 75, 90 ],
+  "abilities" : [ "SHIELD-DUST", "TINTED-LENS", "WONDER-SKIN" ],
+  "previousEvolution" : 48,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 347,
+    "maleFrontSpriteGraphicFileId" : 297,
+    "maleBackSpriteGraphicFileId" : 295,
+    "femaleFrontSpriteGraphicFileId" : 296,
+    "femaleBackSpriteGraphicFileId" : 294,
+    "regularPaletteFileId" : 298,
+    "shinyPaletteFileId" : 299
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 131,
+  "name" : "LAPRAS",
+  "nitroLabelId" : 131,
+  "height" : 25,
+  "weight" : 2200,
+  "baseExperience" : 187,
+  "types" : {
+    "first" : "WATER",
+    "second" : "ICE"
+  },
+  "baseStats" : [ 130, 85, 80, 85, 95, 60 ],
+  "abilities" : [ "WATER-ABSORB", "SHELL-ARMOR", "HYDRATION" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 429,
+    "maleFrontSpriteGraphicFileId" : 789,
+    "maleBackSpriteGraphicFileId" : 787,
+    "femaleFrontSpriteGraphicFileId" : 788,
+    "femaleBackSpriteGraphicFileId" : 786,
+    "regularPaletteFileId" : 790,
+    "shinyPaletteFileId" : 791
+  }
+}

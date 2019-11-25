@@ -1,0 +1,27 @@
+{
+  "id" : 75,
+  "name" : "GRAVELER",
+  "nitroLabelId" : 75,
+  "height" : 10,
+  "weight" : 1050,
+  "baseExperience" : 137,
+  "types" : {
+    "first" : "ROCK",
+    "second" : "GROUND"
+  },
+  "baseStats" : [ 55, 95, 115, 45, 45, 35 ],
+  "abilities" : [ "ROCK-HEAD", "STURDY", "SAND-VEIL" ],
+  "previousEvolution" : 74,
+  "genderRate" : 4,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 373,
+    "maleFrontSpriteGraphicFileId" : 453,
+    "maleBackSpriteGraphicFileId" : 451,
+    "femaleFrontSpriteGraphicFileId" : 452,
+    "femaleBackSpriteGraphicFileId" : 450,
+    "regularPaletteFileId" : 454,
+    "shinyPaletteFileId" : 455
+  }
+}

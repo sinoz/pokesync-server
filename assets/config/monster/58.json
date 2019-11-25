@@ -1,0 +1,27 @@
+{
+  "id" : 58,
+  "name" : "GROWLITHE",
+  "nitroLabelId" : 58,
+  "height" : 7,
+  "weight" : 190,
+  "baseExperience" : 70,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 55, 70, 45, 70, 50, 60 ],
+  "abilities" : [ "INTIMIDATE", "FLASH-FIRE", "JUSTIFIED" ],
+  "previousEvolution" : null,
+  "genderRate" : 2,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 356,
+    "maleFrontSpriteGraphicFileId" : 351,
+    "maleBackSpriteGraphicFileId" : 349,
+    "femaleFrontSpriteGraphicFileId" : 350,
+    "femaleBackSpriteGraphicFileId" : 348,
+    "regularPaletteFileId" : 352,
+    "shinyPaletteFileId" : 353
+  }
+}

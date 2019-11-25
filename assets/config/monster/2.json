@@ -1,0 +1,27 @@
+{
+  "id" : 2,
+  "name" : "IVYSAUR",
+  "nitroLabelId" : 2,
+  "height" : 10,
+  "weight" : 130,
+  "baseExperience" : 142,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 60, 62, 63, 80, 80, 60 ],
+  "abilities" : [ "OVERGROW", "CHLOROPHYLL" ],
+  "previousEvolution" : 1,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 298,
+    "maleFrontSpriteGraphicFileId" : 15,
+    "maleBackSpriteGraphicFileId" : 13,
+    "femaleFrontSpriteGraphicFileId" : 14,
+    "femaleBackSpriteGraphicFileId" : 12,
+    "regularPaletteFileId" : 16,
+    "shinyPaletteFileId" : 17
+  }
+}

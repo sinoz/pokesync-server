@@ -1,0 +1,27 @@
+{
+  "id" : 129,
+  "name" : "MAGIKARP",
+  "nitroLabelId" : 129,
+  "height" : 9,
+  "weight" : 100,
+  "baseExperience" : 40,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 20, 10, 55, 15, 20, 80 ],
+  "abilities" : [ "SWIFT-SWIM", "RATTLED" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 427,
+    "maleFrontSpriteGraphicFileId" : 777,
+    "maleBackSpriteGraphicFileId" : 775,
+    "femaleFrontSpriteGraphicFileId" : 776,
+    "femaleBackSpriteGraphicFileId" : 774,
+    "regularPaletteFileId" : 778,
+    "shinyPaletteFileId" : 779
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 54,
+  "name" : "PSYDUCK",
+  "nitroLabelId" : 54,
+  "height" : 8,
+  "weight" : 196,
+  "baseExperience" : 64,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 50, 52, 48, 65, 50, 55 ],
+  "abilities" : [ "DAMP", "CLOUD-NINE", "SWIFT-SWIM" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 352,
+    "maleFrontSpriteGraphicFileId" : 327,
+    "maleBackSpriteGraphicFileId" : 325,
+    "femaleFrontSpriteGraphicFileId" : 326,
+    "femaleBackSpriteGraphicFileId" : 324,
+    "regularPaletteFileId" : 328,
+    "shinyPaletteFileId" : 329
+  }
+}

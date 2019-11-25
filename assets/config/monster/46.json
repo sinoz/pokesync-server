@@ -1,0 +1,27 @@
+{
+  "id" : 46,
+  "name" : "PARAS",
+  "nitroLabelId" : 46,
+  "height" : 3,
+  "weight" : 54,
+  "baseExperience" : 57,
+  "types" : {
+    "first" : "BUG",
+    "second" : "GRASS"
+  },
+  "baseStats" : [ 35, 70, 55, 45, 55, 25 ],
+  "abilities" : [ "EFFECT-SPORE", "DRY-SKIN", "DAMP" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 344,
+    "maleFrontSpriteGraphicFileId" : 279,
+    "maleBackSpriteGraphicFileId" : 277,
+    "femaleFrontSpriteGraphicFileId" : 278,
+    "femaleBackSpriteGraphicFileId" : 276,
+    "regularPaletteFileId" : 280,
+    "shinyPaletteFileId" : 281
+  }
+}

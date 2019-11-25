@@ -1,0 +1,27 @@
+{
+  "id" : 134,
+  "name" : "VAPOREON",
+  "nitroLabelId" : 134,
+  "height" : 10,
+  "weight" : 290,
+  "baseExperience" : 184,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 130, 65, 60, 110, 95, 65 ],
+  "abilities" : [ "WATER-ABSORB", "HYDRATION" ],
+  "previousEvolution" : 133,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 432,
+    "maleFrontSpriteGraphicFileId" : 807,
+    "maleBackSpriteGraphicFileId" : 805,
+    "femaleFrontSpriteGraphicFileId" : 806,
+    "femaleBackSpriteGraphicFileId" : 804,
+    "regularPaletteFileId" : 808,
+    "shinyPaletteFileId" : 809
+  }
+}

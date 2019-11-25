@@ -1,0 +1,27 @@
+{
+  "id" : 52,
+  "name" : "MEOWTH",
+  "nitroLabelId" : 52,
+  "height" : 4,
+  "weight" : 42,
+  "baseExperience" : 58,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 40, 45, 35, 40, 40, 90 ],
+  "abilities" : [ "PICKUP", "TECHNICIAN", "UNNERVE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 350,
+    "maleFrontSpriteGraphicFileId" : 315,
+    "maleBackSpriteGraphicFileId" : 313,
+    "femaleFrontSpriteGraphicFileId" : 314,
+    "femaleBackSpriteGraphicFileId" : 312,
+    "regularPaletteFileId" : 316,
+    "shinyPaletteFileId" : 317
+  }
+}

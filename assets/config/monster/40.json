@@ -1,0 +1,27 @@
+{
+  "id" : 40,
+  "name" : "WIGGLYTUFF",
+  "nitroLabelId" : 40,
+  "height" : 10,
+  "weight" : 120,
+  "baseExperience" : 196,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FAIRY"
+  },
+  "baseStats" : [ 140, 70, 45, 85, 50, 45 ],
+  "abilities" : [ "CUTE-CHARM", "COMPETITIVE", "FRISK" ],
+  "previousEvolution" : 39,
+  "genderRate" : 6,
+  "captureRate" : 50,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 338,
+    "maleFrontSpriteGraphicFileId" : 243,
+    "maleBackSpriteGraphicFileId" : 241,
+    "femaleFrontSpriteGraphicFileId" : 242,
+    "femaleBackSpriteGraphicFileId" : 240,
+    "regularPaletteFileId" : 244,
+    "shinyPaletteFileId" : 245
+  }
+}

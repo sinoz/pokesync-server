@@ -1,0 +1,27 @@
+{
+  "id" : 24,
+  "name" : "ARBOK",
+  "nitroLabelId" : 24,
+  "height" : 35,
+  "weight" : 650,
+  "baseExperience" : 157,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 60, 95, 69, 65, 79, 80 ],
+  "abilities" : [ "INTIMIDATE", "SHED-SKIN", "UNNERVE" ],
+  "previousEvolution" : 23,
+  "genderRate" : 4,
+  "captureRate" : 90,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 321,
+    "maleFrontSpriteGraphicFileId" : 147,
+    "maleBackSpriteGraphicFileId" : 145,
+    "femaleFrontSpriteGraphicFileId" : 146,
+    "femaleBackSpriteGraphicFileId" : 144,
+    "regularPaletteFileId" : 148,
+    "shinyPaletteFileId" : 149
+  }
+}

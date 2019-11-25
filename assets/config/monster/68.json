@@ -1,0 +1,27 @@
+{
+  "id" : 68,
+  "name" : "MACHAMP",
+  "nitroLabelId" : 68,
+  "height" : 16,
+  "weight" : 1300,
+  "baseExperience" : 227,
+  "types" : {
+    "first" : "FIGHTING",
+    "second" : null
+  },
+  "baseStats" : [ 90, 130, 80, 65, 85, 55 ],
+  "abilities" : [ "GUTS", "NO-GUARD", "STEADFAST" ],
+  "previousEvolution" : 67,
+  "genderRate" : 2,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 366,
+    "maleFrontSpriteGraphicFileId" : 411,
+    "maleBackSpriteGraphicFileId" : 409,
+    "femaleFrontSpriteGraphicFileId" : 410,
+    "femaleBackSpriteGraphicFileId" : 408,
+    "regularPaletteFileId" : 412,
+    "shinyPaletteFileId" : 413
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 15,
+  "name" : "BEEDRILL",
+  "nitroLabelId" : 15,
+  "height" : 10,
+  "weight" : 295,
+  "baseExperience" : 178,
+  "types" : {
+    "first" : "BUG",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 65, 90, 40, 45, 80, 75 ],
+  "abilities" : [ "SWARM", "SNIPER" ],
+  "previousEvolution" : 14,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 312,
+    "maleFrontSpriteGraphicFileId" : 93,
+    "maleBackSpriteGraphicFileId" : 91,
+    "femaleFrontSpriteGraphicFileId" : 92,
+    "femaleBackSpriteGraphicFileId" : 90,
+    "regularPaletteFileId" : 94,
+    "shinyPaletteFileId" : 95
+  }
+}

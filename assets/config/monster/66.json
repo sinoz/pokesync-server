@@ -1,0 +1,27 @@
+{
+  "id" : 66,
+  "name" : "MACHOP",
+  "nitroLabelId" : 66,
+  "height" : 8,
+  "weight" : 195,
+  "baseExperience" : 61,
+  "types" : {
+    "first" : "FIGHTING",
+    "second" : null
+  },
+  "baseStats" : [ 70, 80, 50, 35, 35, 35 ],
+  "abilities" : [ "GUTS", "NO-GUARD", "STEADFAST" ],
+  "previousEvolution" : null,
+  "genderRate" : 2,
+  "captureRate" : 180,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 364,
+    "maleFrontSpriteGraphicFileId" : 399,
+    "maleBackSpriteGraphicFileId" : 397,
+    "femaleFrontSpriteGraphicFileId" : 398,
+    "femaleBackSpriteGraphicFileId" : 396,
+    "regularPaletteFileId" : 400,
+    "shinyPaletteFileId" : 401
+  }
+}

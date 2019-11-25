@@ -1,0 +1,27 @@
+{
+  "id" : 119,
+  "name" : "SEAKING",
+  "nitroLabelId" : 119,
+  "height" : 13,
+  "weight" : 390,
+  "baseExperience" : 158,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 80, 92, 65, 65, 80, 68 ],
+  "abilities" : [ "SWIFT-SWIM", "WATER-VEIL", "LIGHTNING-ROD" ],
+  "previousEvolution" : 118,
+  "genderRate" : 4,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 417,
+    "maleFrontSpriteGraphicFileId" : 717,
+    "maleBackSpriteGraphicFileId" : 715,
+    "femaleFrontSpriteGraphicFileId" : 716,
+    "femaleBackSpriteGraphicFileId" : 714,
+    "regularPaletteFileId" : 718,
+    "shinyPaletteFileId" : 719
+  }
+}

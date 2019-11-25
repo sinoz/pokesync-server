@@ -1,0 +1,27 @@
+{
+  "id" : 137,
+  "name" : "PORYGON",
+  "nitroLabelId" : 137,
+  "height" : 8,
+  "weight" : 365,
+  "baseExperience" : 79,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 65, 60, 70, 85, 75, 40 ],
+  "abilities" : [ "TRACE", "DOWNLOAD", "ANALYTIC" ],
+  "previousEvolution" : null,
+  "genderRate" : -1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 435,
+    "maleFrontSpriteGraphicFileId" : 825,
+    "maleBackSpriteGraphicFileId" : 823,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 826,
+    "shinyPaletteFileId" : 827
+  }
+}

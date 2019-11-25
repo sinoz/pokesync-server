@@ -1,0 +1,27 @@
+{
+  "id" : 14,
+  "name" : "KAKUNA",
+  "nitroLabelId" : 14,
+  "height" : 6,
+  "weight" : 100,
+  "baseExperience" : 72,
+  "types" : {
+    "first" : "BUG",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 45, 25, 50, 25, 25, 35 ],
+  "abilities" : [ "SHED-SKIN" ],
+  "previousEvolution" : 13,
+  "genderRate" : 4,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 311,
+    "maleFrontSpriteGraphicFileId" : 87,
+    "maleBackSpriteGraphicFileId" : 85,
+    "femaleFrontSpriteGraphicFileId" : 86,
+    "femaleBackSpriteGraphicFileId" : 84,
+    "regularPaletteFileId" : 88,
+    "shinyPaletteFileId" : 89
+  }
+}

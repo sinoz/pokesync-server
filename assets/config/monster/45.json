@@ -1,0 +1,27 @@
+{
+  "id" : 45,
+  "name" : "VILEPLUME",
+  "nitroLabelId" : 45,
+  "height" : 12,
+  "weight" : 186,
+  "baseExperience" : 221,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 75, 80, 85, 110, 90, 50 ],
+  "abilities" : [ "CHLOROPHYLL", "EFFECT-SPORE" ],
+  "previousEvolution" : 44,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 343,
+    "maleFrontSpriteGraphicFileId" : 273,
+    "maleBackSpriteGraphicFileId" : 271,
+    "femaleFrontSpriteGraphicFileId" : 272,
+    "femaleBackSpriteGraphicFileId" : 270,
+    "regularPaletteFileId" : 274,
+    "shinyPaletteFileId" : 275
+  }
+}

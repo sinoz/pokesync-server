@@ -1,0 +1,27 @@
+{
+  "id" : 143,
+  "name" : "SNORLAX",
+  "nitroLabelId" : 143,
+  "height" : 21,
+  "weight" : 4600,
+  "baseExperience" : 189,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 160, 110, 65, 65, 110, 30 ],
+  "abilities" : [ "IMMUNITY", "THICK-FAT", "GLUTTONY" ],
+  "previousEvolution" : 446,
+  "genderRate" : 1,
+  "captureRate" : 25,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 441,
+    "maleFrontSpriteGraphicFileId" : 861,
+    "maleBackSpriteGraphicFileId" : 859,
+    "femaleFrontSpriteGraphicFileId" : 860,
+    "femaleBackSpriteGraphicFileId" : 858,
+    "regularPaletteFileId" : 862,
+    "shinyPaletteFileId" : 863
+  }
+}

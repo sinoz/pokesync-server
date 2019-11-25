@@ -1,0 +1,27 @@
+{
+  "id" : 57,
+  "name" : "PRIMEAPE",
+  "nitroLabelId" : 57,
+  "height" : 10,
+  "weight" : 320,
+  "baseExperience" : 159,
+  "types" : {
+    "first" : "FIGHTING",
+    "second" : null
+  },
+  "baseStats" : [ 65, 105, 60, 60, 70, 95 ],
+  "abilities" : [ "VITAL-SPIRIT", "ANGER-POINT", "DEFIANT" ],
+  "previousEvolution" : 56,
+  "genderRate" : 4,
+  "captureRate" : 75,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 355,
+    "maleFrontSpriteGraphicFileId" : 345,
+    "maleBackSpriteGraphicFileId" : 343,
+    "femaleFrontSpriteGraphicFileId" : 344,
+    "femaleBackSpriteGraphicFileId" : 342,
+    "regularPaletteFileId" : 346,
+    "shinyPaletteFileId" : 347
+  }
+}

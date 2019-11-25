@@ -1,0 +1,27 @@
+{
+  "id" : 85,
+  "name" : "DODRIO",
+  "nitroLabelId" : 85,
+  "height" : 18,
+  "weight" : 852,
+  "baseExperience" : 165,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 60, 110, 70, 60, 60, 110 ],
+  "abilities" : [ "RUN-AWAY", "EARLY-BIRD", "TANGLED-FEET" ],
+  "previousEvolution" : 84,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 383,
+    "maleFrontSpriteGraphicFileId" : 513,
+    "maleBackSpriteGraphicFileId" : 511,
+    "femaleFrontSpriteGraphicFileId" : 512,
+    "femaleBackSpriteGraphicFileId" : 510,
+    "regularPaletteFileId" : 514,
+    "shinyPaletteFileId" : 515
+  }
+}

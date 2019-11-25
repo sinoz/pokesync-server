@@ -1,0 +1,27 @@
+{
+  "id" : 104,
+  "name" : "CUBONE",
+  "nitroLabelId" : 104,
+  "height" : 4,
+  "weight" : 65,
+  "baseExperience" : 64,
+  "types" : {
+    "first" : "GROUND",
+    "second" : null
+  },
+  "baseStats" : [ 50, 50, 95, 40, 50, 35 ],
+  "abilities" : [ "ROCK-HEAD", "LIGHTNING-ROD", "BATTLE-ARMOR" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 402,
+    "maleFrontSpriteGraphicFileId" : 627,
+    "maleBackSpriteGraphicFileId" : 625,
+    "femaleFrontSpriteGraphicFileId" : 626,
+    "femaleBackSpriteGraphicFileId" : 624,
+    "regularPaletteFileId" : 628,
+    "shinyPaletteFileId" : 629
+  }
+}

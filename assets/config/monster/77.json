@@ -1,0 +1,27 @@
+{
+  "id" : 77,
+  "name" : "PONYTA",
+  "nitroLabelId" : 77,
+  "height" : 10,
+  "weight" : 300,
+  "baseExperience" : 82,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 50, 85, 55, 65, 65, 90 ],
+  "abilities" : [ "RUN-AWAY", "FLASH-FIRE", "FLAME-BODY" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 375,
+    "maleFrontSpriteGraphicFileId" : 465,
+    "maleBackSpriteGraphicFileId" : 463,
+    "femaleFrontSpriteGraphicFileId" : 464,
+    "femaleBackSpriteGraphicFileId" : 462,
+    "regularPaletteFileId" : 466,
+    "shinyPaletteFileId" : 467
+  }
+}

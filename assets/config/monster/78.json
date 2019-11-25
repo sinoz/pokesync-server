@@ -1,0 +1,27 @@
+{
+  "id" : 78,
+  "name" : "RAPIDASH",
+  "nitroLabelId" : 78,
+  "height" : 17,
+  "weight" : 950,
+  "baseExperience" : 175,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 65, 100, 70, 80, 80, 105 ],
+  "abilities" : [ "RUN-AWAY", "FLASH-FIRE", "FLAME-BODY" ],
+  "previousEvolution" : 77,
+  "genderRate" : 4,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 376,
+    "maleFrontSpriteGraphicFileId" : 471,
+    "maleBackSpriteGraphicFileId" : 469,
+    "femaleFrontSpriteGraphicFileId" : 470,
+    "femaleBackSpriteGraphicFileId" : 468,
+    "regularPaletteFileId" : 472,
+    "shinyPaletteFileId" : 473
+  }
+}

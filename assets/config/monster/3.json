@@ -1,0 +1,27 @@
+{
+  "id" : 3,
+  "name" : "VENUSAUR",
+  "nitroLabelId" : 3,
+  "height" : 20,
+  "weight" : 1000,
+  "baseExperience" : 236,
+  "types" : {
+    "first" : "GRASS",
+    "second" : "POISON"
+  },
+  "baseStats" : [ 80, 82, 83, 100, 100, 80 ],
+  "abilities" : [ "OVERGROW", "CHLOROPHYLL" ],
+  "previousEvolution" : 2,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 299,
+    "maleFrontSpriteGraphicFileId" : 21,
+    "maleBackSpriteGraphicFileId" : 19,
+    "femaleFrontSpriteGraphicFileId" : 20,
+    "femaleBackSpriteGraphicFileId" : 18,
+    "regularPaletteFileId" : 22,
+    "shinyPaletteFileId" : 23
+  }
+}

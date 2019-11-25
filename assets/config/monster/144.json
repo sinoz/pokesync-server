@@ -1,0 +1,27 @@
+{
+  "id" : 144,
+  "name" : "ARTICUNO",
+  "nitroLabelId" : 144,
+  "height" : 17,
+  "weight" : 554,
+  "baseExperience" : 261,
+  "types" : {
+    "first" : "ICE",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 90, 85, 100, 95, 125, 85 ],
+  "abilities" : [ "PRESSURE", "SNOW-CLOAK" ],
+  "previousEvolution" : null,
+  "genderRate" : -1,
+  "captureRate" : 3,
+  "baseHappiness" : 35,
+  "visuals" : {
+    "overworldFileId" : 442,
+    "maleFrontSpriteGraphicFileId" : 867,
+    "maleBackSpriteGraphicFileId" : 865,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 868,
+    "shinyPaletteFileId" : 869
+  }
+}

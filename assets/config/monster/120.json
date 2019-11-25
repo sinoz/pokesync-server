@@ -1,0 +1,27 @@
+{
+  "id" : 120,
+  "name" : "STARYU",
+  "nitroLabelId" : 120,
+  "height" : 8,
+  "weight" : 345,
+  "baseExperience" : 68,
+  "types" : {
+    "first" : "WATER",
+    "second" : null
+  },
+  "baseStats" : [ 30, 45, 55, 70, 55, 85 ],
+  "abilities" : [ "ILLUMINATE", "NATURAL-CURE", "ANALYTIC" ],
+  "previousEvolution" : null,
+  "genderRate" : -1,
+  "captureRate" : 225,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 418,
+    "maleFrontSpriteGraphicFileId" : 723,
+    "maleBackSpriteGraphicFileId" : 721,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 724,
+    "shinyPaletteFileId" : 725
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 21,
+  "name" : "SPEAROW",
+  "nitroLabelId" : 21,
+  "height" : 3,
+  "weight" : 20,
+  "baseExperience" : 52,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 40, 60, 30, 31, 31, 70 ],
+  "abilities" : [ "KEEN-EYE", "SNIPER" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 318,
+    "maleFrontSpriteGraphicFileId" : 129,
+    "maleBackSpriteGraphicFileId" : 127,
+    "femaleFrontSpriteGraphicFileId" : 128,
+    "femaleBackSpriteGraphicFileId" : 126,
+    "regularPaletteFileId" : 130,
+    "shinyPaletteFileId" : 131
+  }
+}

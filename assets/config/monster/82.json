@@ -1,0 +1,27 @@
+{
+  "id" : 82,
+  "name" : "MAGNETON",
+  "nitroLabelId" : 82,
+  "height" : 10,
+  "weight" : 600,
+  "baseExperience" : 163,
+  "types" : {
+    "first" : "ELECTRIC",
+    "second" : "STEEL"
+  },
+  "baseStats" : [ 50, 60, 95, 120, 70, 70 ],
+  "abilities" : [ "MAGNET-PULL", "STURDY", "ANALYTIC" ],
+  "previousEvolution" : 81,
+  "genderRate" : -1,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 380,
+    "maleFrontSpriteGraphicFileId" : 495,
+    "maleBackSpriteGraphicFileId" : 493,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 496,
+    "shinyPaletteFileId" : 497
+  }
+}

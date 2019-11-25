@@ -1,0 +1,27 @@
+{
+  "id" : 112,
+  "name" : "RHYDON",
+  "nitroLabelId" : 112,
+  "height" : 19,
+  "weight" : 1200,
+  "baseExperience" : 170,
+  "types" : {
+    "first" : "GROUND",
+    "second" : "ROCK"
+  },
+  "baseStats" : [ 105, 130, 120, 45, 45, 40 ],
+  "abilities" : [ "LIGHTNING-ROD", "ROCK-HEAD", "RECKLESS" ],
+  "previousEvolution" : 111,
+  "genderRate" : 4,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 410,
+    "maleFrontSpriteGraphicFileId" : 675,
+    "maleBackSpriteGraphicFileId" : 673,
+    "femaleFrontSpriteGraphicFileId" : 674,
+    "femaleBackSpriteGraphicFileId" : 672,
+    "regularPaletteFileId" : 676,
+    "shinyPaletteFileId" : 677
+  }
+}

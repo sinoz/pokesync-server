@@ -1,0 +1,27 @@
+{
+  "id" : 126,
+  "name" : "MAGMAR",
+  "nitroLabelId" : 126,
+  "height" : 13,
+  "weight" : 445,
+  "baseExperience" : 173,
+  "types" : {
+    "first" : "FIRE",
+    "second" : null
+  },
+  "baseStats" : [ 65, 95, 57, 100, 85, 93 ],
+  "abilities" : [ "FLAME-BODY", "VITAL-SPIRIT" ],
+  "previousEvolution" : 240,
+  "genderRate" : 2,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 424,
+    "maleFrontSpriteGraphicFileId" : 759,
+    "maleBackSpriteGraphicFileId" : 757,
+    "femaleFrontSpriteGraphicFileId" : 758,
+    "femaleBackSpriteGraphicFileId" : 756,
+    "regularPaletteFileId" : 760,
+    "shinyPaletteFileId" : 761
+  }
+}

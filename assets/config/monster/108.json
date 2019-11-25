@@ -1,0 +1,27 @@
+{
+  "id" : 108,
+  "name" : "LICKITUNG",
+  "nitroLabelId" : 108,
+  "height" : 12,
+  "weight" : 655,
+  "baseExperience" : 77,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 90, 55, 75, 60, 75, 30 ],
+  "abilities" : [ "OWN-TEMPO", "OBLIVIOUS", "CLOUD-NINE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 406,
+    "maleFrontSpriteGraphicFileId" : 651,
+    "maleBackSpriteGraphicFileId" : 649,
+    "femaleFrontSpriteGraphicFileId" : 650,
+    "femaleBackSpriteGraphicFileId" : 648,
+    "regularPaletteFileId" : 652,
+    "shinyPaletteFileId" : 653
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 141,
+  "name" : "KABUTOPS",
+  "nitroLabelId" : 141,
+  "height" : 13,
+  "weight" : 405,
+  "baseExperience" : 173,
+  "types" : {
+    "first" : "ROCK",
+    "second" : "WATER"
+  },
+  "baseStats" : [ 60, 115, 105, 65, 70, 80 ],
+  "abilities" : [ "SWIFT-SWIM", "BATTLE-ARMOR", "WEAK-ARMOR" ],
+  "previousEvolution" : 140,
+  "genderRate" : 1,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 439,
+    "maleFrontSpriteGraphicFileId" : 849,
+    "maleBackSpriteGraphicFileId" : 847,
+    "femaleFrontSpriteGraphicFileId" : 848,
+    "femaleBackSpriteGraphicFileId" : 846,
+    "regularPaletteFileId" : 850,
+    "shinyPaletteFileId" : 851
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 19,
+  "name" : "RATTATA",
+  "nitroLabelId" : 19,
+  "height" : 3,
+  "weight" : 35,
+  "baseExperience" : 51,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : null
+  },
+  "baseStats" : [ 30, 56, 35, 25, 35, 72 ],
+  "abilities" : [ "RUN-AWAY", "GUTS", "HUSTLE" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 255,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 316,
+    "maleFrontSpriteGraphicFileId" : 117,
+    "maleBackSpriteGraphicFileId" : 115,
+    "femaleFrontSpriteGraphicFileId" : 116,
+    "femaleBackSpriteGraphicFileId" : 114,
+    "regularPaletteFileId" : 118,
+    "shinyPaletteFileId" : 119
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id" : 32,
+  "name" : "NIDORAN-M",
+  "nitroLabelId" : 32,
+  "height" : 5,
+  "weight" : 90,
+  "baseExperience" : 55,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 46, 57, 40, 40, 40, 50 ],
+  "abilities" : [ "POISON-POINT", "RIVALRY", "HUSTLE" ],
+  "previousEvolution" : null,
+  "genderRate" : 0,
+  "captureRate" : 235,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 330,
+    "maleFrontSpriteGraphicFileId" : 195,
+    "maleBackSpriteGraphicFileId" : 193,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 196,
+    "shinyPaletteFileId" : 197
+  }
+}

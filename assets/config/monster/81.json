@@ -1,0 +1,27 @@
+{
+  "id" : 81,
+  "name" : "MAGNEMITE",
+  "nitroLabelId" : 81,
+  "height" : 3,
+  "weight" : 60,
+  "baseExperience" : 65,
+  "types" : {
+    "first" : "ELECTRIC",
+    "second" : "STEEL"
+  },
+  "baseStats" : [ 25, 35, 70, 95, 55, 45 ],
+  "abilities" : [ "MAGNET-PULL", "STURDY", "ANALYTIC" ],
+  "previousEvolution" : null,
+  "genderRate" : -1,
+  "captureRate" : 190,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 379,
+    "maleFrontSpriteGraphicFileId" : 489,
+    "maleBackSpriteGraphicFileId" : 487,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 490,
+    "shinyPaletteFileId" : 491
+  }
+}

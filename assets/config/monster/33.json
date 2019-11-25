@@ -1,0 +1,27 @@
+{
+  "id" : 33,
+  "name" : "NIDORINO",
+  "nitroLabelId" : 33,
+  "height" : 9,
+  "weight" : 195,
+  "baseExperience" : 128,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 61, 72, 57, 55, 55, 65 ],
+  "abilities" : [ "POISON-POINT", "RIVALRY", "HUSTLE" ],
+  "previousEvolution" : 32,
+  "genderRate" : 0,
+  "captureRate" : 120,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 331,
+    "maleFrontSpriteGraphicFileId" : 201,
+    "maleBackSpriteGraphicFileId" : 199,
+    "femaleFrontSpriteGraphicFileId" : -1,
+    "femaleBackSpriteGraphicFileId" : -1,
+    "regularPaletteFileId" : 202,
+    "shinyPaletteFileId" : 203
+  }
+}

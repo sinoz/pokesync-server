@@ -1,0 +1,27 @@
+{
+  "id" : 123,
+  "name" : "SCYTHER",
+  "nitroLabelId" : 123,
+  "height" : 15,
+  "weight" : 560,
+  "baseExperience" : 100,
+  "types" : {
+    "first" : "BUG",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 70, 110, 80, 55, 80, 105 ],
+  "abilities" : [ "SWARM", "TECHNICIAN", "STEADFAST" ],
+  "previousEvolution" : null,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 421,
+    "maleFrontSpriteGraphicFileId" : 741,
+    "maleBackSpriteGraphicFileId" : 739,
+    "femaleFrontSpriteGraphicFileId" : 740,
+    "femaleBackSpriteGraphicFileId" : 738,
+    "regularPaletteFileId" : 742,
+    "shinyPaletteFileId" : 743
+  }
+}

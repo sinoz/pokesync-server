@@ -1,0 +1,27 @@
+{
+  "id" : 110,
+  "name" : "WEEZING",
+  "nitroLabelId" : 110,
+  "height" : 12,
+  "weight" : 95,
+  "baseExperience" : 172,
+  "types" : {
+    "first" : "POISON",
+    "second" : null
+  },
+  "baseStats" : [ 65, 90, 120, 85, 70, 60 ],
+  "abilities" : [ "LEVITATE" ],
+  "previousEvolution" : 109,
+  "genderRate" : 4,
+  "captureRate" : 60,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 408,
+    "maleFrontSpriteGraphicFileId" : 663,
+    "maleBackSpriteGraphicFileId" : 661,
+    "femaleFrontSpriteGraphicFileId" : 662,
+    "femaleBackSpriteGraphicFileId" : 660,
+    "regularPaletteFileId" : 664,
+    "shinyPaletteFileId" : 665
+  }
+}

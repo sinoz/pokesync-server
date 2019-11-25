@@ -1,0 +1,27 @@
+{
+  "id" : 18,
+  "name" : "PIDGEOT",
+  "nitroLabelId" : 18,
+  "height" : 15,
+  "weight" : 395,
+  "baseExperience" : 216,
+  "types" : {
+    "first" : "NORMAL",
+    "second" : "FLYING"
+  },
+  "baseStats" : [ 83, 80, 75, 70, 70, 101 ],
+  "abilities" : [ "KEEN-EYE", "TANGLED-FEET", "BIG-PECKS" ],
+  "previousEvolution" : 17,
+  "genderRate" : 4,
+  "captureRate" : 45,
+  "baseHappiness" : 70,
+  "visuals" : {
+    "overworldFileId" : 315,
+    "maleFrontSpriteGraphicFileId" : 111,
+    "maleBackSpriteGraphicFileId" : 109,
+    "femaleFrontSpriteGraphicFileId" : 110,
+    "femaleBackSpriteGraphicFileId" : 108,
+    "regularPaletteFileId" : 112,
+    "shinyPaletteFileId" : 113
+  }
+}
