@@ -21,7 +21,7 @@ RUN go get -u github.com/golang/dep/cmd/dep \
 FROM alpine
 
 # Copies over the binary from $GOPATH/bin/ to the root directory within the image
-COPY --from=builder go/bin/pokesync game-service
+COPY --from=builder go/bin/game-service game-service
 
 # Copies over all of the necessary resources the server requires to run
 COPY --from=builder go/src/gitlab.com/pokesync/game-service/assets/ assets/
