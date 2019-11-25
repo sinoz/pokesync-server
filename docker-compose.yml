@@ -1,6 +1,6 @@
 version: '3.0'
 services:
-  core:
+  game-service:
     build: .
     environment:
       POKESYNC_HOST: "0.0.0.0"
