@@ -5,8 +5,10 @@ import (
 	"time"
 )
 
+var config = RouterConfig{PublicationTimeout: 2 * time.Second}
+
 func TestRouter_Subscribe(t *testing.T) {
-	router := NewRouter()
+	router := NewRouter(config)
 	router.Subscribe("hello")
 
 	if router.TopicCount() != 1 {
@@ -15,7 +17,7 @@ func TestRouter_Subscribe(t *testing.T) {
 }
 
 func TestRouter_SubscribeMailboxToTopic(t *testing.T) {
-	router := NewRouter()
+	router := NewRouter(config)
 
 	m := router.Subscribe("hello")
 
@@ -36,7 +38,7 @@ func TestRouter_SubscribeMailboxToTopic(t *testing.T) {
 }
 
 func TestRouter_Publish(t *testing.T) {
-	router := NewRouter()
+	router := NewRouter(config)
 
 	m1 := router.Subscribe("hello")
 	m2 := router.Subscribe("hello1")
@@ -61,7 +63,7 @@ func TestRouter_Publish(t *testing.T) {
 }
 
 func TestRouter_Collapse(t *testing.T) {
-	router := NewRouter()
+	router := NewRouter(config)
 
 	router.Subscribe("hello")
 	router.Subscribe("hello1")
@@ -82,7 +84,7 @@ func TestRouter_Collapse(t *testing.T) {
 }
 
 func TestRouter_Unsubscribe(t *testing.T) {
-	router := NewRouter()
+	router := NewRouter(config)
 
 	m1 := router.Subscribe("hello")
 	m2 := router.Subscribe("hello1")

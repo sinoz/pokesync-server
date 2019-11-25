@@ -87,7 +87,7 @@ func (manager *systemManager) update(deltaTime float64) {
 
 	for _, system := range manager.systems {
 		if system.Policy.ShouldRun() {
-			system.Update(deltaTime)
+			// TODO
 		}
 	}
 }
