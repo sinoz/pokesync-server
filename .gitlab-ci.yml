@@ -20,7 +20,8 @@ build-game-service:
   stage: build
   script:
     - dep ensure
-    - go build -o ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}/${BIN_NAME}/cmd/${ARTIFACTS_DIR}
+    - cd cmd/${BIN_NAME}
+    - go build -o ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}/${BIN_NAME}
   artifacts:
     paths:
       - ${ARTIFACTS_DIR}
