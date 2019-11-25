@@ -37,14 +37,19 @@ const DefaultServerHost = "localhost"
 // variable is set.
 const DefaultServerPort = 23192
 
-// messageCodec holds demarshallers and marshallers of messages.
-var messageCodec = client.NewCodec().
+// loginCodec is a message Codec that holds marshallers and demarshallers
+// specific for the login aspect of the server.
+var loginCodec = client.NewCodec().
 	Include(login.RequestConfig).
 	Include(login.RequestTimedOutConfig).
 	Include(login.ErrorDuringAccountFetchConfig).
 	Include(login.AccountDisabledConfig).
 	Include(login.AlreadyLoggedInConfig).
-	Include(login.InvalidCredentialsConfig).
+	Include(login.InvalidCredentialsConfig)
+
+// gameCodec is a message Codec that holds marshallers and demarshallers
+// specific for the game aspect of the server.
+var gameCodec = client.NewCodec().
 	Include(game.UnableToFetchProfileConfig).
 	Include(game.LoginSuccessConfig).
 	Include(game.RefreshMapConfig).
@@ -71,6 +76,11 @@ var messageCodec = client.NewCodec().
 	Include(game.SubmitChatCommandConfig).
 	Include(game.SelectPlayerOptionConfig).
 	Include(game.SetServerTimeConfig)
+
+// messageCodec holds demarshallers and marshallers of messages.
+var messageCodec = client.NewCodec().
+	Join(loginCodec).
+	Join(gameCodec)
 
 // The main entry point to this game server application.
 func main() {

@@ -77,7 +77,6 @@ type Message interface {
 	GetConfig() MessageConfig
 }
 
-// Codec holds
 type Codec struct {
 	configs map[PacketKind]MessageConfig
 }
@@ -245,6 +244,15 @@ func ComputeRawVarInt32Size(value int) int {
 	}
 
 	return 5
+}
+
+// Join joins the given Codec with this Codec.
+func (codec *Codec) Join(other *Codec) *Codec {
+	for key, value := range other.configs {
+		codec.configs[key] = value
+	}
+
+	return codec
 }
 
 // Include includes the given MessageConfig to deal with a specific kind
