@@ -1,6 +1,12 @@
 package main
 
 import (
+	"log"
+	"os"
+	"runtime"
+	"strconv"
+	"time"
+
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/chat"
@@ -10,11 +16,6 @@ import (
 	"gitlab.com/pokesync/game-service/internal/game-service/server"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"log"
-	"os"
-	"runtime"
-	"strconv"
-	"time"
 )
 
 // ClientBuildNo is the build number of the client this game
@@ -108,11 +109,17 @@ func main() {
 		PublicationTimeout: 1 * time.Second,
 	})
 
+	sessionConfig := game.SessionConfig{
+		CommandLimit: 16,
+		EventLimit:   256,
+	}
+
 	gameConfig := game.Config{
-		IntervalRate: 50 * time.Millisecond,
-		JobLimit:     game.Unbounded,
-		EntityLimit:  32768,
-		WorkerCount:  runtime.NumCPU(),
+		IntervalRate:  50 * time.Millisecond,
+		JobLimit:      game.Unbounded,
+		EntityLimit:   32768,
+		WorkerCount:   runtime.NumCPU(),
+		SessionConfig: sessionConfig,
 	}
 
 	loginConfig := login.Config{

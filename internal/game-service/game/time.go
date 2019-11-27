@@ -36,7 +36,7 @@ func NewClock(seconds int) *Clock {
 // Pulse is called every game pulse.
 func (clock *Clock) Pulse() {
 	clock.incrementSecond()
-	if clock.reachedMidnight() {
+	if clock.ReachedMidnight() {
 		clock.resetSeconds()
 	}
 }
@@ -51,18 +51,18 @@ func (clock *Clock) resetSeconds() {
 	clock.seconds = 0
 }
 
-// reachedMidnight checks if the Clock has reached midnight.
-func (clock Clock) reachedMidnight() bool {
+// ReachedMidnight checks if the Clock has reached midnight.
+func (clock Clock) ReachedMidnight() bool {
 	return clock.seconds >= SecondsInADay
 }
 
-// Returns the current hour in a day.
-func (clock Clock) currentHour() int {
+// CurrentHour returns the current hour in a day.
+func (clock Clock) CurrentHour() int {
 	return (clock.seconds / (MinutesInAnHour * SecondsInAMinute)) % HoursInADay
 }
 
-// Returns the current minute in an hour.
-func (clock Clock) currentMinute() int {
+// CurrentMinute returns the current minute in an hour.
+func (clock Clock) CurrentMinute() int {
 	return (clock.seconds / SecondsInAMinute) % SecondsInAMinute
 }
 

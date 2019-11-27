@@ -21,7 +21,12 @@ type CollisionMatrix struct {
 // NewCollisionMatrix constructs a CollisionMatrix of the specified
 // width and length.
 func NewCollisionMatrix(width, length int) *CollisionMatrix {
-	return &CollisionMatrix{Flags: make([][]CollisionBitFlag, width, length)}
+	flags := make([][]CollisionBitFlag, width)
+	for i := range flags {
+		flags[i] = make([]CollisionBitFlag, length)
+	}
+
+	return &CollisionMatrix{Flags: flags}
 }
 
 // Add adds the given CollisionBitFlag to the specified tile. May return an
@@ -44,6 +49,17 @@ func (m *CollisionMatrix) Remove(x, z int, flag CollisionBitFlag) error {
 
 	m.Flags[x][z] &= ^flag
 	return nil
+}
+
+// Contains returns whether the given CollisionBitFlag is set at the specified
+// coordinates. May return an error if the given coordinates were out of bounds
+// of the matrix.
+func (m CollisionMatrix) Contains(x, z int, flag CollisionBitFlag) (bool, error) {
+	if err := m.outOfBounds(x, z); err != nil {
+		return false, err
+	}
+
+	return m.Flags[x][z]&flag == flag, nil
 }
 
 // Get looks up the CollisionBitFlag's that are set for the specified tile.

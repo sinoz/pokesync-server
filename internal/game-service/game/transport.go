@@ -326,6 +326,10 @@ func (message *LoginSuccess) Marshal() *bytes.String {
 	return bldr.Build()
 }
 
+func (message *LoginSuccess) GetConfig() client.MessageConfig {
+	return LoginSuccessConfig
+}
+
 func (r *UnableToFetchProfile) Demarshal(packet *client.Packet) {
 }
 
@@ -335,10 +339,6 @@ func (r *UnableToFetchProfile) Marshal() *bytes.String {
 
 func (r *UnableToFetchProfile) GetConfig() client.MessageConfig {
 	return UnableToFetchProfileConfig
-}
-
-func (message *LoginSuccess) GetConfig() client.MessageConfig {
-	return LoginSuccessConfig
 }
 
 func (message *DisplayChatMessage) Demarshal(packet *client.Packet) {

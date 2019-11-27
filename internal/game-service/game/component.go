@@ -16,6 +16,7 @@ const (
 	KindTag      ecs.ComponentTag = 1 << 7
 	TrackingTag  ecs.ComponentTag = 1 << 8
 	SessionTag   ecs.ComponentTag = 1 << 9
+	MapViewTag   ecs.ComponentTag = 1 << 10
 )
 
 // PIDComponent holds a process id of an entity.
@@ -69,6 +70,10 @@ type TrackingComponent struct {
 // that the entity was created out of a request from a client user.
 type SessionComponent struct {
 	Session *Session
+}
+
+// MapViewComponent keeps track of an entity's map view.
+type MapViewComponent struct {
 }
 
 // Tag returns the tag of a Component instance for identification
@@ -129,4 +134,10 @@ func (component *TrackingComponent) Tag() ecs.ComponentTag {
 // and storage purposes.
 func (component *SessionComponent) Tag() ecs.ComponentTag {
 	return SessionTag
+}
+
+// Tag returns the tag of a Component instance for identification
+// and storage purposes.
+func (component *MapViewComponent) Tag() ecs.ComponentTag {
+	return MapViewTag
 }

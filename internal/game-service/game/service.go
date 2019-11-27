@@ -15,10 +15,11 @@ const Unbounded = -1
 
 // Config holds configurations specific to the game service.
 type Config struct {
-	IntervalRate time.Duration
-	JobLimit     int
-	WorkerCount  int
-	EntityLimit  int
+	IntervalRate  time.Duration
+	JobLimit      int
+	WorkerCount   int
+	EntityLimit   int
+	SessionConfig SessionConfig
 }
 
 // PulseTask is the task to execute every pulse.
@@ -36,13 +37,19 @@ type pulser struct {
 // Service is an implementation of a game service that provides
 // gameplay capabilities to logged in users.
 type Service struct {
-	config     Config
-	routing    *client.Router
-	jobQueue   chan Job
-	assets     *AssetBundle
-	pulser     *pulser
+	config Config
+
+	assets *AssetBundle
+
 	characters character.Repository
-	world      *ecs.World
+
+	routing  *client.Router
+	jobQueue chan Job
+
+	sessions *SessionRegistry
+
+	pulser *pulser
+	world  *ecs.World
 }
 
 const (
@@ -70,14 +77,19 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 	}
 
 	service := &Service{
-		config:     config,
-		routing:    routing,
-		jobQueue:   jobQueue,
-		assets:     assets,
+		config: config,
+
+		assets: assets,
+
 		characters: characters,
+
+		routing:  routing,
+		jobQueue: jobQueue,
 	}
 
+	service.sessions = NewSessionRegistry()
 	service.world = createWorld(config.EntityLimit, assets)
+
 	service.pulser = newPulser(config.IntervalRate, service.pulse)
 
 	mailbox := routing.Subscribe(AuthenticationEventTopic)
@@ -95,6 +107,10 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 // to process game logic.
 func createWorld(entityLimit int, assets *AssetBundle) *ecs.World {
 	world := ecs.NewWorld(entityLimit)
+
+	world.AddSystem(NewInboundNetworkSystem())
+	world.AddSystem(NewMapViewSystem())
+	world.AddSystem(NewOutboundNetworkSystem())
 
 	return world
 }
@@ -116,7 +132,7 @@ func newPulser(intervalRate time.Duration, runTask pulseTask) *pulser {
 			runTask(pulser.deltaTime)
 
 			timeElapsed := time.Since(pulser.lastTime)
-			timeToSleep := (intervalRate * time.Millisecond) - timeElapsed
+			timeToSleep := intervalRate - timeElapsed
 			if timeToSleep > 0 {
 				time.Sleep(timeToSleep)
 			}
@@ -152,6 +168,14 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 					LocalX: uint16(profile.LocalX),
 					LocalZ: uint16(profile.LocalZ),
 				})
+
+			case client.Message:
+				session := service.sessions.Get(mail.Client.ID)
+				if session == nil {
+					continue
+				}
+
+				session.QueueCommand(message)
 			}
 		}
 	}()

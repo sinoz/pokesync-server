@@ -5,6 +5,7 @@ import (
 	"net"
 	"reflect"
 
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"go.uber.org/zap"
 )
@@ -20,10 +21,14 @@ type Config struct {
 	CommandLimit int
 }
 
+// ID is the unique identifier of the Client.
+type ID uuid.UUID
+
 // Client represents a connected game client.
 type Client struct {
 	config Config
 
+	ID         ID
 	connection net.Conn
 
 	reader *bufio.Reader
