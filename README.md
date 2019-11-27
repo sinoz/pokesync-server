@@ -23,4 +23,4 @@ docker-compose up
 
 ## How to Contribute
 
-Please read [https://gitlab.com/pokesync/game-service/blob/master/CONTRIBUTING.md](CONTRIBUTING.md)
+Please read [CONTRIBUTING.md](https://gitlab.com/pokesync/game-service/blob/master/CONTRIBUTING.md)
