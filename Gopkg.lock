@@ -10,14 +10,6 @@
   version = "v0.3.1"
 
 [[projects]]
-  digest = "1:582b704bebaa06b48c29b0cec224a6058a09c86883aaddabde889cd1a5f73e1b"
-  name = "github.com/google/uuid"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "0cd6bf5da1e1c83f8b45653022c74f71af0538a4"
-  version = "v1.1.1"
-
-[[projects]]
   digest = "1:31e761d97c76151dde79e9d28964a812c46efc5baee4085b86f68f0c654450de"
   name = "github.com/konsorten/go-windows-terminal-sequences"
   packages = ["."]
@@ -32,6 +24,14 @@
   pruneopts = "UT"
   revision = "839c75faf7f98a33d445d181f3018b5c3409a45e"
   version = "v1.4.2"
+
+[[projects]]
+  branch = "master"
+  digest = "1:e1aded65715ecc712a9917e8a67e7f04351c2e598db24b8a3428cd0e4639d67b"
+  name = "gitlab.com/pokesync/ecs"
+  packages = ["pkg/ecs"]
+  pruneopts = "UT"
+  revision = "ddb7cad1c6c49c57b923e9a9b301e3f1ad09e21f"
 
 [[projects]]
   digest = "1:c708d00d1097e62bf4f3a72f239efa7dafc257581421b0b7d3789e1ff5299f30"
@@ -164,8 +164,8 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/google/uuid",
     "github.com/sirupsen/logrus",
+    "gitlab.com/pokesync/ecs/pkg/ecs",
     "go.uber.org/zap",
     "go.uber.org/zap/zapcore",
     "golang.org/x/crypto/bcrypt"
