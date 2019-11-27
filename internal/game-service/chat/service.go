@@ -5,7 +5,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// config holds configurations specifically for the chat service.
+// Config holds configurations specifically for the chat service.
 type Config struct {
 	Logger *zap.SugaredLogger
 }

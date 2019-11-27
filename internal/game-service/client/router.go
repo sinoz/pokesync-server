@@ -67,7 +67,7 @@ func (r *Router) SubscribeMailboxToTopic(topic Topic, mailbox Mailbox) error {
 	defer r.mutex.Unlock()
 
 	if r.mailboxes[topic] == nil {
-		return fmt.Errorf("topic %v does not exist yet\n", topic)
+		return fmt.Errorf("topic %v does not exist yet", topic)
 	}
 
 	r.mailboxes[topic] = append(r.mailboxes[topic], mailbox)

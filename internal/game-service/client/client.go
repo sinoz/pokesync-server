@@ -2,13 +2,14 @@ package client
 
 import (
 	"bufio"
-	"github.com/sirupsen/logrus"
-	"go.uber.org/zap"
 	"net"
 	"reflect"
+
+	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
-// config holds configurations specific for Client's.
+// Config holds configurations specific for Client's.
 type Config struct {
 	MessageCodec Codec
 	Log          *zap.SugaredLogger

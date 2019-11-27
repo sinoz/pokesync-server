@@ -2,16 +2,16 @@ package game
 
 import "time"
 
-// The amount of minutes in an hour.
+// MinutesInAnHour is the amount of minutes in an hour.
 const MinutesInAnHour = 60
 
-// The amount of seconds in a minute.
+// SecondsInAMinute is the amount of seconds in a minute.
 const SecondsInAMinute = 60
 
-// The amount of hours in a day.
+// HoursInADay is the amount of hours in a day.
 const HoursInADay = 24
 
-// The amount of seconds in a day.
+// SecondsInADay is the amount of seconds in a day.
 const SecondsInADay = SecondsInAMinute * MinutesInAnHour * HoursInADay
 
 // Clock points to a specific hour and minute on a clock.

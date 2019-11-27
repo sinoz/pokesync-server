@@ -2,17 +2,18 @@ package login
 
 import (
 	"fmt"
+	"reflect"
+	"time"
+
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
 	"gitlab.com/pokesync/game-service/internal/game-service/game"
-	"reflect"
-	"time"
 )
 
-// An unbounded specification for parameters such as the job limit.
+// Unbounded is for parameters such as the job limit.
 const Unbounded = -1
 
-// config holds configurations for the login service.
+// Config holds configurations for the login service.
 type Config struct {
 	JobLimit          int
 	JobConsumeTimeout time.Duration

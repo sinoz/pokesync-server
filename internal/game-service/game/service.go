@@ -2,16 +2,18 @@ package game
 
 import (
 	"fmt"
+	"time"
+
+	"gitlab.com/pokesync/ecs"
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
-	"time"
 )
 
-// An unbounded specification for parameters such as the job limit.
+// Unbounded is for parameters such as the job limit.
 const Unbounded = -1
 
-// AssetConfig holds configurations specific to the game service.
+// Config holds configurations specific to the game service.
 type Config struct {
 	IntervalRate time.Duration
 	JobLimit     int
@@ -38,11 +40,13 @@ type Service struct {
 	routing    *client.Router
 	jobQueue   chan Job
 	assets     *AssetBundle
-	characters character.Repository
 	pulser     *pulser
+	characters character.Repository
+	world      *ecs.World
 }
 
 const (
+	// AuthenticationEventTopic is a topic for authentication events.
 	AuthenticationEventTopic = "auth_event"
 )
 
@@ -71,6 +75,7 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 		jobQueue:   jobQueue,
 		assets:     assets,
 		characters: characters,
+		world:      ecs.NewWorld(config.EntityLimit),
 	}
 
 	service.pulser = newPulser(config.IntervalRate, service.pulse)
@@ -157,5 +162,5 @@ func (service *Service) spawnWorker() {
 // delta time parameter is the amount of time that has elapsed since
 // the last pulse.
 func (service *Service) pulse(deltaTime time.Duration) {
-	// TODO
+	service.world.Update(deltaTime)
 }

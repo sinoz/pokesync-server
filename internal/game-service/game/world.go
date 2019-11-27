@@ -7,7 +7,7 @@ type Position struct {
 	Y int
 }
 
-// A map of tiles in the game world for entities to traverse.
+// TileMap is a map of tiles in the game world for entities to traverse.
 type TileMap struct {
 	Index           MapIndex
 	CollisionMatrix *CollisionMatrix

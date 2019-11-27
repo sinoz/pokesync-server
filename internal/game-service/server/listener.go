@@ -1,13 +1,14 @@
 package server
 
 import (
-	"gitlab.com/pokesync/game-service/internal/game-service/client"
-	"go.uber.org/zap"
 	"net"
 	"strconv"
+
+	"gitlab.com/pokesync/game-service/internal/game-service/client"
+	"go.uber.org/zap"
 )
 
-// config holds configurations specific to the server listener.
+// Config holds configurations specific to the server listener.
 type Config struct {
 	ClientConfig client.Config
 	Logger       *zap.SugaredLogger

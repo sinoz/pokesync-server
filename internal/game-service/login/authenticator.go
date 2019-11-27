@@ -8,7 +8,6 @@ type Authenticator struct {
 	PasswordMatcher account.PasswordMatcher
 }
 
-// couldNotFindAccount is a cached instance of the CouldNotFindAccount result.
 var (
 	couldNotFindAccount AuthResult = CouldNotFindAccount{}
 	passwordMismatch    AuthResult = PasswordMismatch{}
@@ -24,7 +23,7 @@ type AuthSuccess struct {
 // with a provided Email address.
 type CouldNotFindAccount struct{}
 
-// CouldNotFindAccount is an AuthResult of an invalid password having
+// PasswordMismatch is an AuthResult of an invalid password having
 // been entered by the user.
 type PasswordMismatch struct{}
 

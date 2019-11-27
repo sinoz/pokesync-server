@@ -3,6 +3,7 @@ package client
 import (
 	"bufio"
 	"errors"
+
 	"gitlab.com/pokesync/game-service/pkg/bytes"
 )
 
@@ -77,6 +78,7 @@ type Message interface {
 	GetConfig() MessageConfig
 }
 
+// Codec holds message configs for all messages.
 type Codec struct {
 	configs map[PacketKind]MessageConfig
 }
@@ -153,8 +155,20 @@ func readRawVarInt32(reader *bufio.Reader) (int, error) {
 	tmp := int8(v)
 	if tmp >= 0 {
 		return int(tmp), nil
+	}
+
+	result := int(tmp & 127)
+
+	v, err = reader.ReadByte()
+	if err != nil {
+		return 0, err
+	}
+
+	tmp = int8(v)
+	if tmp >= 0 {
+		result |= int(tmp) << 7
 	} else {
-		result := int(tmp & 127)
+		result |= (int(tmp) & 127) << 7
 
 		v, err = reader.ReadByte()
 		if err != nil {
@@ -163,9 +177,9 @@ func readRawVarInt32(reader *bufio.Reader) (int, error) {
 
 		tmp = int8(v)
 		if tmp >= 0 {
-			result |= int(tmp) << 7
+			result |= int(tmp) << 14
 		} else {
-			result |= (int(tmp) & 127) << 7
+			result |= (int(tmp) & 127) << 14
 
 			v, err = reader.ReadByte()
 			if err != nil {
@@ -174,9 +188,9 @@ func readRawVarInt32(reader *bufio.Reader) (int, error) {
 
 			tmp = int8(v)
 			if tmp >= 0 {
-				result |= int(tmp) << 14
+				result |= int(tmp) << 21
 			} else {
-				result |= (int(tmp) & 127) << 14
+				result |= (int(tmp) & 127) << 21
 
 				v, err = reader.ReadByte()
 				if err != nil {
@@ -184,27 +198,15 @@ func readRawVarInt32(reader *bufio.Reader) (int, error) {
 				}
 
 				tmp = int8(v)
-				if tmp >= 0 {
-					result |= int(tmp) << 21
-				} else {
-					result |= (int(tmp) & 127) << 21
-
-					v, err = reader.ReadByte()
-					if err != nil {
-						return 0, err
-					}
-
-					tmp = int8(v)
-					result |= int(tmp) << 28
-					if tmp < 0 {
-						return 0, errors.New("malformed varint")
-					}
+				result |= int(tmp) << 28
+				if tmp < 0 {
+					return 0, errors.New("malformed varint")
 				}
 			}
 		}
-
-		return result, nil
 	}
+
+	return result, nil
 }
 
 // writeRawVarInt32 writes the given value as a 32-bit variable integer,
@@ -214,13 +216,13 @@ func writeRawVarInt32(writer *bufio.Writer, value int) error {
 	for {
 		if (value & ^0x7) == 0 {
 			return writer.WriteByte(byte(value))
-		} else {
-			if err := writer.WriteByte(byte((value & 0x7F) | 0x80)); err != nil {
-				return err
-			}
-
-			value = int(uint(value) >> 7)
 		}
+
+		if err := writer.WriteByte(byte((value & 0x7F) | 0x80)); err != nil {
+			return err
+		}
+
+		value = int(uint(value) >> 7)
 	}
 }
 
