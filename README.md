@@ -8,6 +8,12 @@ From the root directory of the project:
 sh start.sh
 ```
 
+To make `start.sh` executable:
+
+```
+chmod u+x start.sh
+```
+
 ### With Docker
 
 ```
