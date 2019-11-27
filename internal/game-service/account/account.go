@@ -12,25 +12,10 @@ type Password string
 // PasswordMatcher searches for equality between two given Password's.
 type PasswordMatcher func(p1, p2 Password) (bool, error)
 
-// UserGroup is a type of group a user may belong to.
-type UserGroup int
-
-// The regular user group.
-var (
-	Regular       UserGroup = 0
-	Patron        UserGroup = 1
-	Moderator     UserGroup = 2
-	Administrator UserGroup = 3
-	GameDesigner  UserGroup = 4
-	WebDeveloper  UserGroup = 5
-	GameDeveloper UserGroup = 6
-)
-
 // Account represents a user.
 type Account struct {
-	Email     Email
-	Password  Password
-	UserGroup UserGroup
+	Email    Email
+	Password Password
 }
 
 // Validate validates the Email string value. Returns whether

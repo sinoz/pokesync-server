@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"gitlab.com/pokesync/ecs"
+	ecs "gitlab.com/pokesync/ecs/src"
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
@@ -75,9 +75,9 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 		jobQueue:   jobQueue,
 		assets:     assets,
 		characters: characters,
-		world:      ecs.NewWorld(config.EntityLimit),
 	}
 
+	service.world = createWorld(config.EntityLimit, assets)
 	service.pulser = newPulser(config.IntervalRate, service.pulse)
 
 	mailbox := routing.Subscribe(AuthenticationEventTopic)
@@ -88,6 +88,15 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 	}
 
 	return service
+}
+
+// createWorld constructs a new instance of a World, preconfigured
+// with all of its necessary system and processors for the game service
+// to process game logic.
+func createWorld(entityLimit int, assets *AssetBundle) *ecs.World {
+	world := ecs.NewWorld(entityLimit)
+
+	return world
 }
 
 // newPulser constructs a new pulser that operates at the specified
@@ -135,8 +144,8 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 				mail.Client.SendNow(&LoginSuccess{
 					PID:         1,
 					DisplayName: string(profile.DisplayName),
-					Gender:      0,
-					UserGroup:   0,
+					Gender:      byte(profile.Gender),
+					UserGroup:   byte(profile.UserGroup),
 
 					MapX:   uint16(profile.MapX),
 					MapZ:   uint16(profile.MapZ),

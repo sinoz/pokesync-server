@@ -1,6 +1,6 @@
 package game
 
 // TODO
-type PluginModule interface {
+type MapViewProcessor struct {
 	// TODO
 }

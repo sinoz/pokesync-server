@@ -17,9 +17,9 @@ type AssetConfig struct {
 
 // ItemDescriptor describes an item.
 type ItemDescriptor struct {
-	Id           int    `json:"id"`
+	ID           int    `json:"id"`
 	Name         string `json:"name"`
-	NitroLabelId int    `json:"nitroLabelId"`
+	NitroLabelID int    `json:"nitroLabelId"`
 	StorePrice   int    `json:"storePrice"`
 }
 
@@ -30,9 +30,9 @@ type ItemConfig struct {
 
 // NpcDescriptor describes a npc.
 type NpcDescriptor struct {
-	Id           int    `json:"id"`
+	ID           int    `json:"id"`
 	Name         string `json:"name"`
-	NitroLabelId int    `json:"nitroLabelId"`
+	NitroLabelID int    `json:"nitroLabelId"`
 }
 
 // NpcConfig contains a collection of npc config entries.
@@ -48,9 +48,9 @@ type TypePair struct {
 
 // MonsterDescriptor describes a monster.
 type MonsterDescriptor struct {
-	Id            int       `json:"id"`
+	ID            int       `json:"id"`
 	Name          string    `json:"name"`
-	NitroLabelId  int       `json:"nitroLabelId"`
+	NitroLabelID  int       `json:"nitroLabelId"`
 	Height        int       `json:"height"`
 	Weight        int       `json:"weight"`
 	Types         TypePair  `json:"types"`
@@ -70,7 +70,7 @@ type MonsterConfig struct {
 
 // ObjectDescriptor describes an object.
 type ObjectDescriptor struct {
-	Id   int    `json:"id"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 

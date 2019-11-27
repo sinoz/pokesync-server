@@ -33,9 +33,8 @@ func (repo *InMemoryRepository) Get(email Email, password Password) (*Account, e
 	account := repo.accounts[email]
 	if account == nil {
 		account = &Account{
-			Email:     email,
-			Password:  "hello123",
-			UserGroup: GameDesigner,
+			Email:    email,
+			Password: "hello123",
 		}
 	}
 

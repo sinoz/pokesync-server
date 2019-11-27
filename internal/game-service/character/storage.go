@@ -1,8 +1,9 @@
 package character
 
 import (
-	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"sync"
+
+	"gitlab.com/pokesync/game-service/internal/game-service/account"
 )
 
 // Repository stores account associated player characters.
@@ -37,6 +38,9 @@ func (repo *InMemoryRepository) Get(email account.Email) (*Profile, error) {
 	if profile == nil {
 		profile = &Profile{
 			DisplayName: DisplayName(email),
+
+			Gender:    Man,
+			UserGroup: GameDesigner,
 
 			MapX:   0,
 			MapZ:   2,
