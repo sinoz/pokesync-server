@@ -1,6 +1,6 @@
 # PokeSync - Game Service
 
-## Running the Application
+## Building and Running the Application
 
 From the root directory of the project:
 
@@ -19,6 +19,7 @@ Docker-Compose is also supported:
 
 ```
 docker-compose up
+docker-compose down
 ```
 
 ## How to Contribute
