@@ -1,5 +1,7 @@
 package status
 
+import "github.com/go-redis/redis"
+
 // Notifier notifies external services of this server's online status.
 type Notifier interface {
 	Notify(parameters Parameters) error
@@ -12,7 +14,7 @@ type VoidNotifier struct{}
 // RedisNotifier is a Notifier that stores status information in a
 // Redis in-memory server instance.
 type RedisNotifier struct {
-	// TODO
+	redisClient *redis.Client
 }
 
 // NewVoidNotifier constructs a new instance of a VoidNotifier.
@@ -21,8 +23,8 @@ func NewVoidNotifier() *VoidNotifier {
 }
 
 // NewRedisNotifier constructs a new instance of a RedisNotifier.
-func NewRedisNotifier() *RedisNotifier {
-	return &RedisNotifier{}
+func NewRedisNotifier(redisClient *redis.Client) *RedisNotifier {
+	return &RedisNotifier{redisClient: redisClient}
 }
 
 // Notify doesn't do anything as intended.

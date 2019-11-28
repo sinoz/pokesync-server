@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"runtime"
 	"strconv"
 	"time"
 
+	"github.com/go-redis/redis"
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/chat"
@@ -24,21 +26,37 @@ import (
 // server is supporting.
 const ClientBuildNo = client.BuildNumber(1)
 
-// ServerHostEnv is the name of the environment variable of
+// TCPServerHostEnv is the name of the environment variable of
 // the server host.
-const ServerHostEnv = "POKESYNC_HOST"
+const TCPServerHostEnv = "POKESYNC_HOST"
 
-// ServerPortEnv is the name of the environment variable of
+// TCPServerPortEnv is the name of the environment variable of
 // the server port.
-const ServerPortEnv = "POKESYNC_PORT"
+const TCPServerPortEnv = "POKESYNC_PORT"
 
-// DefaultServerHost is the port to fallback to if no environment
-// variable is set.
-const DefaultServerHost = "localhost"
+// RedisHostEnv is the name of the environment variable of
+// the host of the Redis server to connect to.
+const RedisHostEnv = "POKESYNC_REDIS_HOST"
 
-// DefaultServerPort is the port to fallback to if no environment
+// RedisPortEnv is the name of the environment variable of
+// the port of the Redis server to connect to.
+const RedisPortEnv = "POKESYNC_REDIS_PORT"
+
+// DefaultTCPServerHost is the host to fallback to if no environment
 // variable is set.
-const DefaultServerPort = 23192
+const DefaultTCPServerHost = "localhost"
+
+// DefaultTCPServerPort is the port to fallback to if no environment
+// variable is set.
+const DefaultTCPServerPort = 23192
+
+// DefaultRedisHost is the host to fallback to if no environment
+// variable is set.
+const DefaultRedisHost = "localhost"
+
+// DefaultRedisPort is the port to fallback to if no environment
+// variable is set.
+const DefaultRedisPort = 6379
 
 // loginCodec is a message Codec that holds marshallers and demarshallers
 // specific for the login aspect of the server.
@@ -93,6 +111,17 @@ func main() {
 	}
 
 	logger.Info("Starting PokeSync...")
+
+	tcpHost := getTCPServerHostFromEnv()
+	tcpPort := getTCPServerPortFromEnv()
+
+	redisHost := getRedisHostFromEnv()
+	redisPort := getRedisPortFromEnv()
+
+	redisClient, err := connectToRedis(redisHost, redisPort)
+	if err != nil {
+		log.Fatal("Failed to connect to a Redis server instance", err)
+	}
 
 	assetsConfig := game.AssetConfig{
 		ItemDirectory:    "assets/config/item",
@@ -169,7 +198,7 @@ func main() {
 	loginService := login.NewService(loginConfig, authenticator, routing)
 	gameService := game.NewService(gameConfig, routing, characters, assetBundle)
 	discordService := discord.NewService(discordConfig)
-	statusService := status.NewService(statusConfig, status.NewVoidNotifier(), status.NewProvider(gameService))
+	statusService := status.NewService(statusConfig, status.NewRedisNotifier(redisClient), status.NewProvider(gameService))
 
 	// should something go wrong and cause a panic, always safely
 	// tear down these services
@@ -180,9 +209,6 @@ func main() {
 		gameService.TearDown()
 		statusService.TearDown()
 	}()
-
-	host := getServerHostFromEnv()
-	port := getServerPortFromEnv()
 
 	logger.Info("Client build: ", ClientBuildNo)
 
@@ -198,12 +224,26 @@ func main() {
 	logger.Info("Downstream byte limit: ", clientConfig.WriteBufferSize)
 
 	tcpListener := server.NewTcpListener(serverConfig, routing)
-	if err := tcpListener.Bind(host, port); err != nil {
-		logger.Error(err)
+	if err := tcpListener.Bind(tcpHost, tcpPort); err != nil {
+		logger.Fatal(err)
 	}
 }
 
-// createZapLogger constructs a sugared zap logger.
+func connectToRedis(host string, port int) (*redis.Client, error) {
+	client := redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprint(host, ":", port),
+		Password: "",
+		DB:       0,
+	})
+
+	_, err := client.Ping().Result()
+	if err != nil {
+		return nil, err
+	}
+
+	return client, nil
+}
+
 func createZapLogger() (*zap.SugaredLogger, error) {
 	conf := zap.NewDevelopmentConfig()
 
@@ -219,23 +259,37 @@ func createZapLogger() (*zap.SugaredLogger, error) {
 	return logger.Sugar(), nil
 }
 
-// getServerHostFromEnv extracts a host from the user's environment
-// variables. If no environment variable is set, a fallback value is returned.
-func getServerHostFromEnv() string {
-	host := os.Getenv(ServerHostEnv)
+func getRedisHostFromEnv() string {
+	host := os.Getenv(RedisHostEnv)
 	if len(host) == 0 {
-		return DefaultServerHost
+		return DefaultRedisHost
 	}
 
 	return host
 }
 
-// getServerPortFromEnv extracts a port number from the user's environment
-// variables. If no environment variable is set, a fallback value is returned.
-func getServerPortFromEnv() int {
-	port, err := strconv.Atoi(os.Getenv(ServerPortEnv))
+func getRedisPortFromEnv() int {
+	port, err := strconv.Atoi(os.Getenv(RedisPortEnv))
 	if err != nil {
-		return DefaultServerPort
+		return DefaultRedisPort
+	}
+
+	return port
+}
+
+func getTCPServerHostFromEnv() string {
+	host := os.Getenv(TCPServerHostEnv)
+	if len(host) == 0 {
+		return DefaultTCPServerHost
+	}
+
+	return host
+}
+
+func getTCPServerPortFromEnv() int {
+	port, err := strconv.Atoi(os.Getenv(TCPServerPortEnv))
+	if err != nil {
+		return DefaultTCPServerPort
 	}
 
 	return port
