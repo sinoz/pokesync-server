@@ -17,7 +17,22 @@ const (
 	TrackingTag  ecs.ComponentTag = 1 << 8
 	SessionTag   ecs.ComponentTag = 1 << 9
 	MapViewTag   ecs.ComponentTag = 1 << 10
+
+	PlayerKind  EntityKind = 0
+	NpcKind     EntityKind = 1
+	MonsterKind EntityKind = 2
+	ObjectKind  EntityKind = 3
+
+	Man        Gender = 0
+	Woman      Gender = 1
+	Genderless Gender = 2
 )
+
+// EntityKind represents the type of an Entity.
+type EntityKind int
+
+// Gender is a type of gender of an entity.
+type Gender int
 
 // PIDComponent holds a process id of an entity.
 type PIDComponent struct {

@@ -7,8 +7,9 @@ import (
 
 var (
 	UnableToFetchProfileConfig = client.MessageConfig{
-		Kind: client.UnableToFetchProfile,
-		New:  func() client.Message { return &UnableToFetchProfile{} },
+		Kind:  client.UnableToFetchProfile,
+		Topic: "unable_to_fetch_profile",
+		New:   func() client.Message { return &UnableToFetchProfile{} },
 	}
 
 	LoginSuccessConfig = client.MessageConfig{

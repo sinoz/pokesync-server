@@ -2,12 +2,14 @@ package game
 
 import (
 	"fmt"
+	"reflect"
 	"time"
 
 	ecs "gitlab.com/pokesync/ecs/src"
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
+	"go.uber.org/zap"
 )
 
 // Unbounded is for parameters such as the job limit.
@@ -15,11 +17,19 @@ const Unbounded = -1
 
 // Config holds configurations specific to the game service.
 type Config struct {
-	IntervalRate  time.Duration
-	JobLimit      int
-	WorkerCount   int
-	EntityLimit   int
+	IntervalRate time.Duration
+
+	JobLimit    int
+	WorkerCount int
+
+	EntityLimit int
+
 	SessionConfig SessionConfig
+
+	Logger *zap.SugaredLogger
+
+	ClockRate         time.Duration
+	ClockSynchronizer ClockSynchronizer
 }
 
 // PulseTask is the task to execute every pulse.
@@ -88,7 +98,7 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 	}
 
 	service.sessions = NewSessionRegistry()
-	service.world = createWorld(config.EntityLimit, assets)
+	service.world = createWorld(config, assets)
 
 	service.pulser = newPulser(config.IntervalRate, service.pulse)
 
@@ -105,10 +115,11 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 // createWorld constructs a new instance of a World, preconfigured
 // with all of its necessary system and processors for the game service
 // to process game logic.
-func createWorld(entityLimit int, assets *AssetBundle) *ecs.World {
-	world := ecs.NewWorld(entityLimit)
+func createWorld(config Config, assets *AssetBundle) *ecs.World {
+	world := ecs.NewWorld(config.EntityLimit)
 
 	world.AddSystem(NewInboundNetworkSystem())
+	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))
 	world.AddSystem(NewMapViewSystem())
 	world.AddSystem(NewOutboundNetworkSystem())
 
@@ -176,6 +187,9 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 				}
 
 				session.QueueCommand(message)
+
+			default:
+				service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
 			}
 		}
 	}()

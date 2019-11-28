@@ -1,6 +1,10 @@
 package game
 
-import "time"
+import (
+	"time"
+
+	ecs "gitlab.com/pokesync/ecs/src"
+)
 
 // MinutesInAnHour is the amount of minutes in an hour.
 const MinutesInAnHour = 60
@@ -19,18 +23,37 @@ type Clock struct {
 	seconds int
 }
 
-// Synchronizer synchronizes a Clock with an external standard uniform
+// ClockSynchronizer synchronizes a Clock with an external standard uniform
 // of time, such as an actual time zone.
-type Synchronizer interface {
+type ClockSynchronizer interface {
 	Synchronize() (*Clock, error)
 }
 
 // GMT0Synchronizer synchronizes with the GMT0 timezone.
 type GMT0Synchronizer struct{}
 
+// DayNightProcessor processes the transition of the day-night time periods.
+type DayNightProcessor struct {
+	clock        *Clock
+	synchronizer ClockSynchronizer
+}
+
 // NewClock constructs a new Clock.
 func NewClock(seconds int) *Clock {
 	return &Clock{seconds: seconds}
+}
+
+// NewDayNightSystem constructs a System that processes the transitions
+// between day-and night. The system processes time four times as fast
+// as real-time does. This means that there are four transitions between
+// day and night, a day.
+func NewDayNightSystem(clockRate time.Duration, synchronizer ClockSynchronizer) *ecs.System {
+	return ecs.NewSystem(ecs.NewIntervalPolicy(clockRate), NewDayNightProcessor(synchronizer))
+}
+
+// NewDayNightProcessor processes the day-and night transitions.
+func NewDayNightProcessor(synchronizer ClockSynchronizer) *DayNightProcessor {
+	return &DayNightProcessor{synchronizer: synchronizer}
 }
 
 // Pulse is called every game pulse.
@@ -66,9 +89,9 @@ func (clock Clock) CurrentMinute() int {
 	return (clock.seconds / SecondsInAMinute) % SecondsInAMinute
 }
 
-// NewGMT0Synchronizer constructs a new Synchronizer that synchronizes
+// NewGMT0Synchronizer constructs a new ClockSynchronizer that synchronizes
 // with the GMT+0 timezone.
-func NewGMT0Synchronizer() Synchronizer {
+func NewGMT0Synchronizer() ClockSynchronizer {
 	return new(GMT0Synchronizer)
 }
 
@@ -87,4 +110,29 @@ func (gmt *GMT0Synchronizer) Synchronize() (*Clock, error) {
 	seconds := t.Second()
 
 	return NewClock((hours * MinutesInAnHour * SecondsInADay) + (minutes * SecondsInAMinute) + seconds), nil
+}
+
+// AddedToWorld is called when the System of this Processor is added
+// to the game World.
+func (processor *DayNightProcessor) AddedToWorld(world *ecs.World) (err error) {
+	processor.clock, err = processor.synchronizer.Synchronize()
+	return err
+}
+
+// RemovedFromWorld is called when the System of this Processor is removed
+// from the game World.
+func (processor *DayNightProcessor) RemovedFromWorld(world *ecs.World) error {
+	return nil
+}
+
+// Update is called every game pulse to check if entities need their map view
+// refreshed and if so, refreshes them.
+func (processor *DayNightProcessor) Update(world *ecs.World, deltaTime time.Duration) error {
+	return nil
+}
+
+// Components returns a pack of ComponentTag's the DayNightProcessor has
+// interest in.
+func (processor *DayNightProcessor) Components() ecs.ComponentTag {
+	return 0
 }

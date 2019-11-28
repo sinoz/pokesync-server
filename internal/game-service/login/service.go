@@ -1,13 +1,13 @@
 package login
 
 import (
-	"fmt"
 	"reflect"
 	"time"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
 	"gitlab.com/pokesync/game-service/internal/game-service/game"
+	"go.uber.org/zap"
 )
 
 // Unbounded is for parameters such as the job limit.
@@ -17,6 +17,8 @@ const Unbounded = -1
 type Config struct {
 	JobLimit          int
 	JobConsumeTimeout time.Duration
+
+	Logger *zap.SugaredLogger
 
 	WorkerCount int
 }
@@ -69,9 +71,10 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 			switch message := mail.Payload.(type) {
 			case *Request:
 				service.handleRequest(mail.Client, message)
+				break
 
 			default:
-				fmt.Println(reflect.TypeOf(message))
+				service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
 			}
 		}
 	}()
@@ -86,6 +89,7 @@ func (service *Service) handleRequest(client *client.Client, request *Request) {
 	select {
 	case service.jobQueue <- job:
 		// job has been picked up by a worker.
+		break
 
 	case <-time.After(service.config.JobConsumeTimeout):
 		// no worker was able to pick up the job within the time frame.
@@ -130,6 +134,9 @@ func (service *Service) spawnWorker() {
 				job.Client.Terminate()
 
 				continue
+
+			default:
+				service.config.Logger.Errorf("unexpected authentication result type of %v", reflect.TypeOf(res))
 			}
 		}
 	}()

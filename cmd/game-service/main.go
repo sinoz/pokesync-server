@@ -115,16 +115,24 @@ func main() {
 	}
 
 	gameConfig := game.Config{
-		IntervalRate:  50 * time.Millisecond,
-		JobLimit:      game.Unbounded,
-		EntityLimit:   32768,
-		WorkerCount:   runtime.NumCPU(),
+		IntervalRate: 50 * time.Millisecond,
+
+		JobLimit:    game.Unbounded,
+		WorkerCount: runtime.NumCPU(),
+
+		EntityLimit: 32768,
+
+		ClockRate:         250 * time.Millisecond,
+		ClockSynchronizer: game.NewGMT0Synchronizer(),
+
+		Logger:        logger,
 		SessionConfig: sessionConfig,
 	}
 
 	loginConfig := login.Config{
 		JobLimit:          login.Unbounded,
 		JobConsumeTimeout: time.Second,
+		Logger:            logger,
 		WorkerCount:       runtime.NumCPU(),
 	}
 

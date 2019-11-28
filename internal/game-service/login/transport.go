@@ -13,33 +13,39 @@ var (
 	}
 
 	InvalidCredentialsConfig = client.MessageConfig{
-		Kind: client.InvalidCredentials,
-		New:  func() client.Message { return &InvalidCredentials{} },
+		Kind:  client.InvalidCredentials,
+		Topic: "invalid_cred",
+		New:   func() client.Message { return &InvalidCredentials{} },
 	}
 
 	AlreadyLoggedInConfig = client.MessageConfig{
-		Kind: client.AlreadyLoggedIn,
-		New:  func() client.Message { return &AlreadyLoggedIn{} },
+		Kind:  client.AlreadyLoggedIn,
+		Topic: "already_logged_in",
+		New:   func() client.Message { return &AlreadyLoggedIn{} },
 	}
 
 	WorldFullConfig = client.MessageConfig{
-		Kind: client.WorldFull,
-		New:  func() client.Message { return &WorldFull{} },
+		Kind:  client.WorldFull,
+		Topic: "world_full",
+		New:   func() client.Message { return &WorldFull{} },
 	}
 
 	AccountDisabledConfig = client.MessageConfig{
-		Kind: client.AccountDisabled,
-		New:  func() client.Message { return &AccountDisabled{} },
+		Kind:  client.AccountDisabled,
+		Topic: "account_disabled",
+		New:   func() client.Message { return &AccountDisabled{} },
 	}
 
 	ErrorDuringAccountFetchConfig = client.MessageConfig{
-		Kind: client.UnableToFetchProfile,
-		New:  func() client.Message { return &ErrorDuringAccountFetch{} },
+		Kind:  client.UnableToFetchProfile,
+		Topic: "error_during_acc_fetch",
+		New:   func() client.Message { return &ErrorDuringAccountFetch{} },
 	}
 
 	RequestTimedOutConfig = client.MessageConfig{
-		Kind: client.LoginRequestTimedOut,
-		New:  func() client.Message { return &RequestTimedOut{} },
+		Kind:  client.LoginRequestTimedOut,
+		Topic: "req_timeout",
+		New:   func() client.Message { return &RequestTimedOut{} },
 	}
 )
 

@@ -93,7 +93,7 @@ func (c *Client) Pull() {
 		packet, err := ForkPacket(c.reader)
 		if err != nil {
 			c.quit <- true
-			break
+			return
 		}
 
 		config, exists := c.codec.GetConfig(packet.Kind)
@@ -120,7 +120,7 @@ func (c *Client) Push() {
 	for {
 		select {
 		case <-c.quit:
-			break
+			return
 
 		case command := <-c.commands:
 			switch cmd := command.(type) {
@@ -137,13 +137,13 @@ func (c *Client) Push() {
 					// automatically performs a flush to be able to write more
 					// bytes, which may produce an error if the socket connection
 					// is dropped
-					break
+					return
 				}
 
 			case flush:
 				if err := c.writer.Flush(); err != nil {
 					// disconnected
-					break
+					return
 				}
 
 			case terminate:
@@ -151,7 +151,7 @@ func (c *Client) Push() {
 					// don't care
 				}
 
-				break
+				return
 			}
 		}
 	}
@@ -182,6 +182,7 @@ func (c *Client) Flush() {
 
 // dispose disposes off any consumed resources such as channels.
 func (c *Client) dispose() {
+	close(c.quit)
 	close(c.commands)
 }
 
