@@ -211,3 +211,8 @@ func (service *Service) spawnWorker() {
 func (service *Service) pulse(deltaTime time.Duration) {
 	service.world.Update(deltaTime)
 }
+
+// Terminate terminates this Service and cleans up resources.
+func (service *Service) TearDown() {
+	// TODO
+}

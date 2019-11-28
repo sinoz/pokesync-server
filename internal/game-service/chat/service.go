@@ -24,3 +24,8 @@ func NewService(config Config, routing *client.Router) *Service {
 		routing: routing,
 	}
 }
+
+// TearDown tears down this Service and cleans up resources.
+func (service *Service) TearDown() {
+	// TODO
+}

@@ -11,9 +11,11 @@ import (
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/chat"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
+	"gitlab.com/pokesync/game-service/internal/game-service/discord"
 	"gitlab.com/pokesync/game-service/internal/game-service/game"
 	"gitlab.com/pokesync/game-service/internal/game-service/login"
 	"gitlab.com/pokesync/game-service/internal/game-service/server"
+	"gitlab.com/pokesync/game-service/internal/game-service/status"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -115,19 +117,22 @@ func main() {
 	}
 
 	gameConfig := game.Config{
-		IntervalRate: 50 * time.Millisecond,
-
-		JobLimit:    game.Unbounded,
-		WorkerCount: runtime.NumCPU(),
-
-		EntityLimit: 32768,
-
+		IntervalRate:      50 * time.Millisecond,
+		JobLimit:          game.Unbounded,
+		WorkerCount:       runtime.NumCPU(),
+		EntityLimit:       32768,
 		ClockRate:         250 * time.Millisecond,
 		ClockSynchronizer: game.NewGMT0Synchronizer(),
-
-		Logger:        logger,
-		SessionConfig: sessionConfig,
+		Logger:            logger,
+		SessionConfig:     sessionConfig,
 	}
+
+	statusConfig := status.Config{
+		Logger:      logger,
+		RefreshRate: 15 * time.Second,
+	}
+
+	discordConfig := discord.Config{}
 
 	loginConfig := login.Config{
 		JobLimit:          login.Unbounded,
@@ -141,13 +146,11 @@ func main() {
 	}
 
 	clientConfig := client.Config{
-		Log:          logger,
-		MessageCodec: *messageCodec,
-
+		Log:             logger,
+		MessageCodec:    *messageCodec,
 		ReadBufferSize:  512,
 		WriteBufferSize: 2048,
-
-		CommandLimit: 32,
+		CommandLimit:    32,
 	}
 
 	serverConfig := server.Config{
@@ -162,9 +165,21 @@ func main() {
 
 	characters := character.NewInMemoryRepository()
 
-	chat.NewService(chatConfig, routing)
-	login.NewService(loginConfig, authenticator, routing)
-	game.NewService(gameConfig, routing, characters, assetBundle)
+	chatService := chat.NewService(chatConfig, routing)
+	loginService := login.NewService(loginConfig, authenticator, routing)
+	gameService := game.NewService(gameConfig, routing, characters, assetBundle)
+	discordService := discord.NewService(discordConfig)
+	statusService := status.NewService(statusConfig, status.NewVoidNotifier(), status.NewProvider(gameService))
+
+	// should something go wrong and cause a panic, always safely
+	// tear down these services
+	defer func() {
+		chatService.TearDown()
+		loginService.TearDown()
+		discordService.TearDown()
+		gameService.TearDown()
+		statusService.TearDown()
+	}()
 
 	host := getServerHostFromEnv()
 	port := getServerPortFromEnv()
@@ -184,7 +199,7 @@ func main() {
 
 	tcpListener := server.NewTcpListener(serverConfig, routing)
 	if err := tcpListener.Bind(host, port); err != nil {
-		logger.Fatal(err)
+		logger.Error(err)
 	}
 }
 
