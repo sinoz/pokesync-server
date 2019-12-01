@@ -1,19 +1,19 @@
-package game
+package collision
 
 import (
 	"testing"
 )
 
-func TestCollisionMatrix_Add(t *testing.T) {
-	matrix := NewCollisionMatrix(16, 16)
+func TestMatrix_Add(t *testing.T) {
+	matrix := NewMatrix(16, 16)
 	_ = matrix.Add(2, 2, Blocked)
 	if matrix.Flags[2][2] != Blocked {
 		t.Errorf("expected collision flag at coordinates %v %v to equal %v", 2, 2, Blocked)
 	}
 }
 
-func TestCollisionMatrix_Add_Stacking(t *testing.T) {
-	matrix := NewCollisionMatrix(16, 16)
+func TestMatrix_Add_Stacking(t *testing.T) {
+	matrix := NewMatrix(16, 16)
 
 	_ = matrix.Add(7, 5, Water)
 	_ = matrix.Add(7, 5, Door)
@@ -34,8 +34,8 @@ func TestCollisionMatrix_Add_Stacking(t *testing.T) {
 	}
 }
 
-func TestCollisionMatrix_Clear(t *testing.T) {
-	matrix := NewCollisionMatrix(16, 16)
+func TestMatrix_Clear(t *testing.T) {
+	matrix := NewMatrix(16, 16)
 
 	_ = matrix.Add(5, 7, Water)
 	_ = matrix.Add(3, 2, Blocked)
@@ -46,8 +46,8 @@ func TestCollisionMatrix_Clear(t *testing.T) {
 	}
 }
 
-func TestCollisionMatrix_Remove(t *testing.T) {
-	matrix := NewCollisionMatrix(16, 16)
+func TestMatrix_Remove(t *testing.T) {
+	matrix := NewMatrix(16, 16)
 
 	_ = matrix.Add(7, 5, Water)
 	_ = matrix.Add(7, 5, Blocked)

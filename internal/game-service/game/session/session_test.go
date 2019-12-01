@@ -1,21 +1,21 @@
-package game
+package session
 
 import (
 	"testing"
 	"time"
 
-	ecs "gitlab.com/pokesync/ecs/src"
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 )
 
 func TestSession_QueueCommand(t *testing.T) {
 	account := account.Account{}
-	config := SessionConfig{CommandLimit: 16, EventLimit: 16}
+	config := Config{CommandLimit: 16, EventLimit: 16}
 
-	command := &SubmitChatMessage{}
+	command := &transport.SubmitChatMessage{}
 
-	session := NewSession(nil, config, account, ecs.NewEntity())
+	session := NewSession(nil, config, account)
 	session.QueueCommand(command)
 
 	select {
@@ -31,11 +31,11 @@ func TestSession_QueueCommand(t *testing.T) {
 
 func TestSession_QueueEvent(t *testing.T) {
 	account := account.Account{}
-	config := SessionConfig{CommandLimit: 16, EventLimit: 16}
+	config := Config{CommandLimit: 16, EventLimit: 16}
 
-	event := &DisplayChatMessage{}
+	event := &transport.DisplayChatMessage{}
 
-	session := NewSession(nil, config, account, ecs.NewEntity())
+	session := NewSession(nil, config, account)
 	session.QueueEvent(event)
 
 	select {
@@ -51,9 +51,9 @@ func TestSession_QueueEvent(t *testing.T) {
 
 func TestSession_DequeueCommand(t *testing.T) {
 	account := account.Account{}
-	config := SessionConfig{CommandLimit: 16, EventLimit: 16}
+	config := Config{CommandLimit: 16, EventLimit: 16}
 
-	session := NewSession(nil, config, account, ecs.NewEntity())
+	session := NewSession(nil, config, account)
 	commandCh := make(chan client.Message)
 
 	go func() {
@@ -73,9 +73,9 @@ func TestSession_DequeueCommand(t *testing.T) {
 
 func TestSession_DequeueEvent(t *testing.T) {
 	account := account.Account{}
-	config := SessionConfig{CommandLimit: 16, EventLimit: 16}
+	config := Config{CommandLimit: 16, EventLimit: 16}
 
-	session := NewSession(nil, config, account, ecs.NewEntity())
+	session := NewSession(nil, config, account)
 	eventCh := make(chan client.Message)
 
 	go func() {

@@ -5,6 +5,9 @@ import (
 	"reflect"
 	"time"
 
+	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
+
 	ecs "gitlab.com/pokesync/ecs/src"
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
@@ -24,7 +27,7 @@ type Config struct {
 
 	EntityLimit int
 
-	SessionConfig SessionConfig
+	SessionConfig session.Config
 
 	Logger *zap.SugaredLogger
 
@@ -56,7 +59,7 @@ type Service struct {
 	routing  *client.Router
 	jobQueue chan Job
 
-	sessions *SessionRegistry
+	sessions *session.Registry
 
 	pulser *pulser
 	world  *ecs.World
@@ -97,7 +100,7 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 		jobQueue: jobQueue,
 	}
 
-	service.sessions = NewSessionRegistry()
+	service.sessions = session.NewRegistry()
 	service.world = createWorld(config, assets)
 
 	service.pulser = newPulser(config.IntervalRate, service.pulse)
@@ -162,13 +165,13 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 				// TODO have a worker do this
 				profile, err := service.characters.Get(message.Account.Email)
 				if err != nil {
-					mail.Client.SendNow(&UnableToFetchProfile{})
+					mail.Client.SendNow(&transport.UnableToFetchProfile{})
 					mail.Client.Terminate()
 
 					continue
 				}
 
-				mail.Client.SendNow(&LoginSuccess{
+				mail.Client.SendNow(&transport.LoginSuccess{
 					PID:         1,
 					DisplayName: string(profile.DisplayName),
 					Gender:      byte(profile.Gender),

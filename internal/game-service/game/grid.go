@@ -3,6 +3,8 @@ package game
 import (
 	"fmt"
 	"math"
+
+	"gitlab.com/pokesync/game-service/internal/game-service/game/collision"
 )
 
 // These are the supported types of Direction's.
@@ -27,7 +29,7 @@ type Position struct {
 // TileMap is a map of tiles in the game world for entities to traverse.
 type TileMap struct {
 	Index           MapIndex
-	CollisionMatrix *CollisionMatrix
+	CollisionMatrix *collision.Matrix
 }
 
 // Grid represents the physical grid of TileMap's that together
@@ -94,7 +96,12 @@ func DistanceBetween(p1, p2 Position, grid *Grid) (int, error) {
 	return int(math.Sqrt(float64(deltaX*2) + float64(deltaZ*2))), nil
 }
 
-func AddDirection(position Position, direction Direction, grid *Grid) (Position, error) {
+// AddStep adds a single step to the given Position in the specified Direction
+// on the given map Grid. If the step falls out of bounds of the Position's
+// current map, the location of the current map is updated. May return an error
+// if the map for the specified Position does not exist or if the step falls
+// into a map that doesn't exist on the Grid.
+func AddStep(position Position, direction Direction, grid *Grid) (Position, error) {
 	tileMap, err := grid.GetMap(position.MapX, position.MapZ)
 	if err != nil {
 		return position, err

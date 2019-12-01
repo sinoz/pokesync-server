@@ -3,6 +3,7 @@ package game
 import (
 	ecs "gitlab.com/pokesync/ecs/src"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 )
 
 const (
@@ -17,31 +18,17 @@ const (
 	TrackingTag  ecs.ComponentTag = 1 << 8
 	SessionTag   ecs.ComponentTag = 1 << 9
 	MapViewTag   ecs.ComponentTag = 1 << 10
-
-	PlayerKind  EntityKind = 0
-	NpcKind     EntityKind = 1
-	MonsterKind EntityKind = 2
-	ObjectKind  EntityKind = 3
-
-	Man        Gender = 0
-	Woman      Gender = 1
-	Genderless Gender = 2
+	BlockingTag  ecs.ComponentTag = 1 << 11
 )
-
-// EntityKind represents the type of an Entity.
-type EntityKind int
-
-// Gender is a type of gender of an entity.
-type Gender int
 
 // PIDComponent holds a process id of an entity.
 type PIDComponent struct {
-	Value int
+	PID PID
 }
 
 // ModelIDComponent holds a model id of an entity.
 type ModelIDComponent struct {
-	Value int
+	ModelID ModelID
 }
 
 // RankComponent holds the UserGroup of an entity.
@@ -69,6 +56,9 @@ type TransformComponent struct {
 	Position Position
 }
 
+// BlockingComponent marks an Entity as blocking all other entities paths.
+type BlockingComponent struct{}
+
 // KindComponent holds the EntityKind of the Entity, which is used
 // to check what kind of Entity it is (player, npc, monster, obj etc).
 type KindComponent struct {
@@ -84,7 +74,7 @@ type TrackingComponent struct {
 // SessionComponent holds a Session instance, which indicates
 // that the entity was created out of a request from a client user.
 type SessionComponent struct {
-	Session *Session
+	Session *session.Session
 }
 
 // MapViewComponent keeps track of an entity's map view.
@@ -137,6 +127,12 @@ func (component *TransformComponent) Tag() ecs.ComponentTag {
 // and storage purposes.
 func (component *KindComponent) Tag() ecs.ComponentTag {
 	return KindTag
+}
+
+// Tag returns the tag of a Component instance for identification
+// and storage purposes.
+func (component *BlockingComponent) Tag() ecs.ComponentTag {
+	return BlockingTag
 }
 
 // Tag returns the tag of a Component instance for identification

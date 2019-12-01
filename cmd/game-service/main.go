@@ -15,6 +15,8 @@ import (
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
 	"gitlab.com/pokesync/game-service/internal/game-service/discord"
 	"gitlab.com/pokesync/game-service/internal/game-service/game"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
+	gameTransport "gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 	"gitlab.com/pokesync/game-service/internal/game-service/login"
 	"gitlab.com/pokesync/game-service/internal/game-service/server"
 	"gitlab.com/pokesync/game-service/internal/game-service/status"
@@ -71,32 +73,32 @@ var loginCodec = client.NewCodec().
 // gameCodec is a message Codec that holds marshallers and demarshallers
 // specific for the game aspect of the server.
 var gameCodec = client.NewCodec().
-	Include(game.UnableToFetchProfileConfig).
-	Include(game.LoginSuccessConfig).
-	Include(game.RefreshMapConfig).
-	Include(game.MoveAvatarConfig).
-	Include(game.MoveCameraConfig).
-	Include(game.ResetCameraConfig).
-	Include(game.AttachFollowerConfig).
-	Include(game.ClearFollowerConfig).
-	Include(game.ChangeMovementTypeConfig).
-	Include(game.ClickTeleportConfig).
-	Include(game.CloseDialogueConfig).
-	Include(game.ContinueDialogueConfig).
-	Include(game.DisplayChatMessageConfig).
-	Include(game.FaceDirectionConfig).
-	Include(game.EntityUpdateConfig).
-	Include(game.InteractWithEntityConfig).
-	Include(game.SelectCharacterConfig).
-	Include(game.SelectChatChannelConfig).
-	Include(game.SetDonatorPointsConfig).
-	Include(game.SetPokeDollarsConfig).
-	Include(game.SwitchPartySlotsConfig).
-	Include(game.SubmitChatMessageConfig).
-	Include(game.SwitchChatChannelConfig).
-	Include(game.SubmitChatCommandConfig).
-	Include(game.SelectPlayerOptionConfig).
-	Include(game.SetServerTimeConfig)
+	Include(gameTransport.UnableToFetchProfileConfig).
+	Include(gameTransport.LoginSuccessConfig).
+	Include(gameTransport.RefreshMapConfig).
+	Include(gameTransport.MoveAvatarConfig).
+	Include(gameTransport.MoveCameraConfig).
+	Include(gameTransport.ResetCameraConfig).
+	Include(gameTransport.AttachFollowerConfig).
+	Include(gameTransport.ClearFollowerConfig).
+	Include(gameTransport.ChangeMovementTypeConfig).
+	Include(gameTransport.ClickTeleportConfig).
+	Include(gameTransport.CloseDialogueConfig).
+	Include(gameTransport.ContinueDialogueConfig).
+	Include(gameTransport.DisplayChatMessageConfig).
+	Include(gameTransport.FaceDirectionConfig).
+	Include(gameTransport.EntityUpdateConfig).
+	Include(gameTransport.InteractWithEntityConfig).
+	Include(gameTransport.SelectCharacterConfig).
+	Include(gameTransport.SelectChatChannelConfig).
+	Include(gameTransport.SetDonatorPointsConfig).
+	Include(gameTransport.SetPokeDollarsConfig).
+	Include(gameTransport.SwitchPartySlotsConfig).
+	Include(gameTransport.SubmitChatMessageConfig).
+	Include(gameTransport.SwitchChatChannelConfig).
+	Include(gameTransport.SubmitChatCommandConfig).
+	Include(gameTransport.SelectPlayerOptionConfig).
+	Include(gameTransport.SetServerTimeConfig)
 
 // messageCodec holds demarshallers and marshallers of messages.
 var messageCodec = client.NewCodec().
@@ -140,7 +142,7 @@ func main() {
 		PublicationTimeout: 1 * time.Second,
 	})
 
-	sessionConfig := game.SessionConfig{
+	sessionConfig := session.Config{
 		CommandLimit: 16,
 		EventLimit:   256,
 	}
