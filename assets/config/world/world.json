@@ -11,25 +11,25 @@
           "mapX": 0,
           "mapZ": 0,
           "renderX": 0,
-          "renderY": 0
+          "renderZ": 0
         },
         {
           "mapX": 0,
           "mapZ": 1,
           "renderX": 0,
-          "renderY": 64
+          "renderZ": 64
         },
         {
           "mapX": 0,
           "mapZ": 2,
           "renderX": 0,
-          "renderY": 148
+          "renderZ": 148
         },
         {
           "mapX": 0,
           "mapZ": 3,
           "renderX": 0,
-          "renderY": 233
+          "renderZ": 233
         }
       ]
     }

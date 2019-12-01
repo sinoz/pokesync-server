@@ -12,6 +12,7 @@ type Game struct {
 	eventBus      event.Bus
 	entityList    *EntityList
 	entityFactory *EntityFactory
+	grid          *Grid
 }
 
 // NewGame constructs a new Game.

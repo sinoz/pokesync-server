@@ -21,8 +21,8 @@ type Matrix struct {
 // NewMatrix constructs a Matrix of the specified width and length.
 func NewMatrix(width, length int) *Matrix {
 	flags := make([][]BitFlag, width)
-	for i := range flags {
-		flags[i] = make([]BitFlag, length)
+	for x := range flags {
+		flags[x] = make([]BitFlag, length)
 	}
 
 	return &Matrix{Flags: flags}

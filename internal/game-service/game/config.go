@@ -107,6 +107,7 @@ type AssetBundle struct {
 	Monsters *MonsterConfig
 	Objects  *ObjectConfig
 	World    *WorldConfig
+	Grid     *Grid
 }
 
 // LoadAssetBundle loads all of the assets that the game requires.
@@ -131,11 +132,17 @@ func LoadAssetBundle(config AssetConfig) (*AssetBundle, error) {
 		return nil, err
 	}
 
+	grid, err := LoadGridFromConfig(*worldConfig)
+	if err != nil {
+		return nil, err
+	}
+
 	return &AssetBundle{
 		Items:    itemConfig,
 		Npcs:     npcConfig,
 		Monsters: monsterConfig,
 		World:    worldConfig,
+		Grid:     grid,
 	}, nil
 }
 
