@@ -220,6 +220,17 @@ func (i *Iterator) ReadString(length int) (string, error) {
 	return bldr.String(), nil
 }
 
+// ReadableBytes returns the amount of bytes the iterator has left to read.
+func (i *Iterator) ReadableBytes() int {
+	return i.bytes.Length() - i.index
+}
+
+// CanRead returns whether the iterator has at least the specified amount
+// of bytes left to read.
+func (i *Iterator) CanRead(amount int) bool {
+	return (i.index + amount) <= i.bytes.Length()
+}
+
 // IsReadable returns whether the iterator has any bytes left to read.
 func (i *Iterator) IsReadable() bool {
 	return i.index < i.bytes.Length()
