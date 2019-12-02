@@ -50,12 +50,6 @@ const (
 // PacketKind is a kind of packet.
 type PacketKind uint8
 
-// PacketDemarshaller demarshals a given Packet into a message type.
-type PacketDemarshaller func(*Packet) interface{}
-
-// PacketMarshaller marshals a given message type into a Packet.
-type PacketMarshaller func(interface{}) *Packet
-
 // Packet is a structured unit of data that can be transferred
 // across the wire.
 type Packet struct {
@@ -70,11 +64,22 @@ type MessageConfig struct {
 	New   func() Message
 }
 
+// Demarshaller demarshals bytes of a Packet into a message.
+type Demarshaller interface {
+	Demarshal(packet *Packet)
+}
+
+// Marshaller marshals a message into bytes.
+type Marshaller interface {
+	Marshal() *bytes.String
+}
+
 // Message represents the abstraction for a structure of data
 // sent across the wire.
 type Message interface {
-	Demarshal(packet *Packet)
-	Marshal() *bytes.String
+	Demarshaller
+	Marshaller
+
 	GetConfig() MessageConfig
 }
 
