@@ -2,6 +2,7 @@ package bytes
 
 import (
 	"errors"
+	"io"
 	"strings"
 )
 
@@ -236,6 +237,11 @@ func (i *Iterator) IsReadable() bool {
 	return i.index < i.bytes.Length()
 }
 
+// IsEmpty returns whether this Iterator has any bytes left to read.
+func (i *Iterator) IsEmpty() bool {
+	return !i.CanRead(1)
+}
+
 // testAvailableBytes tests whether the specified amount of bytes are
 // available for reading.
 func (i *Iterator) testAvailableBytes(amount int) error {
@@ -244,6 +250,29 @@ func (i *Iterator) testAvailableBytes(amount int) error {
 	}
 
 	return nil
+}
+
+// Read reads the next len(p) bytes from the iterator or until the
+// iterator is drained. The return value n is the number of bytes read.
+// If the iterator has no data to return, err is io.EOF (unless len(p)
+// is zero); otherwise it is nil.
+func (i *Iterator) Read(p []byte) (n int, err error) {
+	if i.IsEmpty() {
+		return 0, io.EOF
+	}
+
+	n = copy(p, i.bytes.bytes[i.index:])
+	i.index += n
+
+	return n, nil
+}
+
+// Write appends the contents of p to the Builder, growing the Builder as
+// needed. The return value n is the length of p; err is always nil. If the
+// buffer becomes too large, Write will panic with ErrTooLarge.
+func (b *Builder) Write(p []byte) (n int, err error) {
+	b.ensureWritable(len(p))
+	return copy(b.bytes[b.index:], p), nil
 }
 
 // capacity returns this builder's current capacity.
