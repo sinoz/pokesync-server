@@ -142,6 +142,11 @@ func main() {
 		PublicationTimeout: 1 * time.Second,
 	})
 
+	accountConfig := account.Config{
+		WorkerCount: runtime.NumCPU(),
+		Logger:      logger,
+	}
+
 	sessionConfig := session.Config{
 		CommandLimit: 16,
 		EventLimit:   256,
@@ -149,8 +154,6 @@ func main() {
 
 	gameConfig := game.Config{
 		IntervalRate:      50 * time.Millisecond,
-		JobLimit:          game.Unbounded,
-		WorkerCount:       runtime.NumCPU(),
 		EntityLimit:       32768,
 		ClockRate:         250 * time.Millisecond,
 		ClockSynchronizer: game.NewGMT0Synchronizer(),
@@ -166,10 +169,8 @@ func main() {
 	discordConfig := discord.Config{}
 
 	loginConfig := login.Config{
-		JobLimit:          login.Unbounded,
-		JobConsumeTimeout: time.Second,
-		Logger:            logger,
-		WorkerCount:       runtime.NumCPU(),
+		Logger:      logger,
+		WorkerCount: runtime.NumCPU(),
 	}
 
 	chatConfig := chat.Config{
@@ -189,15 +190,21 @@ func main() {
 		Logger:       logger,
 	}
 
-	authenticator := login.NewAuthenticator(
-		account.NewInMemoryRepository(),
-		account.BasicPasswordMatcher(),
-	)
+	accountRepository := account.NewInMemoryRepository()
+	passwordMatcher := account.BasicPasswordMatcher()
 
 	characters := character.NewInMemoryRepository()
 
+	accountService := account.NewService(accountConfig, accountRepository)
 	chatService := chat.NewService(chatConfig, routing)
+
+	authenticator := login.NewAuthenticator(
+		accountService.LoadAccount,
+		passwordMatcher,
+	)
+
 	loginService := login.NewService(loginConfig, authenticator, routing)
+
 	gameService := game.NewService(gameConfig, routing, characters, assetBundle)
 	discordService := discord.NewService(discordConfig)
 	statusService := status.NewService(statusConfig, status.NewRedisNotifier(redisClient), status.NewProvider(gameService))
@@ -205,6 +212,7 @@ func main() {
 	// should something go wrong and cause a panic, always safely
 	// tear down these services
 	defer func() {
+		accountService.TearDown()
 		chatService.TearDown()
 		loginService.TearDown()
 		discordService.TearDown()

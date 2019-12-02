@@ -2,7 +2,6 @@ package login
 
 import (
 	"reflect"
-	"time"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
@@ -10,16 +9,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// Unbounded is for parameters such as the job limit.
-const Unbounded = -1
-
 // Config holds configurations for the login service.
 type Config struct {
-	JobLimit          int
-	JobConsumeTimeout time.Duration
-
-	Logger *zap.SugaredLogger
-
+	Logger      *zap.SugaredLogger
 	WorkerCount int
 }
 
@@ -40,12 +32,7 @@ type Service struct {
 
 // NewService constructs a new login Service.
 func NewService(config Config, authenticator Authenticator, routing *client.Router) *Service {
-	var jobQueue chan Job
-	if config.JobLimit == Unbounded {
-		jobQueue = make(chan Job)
-	} else {
-		jobQueue = make(chan Job, config.JobLimit)
-	}
+	jobQueue := make(chan Job)
 
 	service := &Service{
 		config:        config,
@@ -55,10 +42,10 @@ func NewService(config Config, authenticator Authenticator, routing *client.Rout
 	}
 
 	mailbox := routing.Subscribe("login_request")
-	service.receiver(mailbox)
+	go service.receiver(mailbox)
 
 	for i := 0; i < config.WorkerCount; i++ {
-		service.spawnWorker()
+		go service.spawnWorker()
 	}
 
 	return service
@@ -66,80 +53,68 @@ func NewService(config Config, authenticator Authenticator, routing *client.Rout
 
 // receiver receives and handles client messages from the specified mailbox.
 func (service *Service) receiver(mailbox client.Mailbox) {
-	go func() {
-		for mail := range mailbox {
-			switch message := mail.Payload.(type) {
-			case *Request:
-				service.handleRequest(mail.Client, message)
-				break
+	for mail := range mailbox {
+		switch message := mail.Payload.(type) {
+		case *Request:
+			service.handleRequest(mail.Client, message)
+			break
 
-			default:
-				service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
-			}
+		default:
+			service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
 		}
-	}()
+	}
 }
 
-// handleRequest handles the given login Request for the given Client. If no
-// worker was able to pick up the job within a specific time frame, a timeout
-// occurs and the client's request is denied.
+// handleRequest handles the given login Request for the given Client.
 func (service *Service) handleRequest(client *client.Client, request *Request) {
-	job := Job{Client: client, Request: *request}
-
-	select {
-	case service.jobQueue <- job:
-		// job has been picked up by a worker.
-		break
-
-	case <-time.After(service.config.JobConsumeTimeout):
-		// no worker was able to pick up the job within the time frame.
-		// we have to notify the client of this failure.
-		client.SendNow(&RequestTimedOut{})
-		client.Terminate()
-	}
+	service.jobQueue <- Job{Client: client, Request: *request}
 }
 
 // spawnWorker spawns a worker goroutine that reads from the
 // service's job queue.
 func (service *Service) spawnWorker() {
-	go func() {
-		for job := range service.jobQueue {
-			email := account.Email(job.Request.Email)
-			password := account.Password(job.Request.Password)
+	for job := range service.jobQueue {
+		email := account.Email(job.Request.Email)
+		password := account.Password(job.Request.Password)
 
-			if !email.Validate() || !password.Validate() {
-				job.Client.SendNow(&InvalidCredentials{})
-				job.Client.Terminate()
+		if !email.Validate() || !password.Validate() {
+			job.Client.SendNow(&InvalidCredentials{})
+			job.Client.Terminate()
 
-				continue
-			}
-
-			result, err := service.authenticator.Authenticate(email, password)
-			if err != nil {
-				job.Client.SendNow(&ErrorDuringAccountFetch{})
-				job.Client.Terminate()
-
-				continue
-			}
-
-			switch res := result.(type) {
-			case AuthSuccess:
-				service.routing.Publish(game.AuthenticationEventTopic, client.Mail{
-					Client:  job.Client,
-					Payload: game.Authenticated{Account: res.Account},
-				})
-
-			case CouldNotFindAccount, PasswordMismatch:
-				job.Client.SendNow(&InvalidCredentials{})
-				job.Client.Terminate()
-
-				continue
-
-			default:
-				service.config.Logger.Errorf("unexpected authentication result type of %v", reflect.TypeOf(res))
-			}
+			continue
 		}
-	}()
+
+		result, err := service.authenticator.Authenticate(email, password)
+		if err != nil {
+			job.Client.SendNow(&ErrorDuringAccountFetch{})
+			job.Client.Terminate()
+
+			continue
+		}
+
+		switch res := result.(type) {
+		case AuthSuccess:
+			service.routing.Publish(game.AuthenticationEventTopic, client.Mail{
+				Client:  job.Client,
+				Payload: game.Authenticated{Account: res.Account},
+			})
+
+		case TimedOut:
+			job.Client.SendNow(&RequestTimedOut{})
+			job.Client.Terminate()
+
+			continue
+
+		case CouldNotFindAccount, PasswordMismatch:
+			job.Client.SendNow(&InvalidCredentials{})
+			job.Client.Terminate()
+
+			continue
+
+		default:
+			service.config.Logger.Errorf("unexpected authentication result type of %v", reflect.TypeOf(res))
+		}
+	}
 }
 
 // TearDown tears down this service, closing its job queue and

@@ -1,6 +1,8 @@
 package game
 
 import (
+	"time"
+
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 	"gitlab.com/pokesync/game-service/pkg/event"
@@ -21,6 +23,11 @@ func NewGame(assets *AssetBundle, entityCapacity int) *Game {
 		entityFactory: NewEntityFactory(assets),
 		eventBus:      event.NewSerialBus(),
 	}
+}
+
+// pulse is called every game pulse to process the game.
+func (game *Game) pulse(deltaTime time.Duration) error {
+	return game.world.Update(deltaTime)
 }
 
 // AddPlayer adds a player Entity with the specified details.
@@ -54,4 +61,24 @@ func (game *Game) AddMonster(modelID ModelID, position Position) (*entity.Entity
 		CreateEntity().
 		With(components...).
 		Build()
+}
+
+// RemovePlayer removes the given Player-like entity.
+func (game *Game) RemovePlayer(entity *entity.Entity) {
+	game.RemoveEntity(entity)
+}
+
+// RemoveNpc removes the given Npc-like entity.
+func (game *Game) RemoveNpc(entity *entity.Entity) {
+	game.RemoveEntity(entity)
+}
+
+// RemoveMonster removes the given Monster-like entity.
+func (game *Game) RemoveMonster(entity *entity.Entity) {
+	game.RemoveEntity(entity)
+}
+
+// RemoveEntity removes the given Entity from the game world.
+func (game *Game) RemoveEntity(entity *entity.Entity) {
+	game.world.DestroyEntity(entity)
 }

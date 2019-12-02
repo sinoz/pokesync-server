@@ -2,20 +2,10 @@ package account
 
 import "sync"
 
-// Fetcher fetches an Account.
-type Fetcher interface {
-	Get(email Email, password Password) (*Account, error)
-}
-
-// Saver saves Account's.
-type Saver interface {
-	Put(email Email, account Account) error
-}
-
 // Repository stores every registered Account.
 type Repository interface {
-	Fetcher
-	Saver
+	Get(email Email, password Password) (*Account, error)
+	Put(email Email, account Account) error
 }
 
 // InMemoryRepository is an in-memory implementation of an account

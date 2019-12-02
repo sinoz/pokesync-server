@@ -1,13 +1,11 @@
 package game
 
 import (
-	"fmt"
 	"reflect"
 	"time"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
-	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
@@ -15,15 +13,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// Unbounded is for parameters such as the job limit.
-const Unbounded = -1
-
 // Config holds configurations specific to the game service.
 type Config struct {
 	IntervalRate time.Duration
-
-	JobLimit    int
-	WorkerCount int
 
 	EntityLimit int
 
@@ -56,13 +48,12 @@ type Service struct {
 
 	characters character.Repository
 
-	routing  *client.Router
-	jobQueue chan Job
+	routing *client.Router
 
 	sessions *session.Registry
 
 	pulser *pulser
-	world  *entity.World
+	game   *Game
 }
 
 const (
@@ -77,18 +68,8 @@ type Authenticated struct {
 	Account account.Account
 }
 
-// Job is an interface for game specific jobs.
-type Job interface{}
-
 // NewService constructs a new game Service.
 func NewService(config Config, routing *client.Router, characters character.Repository, assets *AssetBundle) *Service {
-	var jobQueue chan Job
-	if config.JobLimit == Unbounded {
-		jobQueue = make(chan Job)
-	} else {
-		jobQueue = make(chan Job, config.JobLimit)
-	}
-
 	service := &Service{
 		config: config,
 
@@ -96,21 +77,16 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 
 		characters: characters,
 
-		routing:  routing,
-		jobQueue: jobQueue,
+		routing: routing,
 	}
 
 	service.sessions = session.NewRegistry()
-	service.world = createWorld(config, assets)
+	service.game = NewGame(assets, config.EntityLimit)
 
 	service.pulser = newPulser(config.IntervalRate, service.pulse)
 
 	mailbox := routing.Subscribe(AuthenticationEventTopic)
-	service.receiver(mailbox)
-
-	for i := 0; i < config.WorkerCount; i++ {
-		service.spawnWorker()
-	}
+	go service.receiver(mailbox)
 
 	return service
 }
@@ -158,64 +134,47 @@ func newPulser(intervalRate time.Duration, runTask pulseTask) *pulser {
 
 // receiver receives and handles client messages from the specified mailbox.
 func (service *Service) receiver(mailbox client.Mailbox) {
-	go func() {
-		for mail := range mailbox {
-			switch message := mail.Payload.(type) {
-			case Authenticated:
-				// TODO have a worker do this
-				profile, err := service.characters.Get(message.Account.Email)
-				if err != nil {
-					mail.Client.SendNow(&transport.UnableToFetchProfile{})
-					mail.Client.Terminate()
+	for mail := range mailbox {
+		switch message := mail.Payload.(type) {
+		case Authenticated:
+			// TODO have a worker do this
 
-					continue
-				}
+			// mail.Client.SendNow(&transport.LoginSuccess{
+			// 	PID:         1,
+			// 	DisplayName: string(profile.DisplayName),
+			// 	Gender:      byte(profile.Gender),
+			// 	UserGroup:   byte(profile.UserGroup),
 
-				mail.Client.SendNow(&transport.LoginSuccess{
-					PID:         1,
-					DisplayName: string(profile.DisplayName),
-					Gender:      byte(profile.Gender),
-					UserGroup:   byte(profile.UserGroup),
+			// 	MapX:   uint16(profile.MapX),
+			// 	MapZ:   uint16(profile.MapZ),
+			// 	LocalX: uint16(profile.LocalX),
+			// 	LocalZ: uint16(profile.LocalZ),
+			// })
 
-					MapX:   uint16(profile.MapX),
-					MapZ:   uint16(profile.MapZ),
-					LocalX: uint16(profile.LocalX),
-					LocalZ: uint16(profile.LocalZ),
-				})
-
-			case client.Message:
-				session := service.sessions.Get(mail.Client.ID)
-				if session == nil {
-					continue
-				}
-
-				session.QueueCommand(message)
-
-			default:
-				service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
+		case client.Message:
+			session := service.sessions.Get(mail.Client.ID)
+			if session == nil {
+				continue
 			}
-		}
-	}()
-}
 
-// spawnWorker spawns a worker goroutine that reads from the
-// service's job queue.
-func (service *Service) spawnWorker() {
-	go func() {
-		for job := range service.jobQueue {
-			fmt.Println(job)
+			session.QueueCommand(message)
+
+		default:
+			service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
 		}
-	}()
+	}
 }
 
 // pulse is called every pulse or tick to process the game. The given
 // delta time parameter is the amount of time that has elapsed since
 // the last pulse.
 func (service *Service) pulse(deltaTime time.Duration) {
-	service.world.Update(deltaTime)
+	if err := service.game.pulse(deltaTime); err != nil {
+		service.config.Logger.Error(err)
+	}
 }
 
 // TearDown terminates this Service and cleans up resources.
 func (service *Service) TearDown() {
-	close(service.jobQueue)
+	// TODO
 }

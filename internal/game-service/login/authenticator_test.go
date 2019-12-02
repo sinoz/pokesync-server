@@ -10,16 +10,20 @@ type dummyFetcher struct {
 	ReturnNil bool
 }
 
-func (repo *dummyFetcher) Get(email account.Email, password account.Password) (*account.Account, error) {
-	if repo.ReturnNil {
-		return nil, nil
-	}
+func returnNilAccount(email account.Email, password account.Password) <-chan account.LoadResult {
+	ch := make(chan account.LoadResult, 1)
+	ch <- account.LoadResult{Account: nil, Error: nil}
+	return ch
+}
 
-	return &account.Account{Email: email, Password: password}, nil
+func returnMyAccount(email account.Email, password account.Password) <-chan account.LoadResult {
+	ch := make(chan account.LoadResult, 1)
+	ch <- account.LoadResult{Account: &account.Account{Email: email, Password: password}}
+	return ch
 }
 
 func TestAuthenticator_Authenticat_Success(t *testing.T) {
-	authenticator := NewAuthenticator(&dummyFetcher{ReturnNil: false}, account.BasicPasswordMatcher())
+	authenticator := NewAuthenticator(returnMyAccount, account.BasicPasswordMatcher())
 	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
@@ -34,7 +38,7 @@ func TestAuthenticator_Authenticat_Success(t *testing.T) {
 }
 
 func TestAuthenticator_Authenticat_CouldNotFindAccount(t *testing.T) {
-	authenticator := NewAuthenticator(&dummyFetcher{ReturnNil: true}, account.BasicPasswordMatcher())
+	authenticator := NewAuthenticator(returnNilAccount, account.BasicPasswordMatcher())
 	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
@@ -49,7 +53,7 @@ func TestAuthenticator_Authenticat_CouldNotFindAccount(t *testing.T) {
 }
 
 func TestAuthenticator_Authenticat_WrongPassword(t *testing.T) {
-	authenticator := NewAuthenticator(&dummyFetcher{}, func(p1, p2 account.Password) (bool, error) {
+	authenticator := NewAuthenticator(returnMyAccount, func(p1, p2 account.Password) (bool, error) {
 		return false, nil
 	})
 

@@ -229,6 +229,8 @@ func (manager *Manager) add(components []Component) (*Entity, bool) {
 
 // remove schedules the given Entity to be removed from this entity manager.
 func (manager *Manager) remove(entity *Entity) {
+	manager.list.ReleaseID(entity.ID)
+
 	manager.entitiesToRemove = append(manager.entitiesToRemove, removal{entity: entity})
 }
 
@@ -252,8 +254,6 @@ func (manager *Manager) removeComponent(entity *Entity, component Component) {
 func (manager *Manager) update(deltaTime time.Duration) error {
 	for _, removal := range manager.entitiesToRemove {
 		manager.list.Clear(removal.entity.ID)
-		manager.list.ReleaseID(removal.entity.ID)
-
 		removal.entity.clearListeners()
 
 		manager.notifyEntityRemoved(removal.entity)
