@@ -46,9 +46,5 @@
   version = "1.1.1"
 
 [[constraint]]
-  branch = "master"
-  name = "gitlab.com/pokesync/ecs"
-
-[[constraint]]
   name = "github.com/go-redis/redis"
   version = "6.15.6"

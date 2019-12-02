@@ -3,7 +3,7 @@ package game
 import (
 	"time"
 
-	ecs "gitlab.com/pokesync/ecs/src"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/ecs"
 )
 
 // MapViewProcessor processes map view changes.

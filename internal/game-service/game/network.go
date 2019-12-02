@@ -3,7 +3,7 @@ package game
 import (
 	"time"
 
-	ecs "gitlab.com/pokesync/ecs/src"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/ecs"
 )
 
 const (
@@ -77,7 +77,7 @@ func (processor *OutboundNetworkProcessor) RemovedFromWorld(world *ecs.World) er
 func (processor *InboundNetworkProcessor) Update(world *ecs.World, deltaTime time.Duration) error {
 	entities := world.GetEntitiesFor(processor)
 	for _, entity := range entities {
-		sessionComponent := entity.GetComponent(SessionTag).(*SessionComponent)
+		sessionComponent := ecs.GetComponent(SessionTag).(*SessionComponent)
 		session := sessionComponent.Session
 
 		for i := 0; i < CommandLimit; i++ {
@@ -98,7 +98,7 @@ func (processor *InboundNetworkProcessor) Update(world *ecs.World, deltaTime tim
 func (processor *OutboundNetworkProcessor) Update(world *ecs.World, deltaTime time.Duration) error {
 	entities := world.GetEntitiesFor(processor)
 	for _, entity := range entities {
-		sessionComponent := entity.GetComponent(SessionTag).(*SessionComponent)
+		sessionComponent := ecs.GetComponent(SessionTag).(*SessionComponent)
 		session := sessionComponent.Session
 
 		var eventCount = 0

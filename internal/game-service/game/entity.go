@@ -3,8 +3,8 @@ package game
 import (
 	"errors"
 
-	ecs "gitlab.com/pokesync/ecs/src"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/ecs"
 )
 
 const (
@@ -27,7 +27,7 @@ type ModelID int
 // EntityKind represents the type of an Entity.
 type EntityKind int
 
-// Gender is a type of gender of an entity.
+// Gender is a type of gender of an Entity.
 type Gender int
 
 // EntityList holds a list of entities in a fixed-sized collection.
