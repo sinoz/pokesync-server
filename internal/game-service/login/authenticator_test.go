@@ -6,25 +6,20 @@ import (
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 )
 
-type dummyRepository struct {
+type dummyFetcher struct {
 	ReturnNil bool
 }
 
-func (repo *dummyRepository) Get(email account.Email, password account.Password) (*account.Account, error) {
+func (repo *dummyFetcher) Get(email account.Email, password account.Password) (*account.Account, error) {
 	if repo.ReturnNil {
 		return nil, nil
-	} else {
-		return &account.Account{Email: email, Password: password}, nil
 	}
-}
 
-// Put puts the given Account under the specified Email into the Repository.
-func (repo *dummyRepository) Put(email account.Email, account account.Account) error {
-	return nil
+	return &account.Account{Email: email, Password: password}, nil
 }
 
 func TestAuthenticator_Authenticat_Success(t *testing.T) {
-	authenticator := NewAuthenticator(&dummyRepository{ReturnNil: false}, account.BasicPasswordMatcher())
+	authenticator := NewAuthenticator(&dummyFetcher{ReturnNil: false}, account.BasicPasswordMatcher())
 	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
@@ -39,7 +34,7 @@ func TestAuthenticator_Authenticat_Success(t *testing.T) {
 }
 
 func TestAuthenticator_Authenticat_CouldNotFindAccount(t *testing.T) {
-	authenticator := NewAuthenticator(&dummyRepository{ReturnNil: true}, account.BasicPasswordMatcher())
+	authenticator := NewAuthenticator(&dummyFetcher{ReturnNil: true}, account.BasicPasswordMatcher())
 	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
@@ -54,7 +49,7 @@ func TestAuthenticator_Authenticat_CouldNotFindAccount(t *testing.T) {
 }
 
 func TestAuthenticator_Authenticat_WrongPassword(t *testing.T) {
-	authenticator := NewAuthenticator(&dummyRepository{}, func(p1, p2 account.Password) (bool, error) {
+	authenticator := NewAuthenticator(&dummyFetcher{}, func(p1, p2 account.Password) (bool, error) {
 		return false, nil
 	})
 

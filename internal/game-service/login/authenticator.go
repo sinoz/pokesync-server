@@ -4,7 +4,7 @@ import "gitlab.com/pokesync/game-service/internal/game-service/account"
 
 // Authenticator authenticates users.
 type Authenticator struct {
-	AccountStorage  account.Repository
+	AccountFetcher  account.Fetcher
 	PasswordMatcher account.PasswordMatcher
 }
 
@@ -31,16 +31,16 @@ type PasswordMismatch struct{}
 type AuthResult interface{}
 
 // NewAuthenticator constructs a new instance of an Authenticator.
-func NewAuthenticator(repository account.Repository, matcher account.PasswordMatcher) Authenticator {
+func NewAuthenticator(accountFetcher account.Fetcher, matcher account.PasswordMatcher) Authenticator {
 	return Authenticator{
-		AccountStorage:  repository,
+		AccountFetcher:  accountFetcher,
 		PasswordMatcher: matcher,
 	}
 }
 
 // Authenticate authenticates a user by the given E-mail / Password combination.
 func (auth Authenticator) Authenticate(email account.Email, password account.Password) (AuthResult, error) {
-	record, err := auth.AccountStorage.Get(email, password)
+	record, err := auth.AccountFetcher.Get(email, password)
 	if err != nil {
 		return nil, err
 	}

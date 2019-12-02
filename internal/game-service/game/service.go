@@ -217,5 +217,5 @@ func (service *Service) pulse(deltaTime time.Duration) {
 
 // TearDown terminates this Service and cleans up resources.
 func (service *Service) TearDown() {
-	// TODO
+	close(service.jobQueue)
 }

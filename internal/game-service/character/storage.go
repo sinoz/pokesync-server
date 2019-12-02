@@ -6,10 +6,20 @@ import (
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 )
 
+// Fetcher fetches a character Profile.
+type Fetcher interface {
+	Get(email account.Email) (*Profile, error)
+}
+
+// Saver saves a character Profile.
+type Saver interface {
+	Put(email account.Email, profile *Profile) error
+}
+
 // Repository stores account associated player characters.
 type Repository interface {
-	Get(email account.Email) (*Profile, error)
-	Put(email account.Email, profile *Profile) error
+	Fetcher
+	Saver
 }
 
 // InMemoryRepository is an in-memory implementation of a profile
