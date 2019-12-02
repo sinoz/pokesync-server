@@ -2,29 +2,23 @@ package game
 
 import (
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
-	"gitlab.com/pokesync/game-service/internal/game-service/game/ecs"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 )
 
 const (
-	PIDTag       ecs.ComponentTag = 1 << 0
-	ModelIDTag   ecs.ComponentTag = 1 << 1
-	RankTag      ecs.ComponentTag = 1 << 2
-	UsernameTag  ecs.ComponentTag = 1 << 3
-	HealthTag    ecs.ComponentTag = 1 << 4
-	CanRunTag    ecs.ComponentTag = 1 << 5
-	TransformTag ecs.ComponentTag = 1 << 6
-	KindTag      ecs.ComponentTag = 1 << 7
-	TrackingTag  ecs.ComponentTag = 1 << 8
-	SessionTag   ecs.ComponentTag = 1 << 9
-	MapViewTag   ecs.ComponentTag = 1 << 10
-	BlockingTag  ecs.ComponentTag = 1 << 11
+	ModelIDTag   entity.ComponentTag = 1 << 0
+	RankTag      entity.ComponentTag = 1 << 1
+	UsernameTag  entity.ComponentTag = 1 << 2
+	HealthTag    entity.ComponentTag = 1 << 3
+	CanRunTag    entity.ComponentTag = 1 << 4
+	TransformTag entity.ComponentTag = 1 << 5
+	KindTag      entity.ComponentTag = 1 << 6
+	TrackingTag  entity.ComponentTag = 1 << 7
+	SessionTag   entity.ComponentTag = 1 << 8
+	MapViewTag   entity.ComponentTag = 1 << 9
+	BlockingTag  entity.ComponentTag = 1 << 10
 )
-
-// PIDComponent holds a process id of an entity.
-type PIDComponent struct {
-	PID PID
-}
 
 // ModelIDComponent holds a model id of an entity.
 type ModelIDComponent struct {
@@ -68,7 +62,7 @@ type KindComponent struct {
 // TrackingComponent keeps track of entities that are nearby the
 // Entity this Component is for.
 type TrackingComponent struct {
-	Nearby []*ecs.Entity
+	Nearby []*entity.Entity
 }
 
 // SessionComponent holds a Session instance, which indicates
@@ -83,72 +77,66 @@ type MapViewComponent struct {
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *PIDComponent) Tag() ecs.ComponentTag {
-	return PIDTag
-}
-
-// Tag returns the tag of a Component instance for identification
-// and storage purposes.
-func (component *ModelIDComponent) Tag() ecs.ComponentTag {
+func (component *ModelIDComponent) Tag() entity.ComponentTag {
 	return ModelIDTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *RankComponent) Tag() ecs.ComponentTag {
+func (component *RankComponent) Tag() entity.ComponentTag {
 	return RankTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *HealthComponent) Tag() ecs.ComponentTag {
+func (component *HealthComponent) Tag() entity.ComponentTag {
 	return HealthTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *UsernameComponent) Tag() ecs.ComponentTag {
+func (component *UsernameComponent) Tag() entity.ComponentTag {
 	return UsernameTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *CanRunComponent) Tag() ecs.ComponentTag {
+func (component *CanRunComponent) Tag() entity.ComponentTag {
 	return CanRunTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *TransformComponent) Tag() ecs.ComponentTag {
+func (component *TransformComponent) Tag() entity.ComponentTag {
 	return TransformTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *KindComponent) Tag() ecs.ComponentTag {
+func (component *KindComponent) Tag() entity.ComponentTag {
 	return KindTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *BlockingComponent) Tag() ecs.ComponentTag {
+func (component *BlockingComponent) Tag() entity.ComponentTag {
 	return BlockingTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *TrackingComponent) Tag() ecs.ComponentTag {
+func (component *TrackingComponent) Tag() entity.ComponentTag {
 	return TrackingTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *SessionComponent) Tag() ecs.ComponentTag {
+func (component *SessionComponent) Tag() entity.ComponentTag {
 	return SessionTag
 }
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
-func (component *MapViewComponent) Tag() ecs.ComponentTag {
+func (component *MapViewComponent) Tag() entity.ComponentTag {
 	return MapViewTag
 }

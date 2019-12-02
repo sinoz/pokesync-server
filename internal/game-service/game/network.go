@@ -3,7 +3,7 @@ package game
 import (
 	"time"
 
-	"gitlab.com/pokesync/game-service/internal/game-service/game/ecs"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 )
 
 const (
@@ -24,16 +24,16 @@ type OutboundNetworkProcessor struct {
 	// TODO
 }
 
-// NewInboundNetworkSystem constructs a new instance of an ecs.System with
+// NewInboundNetworkSystem constructs a new instance of an entity.System with
 // a InboundNetworkProcessor as its internal processor.
-func NewInboundNetworkSystem() *ecs.System {
-	return ecs.NewSystem(ecs.NewIntervalPolicy(100*time.Millisecond), NewInboundNetworkProcessor())
+func NewInboundNetworkSystem() *entity.System {
+	return entity.NewSystem(entity.NewIntervalPolicy(100*time.Millisecond), NewInboundNetworkProcessor())
 }
 
-// NewOutboundNetworkSystem constructs a new instance of an ecs.System with
+// NewOutboundNetworkSystem constructs a new instance of an entity.System with
 // a OutboundNetworkProcessor as its internal processor.
-func NewOutboundNetworkSystem() *ecs.System {
-	return ecs.NewSystem(ecs.NewDefaultSystemPolicy(), NewOutboundNetworkProcessor())
+func NewOutboundNetworkSystem() *entity.System {
+	return entity.NewSystem(entity.NewDefaultSystemPolicy(), NewOutboundNetworkProcessor())
 }
 
 // NewInboundNetworkProcessor constructs a new instance of a
@@ -50,31 +50,31 @@ func NewOutboundNetworkProcessor() *OutboundNetworkProcessor {
 
 // AddedToWorld is called when the System of this Processor is added
 // to the game World.
-func (processor *InboundNetworkProcessor) AddedToWorld(world *ecs.World) error {
+func (processor *InboundNetworkProcessor) AddedToWorld(world *entity.World) error {
 	return nil
 }
 
 // RemovedFromWorld is called when the System of this Processor is removed
 // from the game World.
-func (processor *InboundNetworkProcessor) RemovedFromWorld(world *ecs.World) error {
+func (processor *InboundNetworkProcessor) RemovedFromWorld(world *entity.World) error {
 	return nil
 }
 
 // AddedToWorld is called when the System of this Processor is added
 // to the game World.
-func (processor *OutboundNetworkProcessor) AddedToWorld(world *ecs.World) error {
+func (processor *OutboundNetworkProcessor) AddedToWorld(world *entity.World) error {
 	return nil
 }
 
 // RemovedFromWorld is called when the System of this Processor is removed
 // from the game World.
-func (processor *OutboundNetworkProcessor) RemovedFromWorld(world *ecs.World) error {
+func (processor *OutboundNetworkProcessor) RemovedFromWorld(world *entity.World) error {
 	return nil
 }
 
 // Update is called every game pulse to check if entities need any received
 // messages processed.
-func (processor *InboundNetworkProcessor) Update(world *ecs.World, deltaTime time.Duration) error {
+func (processor *InboundNetworkProcessor) Update(world *entity.World, deltaTime time.Duration) error {
 	entities := world.GetEntitiesFor(processor)
 	for _, entity := range entities {
 		sessionComponent := entity.GetComponent(SessionTag).(*SessionComponent)
@@ -95,7 +95,7 @@ func (processor *InboundNetworkProcessor) Update(world *ecs.World, deltaTime tim
 
 // Update is called every game pulse to check if entities need any queued
 // messages processed.
-func (processor *OutboundNetworkProcessor) Update(world *ecs.World, deltaTime time.Duration) error {
+func (processor *OutboundNetworkProcessor) Update(world *entity.World, deltaTime time.Duration) error {
 	entities := world.GetEntitiesFor(processor)
 	for _, entity := range entities {
 		sessionComponent := entity.GetComponent(SessionTag).(*SessionComponent)
@@ -122,12 +122,12 @@ func (processor *OutboundNetworkProcessor) Update(world *ecs.World, deltaTime ti
 
 // Components returns a pack of ComponentTag's the InboundNetworkProcessor has
 // interest in.
-func (processor *InboundNetworkProcessor) Components() ecs.ComponentTag {
+func (processor *InboundNetworkProcessor) Components() entity.ComponentTag {
 	return SessionTag
 }
 
 // Components returns a pack of ComponentTag's the OutboundNetworkProcessor has
 // interest in.
-func (processor *OutboundNetworkProcessor) Components() ecs.ComponentTag {
+func (processor *OutboundNetworkProcessor) Components() entity.ComponentTag {
 	return SessionTag
 }

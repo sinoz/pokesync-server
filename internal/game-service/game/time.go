@@ -3,7 +3,7 @@ package game
 import (
 	"time"
 
-	"gitlab.com/pokesync/game-service/internal/game-service/game/ecs"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 )
 
 // MinutesInAnHour is the amount of minutes in an hour.
@@ -47,8 +47,8 @@ func NewClock(seconds int) *Clock {
 // between day-and night. The system processes time four times as fast
 // as real-time does. This means that there are four transitions between
 // day and night, a day.
-func NewDayNightSystem(clockRate time.Duration, synchronizer ClockSynchronizer) *ecs.System {
-	return ecs.NewSystem(ecs.NewIntervalPolicy(clockRate), NewDayNightProcessor(synchronizer))
+func NewDayNightSystem(clockRate time.Duration, synchronizer ClockSynchronizer) *entity.System {
+	return entity.NewSystem(entity.NewIntervalPolicy(clockRate), NewDayNightProcessor(synchronizer))
 }
 
 // NewDayNightProcessor processes the day-and night transitions.
@@ -114,25 +114,25 @@ func (gmt *GMT0Synchronizer) Synchronize() (*Clock, error) {
 
 // AddedToWorld is called when the System of this Processor is added
 // to the game World.
-func (processor *DayNightProcessor) AddedToWorld(world *ecs.World) (err error) {
+func (processor *DayNightProcessor) AddedToWorld(world *entity.World) (err error) {
 	processor.clock, err = processor.synchronizer.Synchronize()
 	return err
 }
 
 // RemovedFromWorld is called when the System of this Processor is removed
 // from the game World.
-func (processor *DayNightProcessor) RemovedFromWorld(world *ecs.World) error {
+func (processor *DayNightProcessor) RemovedFromWorld(world *entity.World) error {
 	return nil
 }
 
 // Update is called every game pulse to check if entities need their map view
 // refreshed and if so, refreshes them.
-func (processor *DayNightProcessor) Update(world *ecs.World, deltaTime time.Duration) error {
+func (processor *DayNightProcessor) Update(world *entity.World, deltaTime time.Duration) error {
 	return nil
 }
 
 // Components returns a pack of ComponentTag's the DayNightProcessor has
 // interest in.
-func (processor *DayNightProcessor) Components() ecs.ComponentTag {
+func (processor *DayNightProcessor) Components() entity.ComponentTag {
 	return 0
 }

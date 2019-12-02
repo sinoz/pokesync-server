@@ -1,4 +1,4 @@
-package ecs
+package entity
 
 // ComponentTag is a unique bit mask value that is assigned to
 // each type of Component for identification purposes.

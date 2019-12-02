@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"time"
 
-	"gitlab.com/pokesync/game-service/internal/game-service/game/ecs"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 
@@ -62,7 +62,7 @@ type Service struct {
 	sessions *session.Registry
 
 	pulser *pulser
-	world  *ecs.World
+	world  *entity.World
 }
 
 const (
@@ -118,8 +118,8 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 // createWorld constructs a new instance of a World, preconfigured
 // with all of its necessary system and processors for the game service
 // to process game logic.
-func createWorld(config Config, assets *AssetBundle) *ecs.World {
-	world := ecs.NewWorld(config.EntityLimit)
+func createWorld(config Config, assets *AssetBundle) *entity.World {
+	world := entity.NewWorld(config.EntityLimit)
 
 	world.AddSystem(NewInboundNetworkSystem())
 	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))

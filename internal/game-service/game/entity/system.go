@@ -1,11 +1,11 @@
-package ecs
+package entity
 
 import (
 	"time"
 )
 
-// emptyEntityList is an empty slice of Entity's.
-var emptyEntityList []*Entity
+// emptyList is an empty slice of Entity's.
+var emptyList []*Entity
 
 // systemListener listens for systems being added and removed
 // from the world.

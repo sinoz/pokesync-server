@@ -1,4 +1,4 @@
-package ecs
+package entity
 
 import (
 	"time"
@@ -6,7 +6,7 @@ import (
 
 // World is the world of entities.
 type World struct {
-	entityManager *entityManager
+	entityManager *Manager
 	systemManager *systemManager
 }
 
@@ -25,7 +25,7 @@ type systemComponentListener struct {
 // NewWorld constructs a new instance of a World.
 func NewWorld(capacity int) *World {
 	world := &World{
-		entityManager: newEntityManager(capacity),
+		entityManager: newManager(capacity),
 		systemManager: newSystemManager(),
 	}
 
@@ -36,8 +36,8 @@ func NewWorld(capacity int) *World {
 }
 
 // CreateEntity schedules the given Entity to be added to the world.
-func (world *World) CreateEntity() *EntityBuilder {
-	return newEntityBuilder(world)
+func (world *World) CreateEntity() *Builder {
+	return newBuilder(world)
 }
 
 // DestroyEntity schedules the given Entity to be removed from the world.
@@ -92,7 +92,7 @@ SystemLoop:
 	for _, system := range world.systemManager.systems {
 		if entity.shouldBeSubscribedTo(system) {
 			for slot, ent := range system.entities {
-				if ent.id == entity.id {
+				if ent.ID == entity.ID {
 					system.entities = append(system.entities[:slot], system.entities[slot+1:]...)
 					continue SystemLoop
 				}
@@ -110,11 +110,11 @@ func (world *World) GetEntitiesFor(processor Processor) []*Entity {
 		}
 	}
 
-	return emptyEntityList
+	return emptyList
 }
 
 func (listener *systemComponentListener) systemAdded(system *System) {
-	for _, entity := range listener.world.entityManager.entities {
+	for _, entity := range listener.world.entityManager.list.entities {
 		if entity != nil && entity.shouldBeSubscribedTo(system) {
 			system.entities = append(system.entities, entity)
 		}

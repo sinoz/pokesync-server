@@ -1,6 +1,7 @@
-package ecs
+package entity
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -10,9 +11,9 @@ const (
 	TypeLimit = 64
 )
 
-// EntityID is the unique id of an entity, which we can use to identify
+// ID is the unique id of an entity, which we can use to identify
 // Entity's with within our world.
-type EntityID int
+type ID int
 
 // listener listens for changes made to an entity's bag of components.
 type listener interface {
@@ -26,13 +27,13 @@ type listener interface {
 // componentListener listens for changes made to an Entity's bag
 // of components, to publish these changes to the entityManager.
 type componentListener struct {
-	manager *entityManager
+	manager *Manager
 }
 
 // Entity represents an entity in the game world. An entity only holds its own
 // id and a bitpack value to reference which components an entity has.
 type Entity struct {
-	id EntityID
+	ID ID
 
 	typePack   int
 	components [TypeLimit]Component
@@ -40,19 +41,19 @@ type Entity struct {
 	listeners []listener
 }
 
-// EntityBuilder builds up an Entity.
-type EntityBuilder struct {
+// Builder builds up an Entity.
+type Builder struct {
 	world      *World
 	components []Component
 }
 
-// entityAddition is the addition of an entity to the world.
-type entityAddition struct {
-	components []Component
+// addition is the addition of an entity to the world.
+type addition struct {
+	entity *Entity
 }
 
-// entityRemoval is the removal of an entity from the world.
-type entityRemoval struct {
+// removal is the removal of an entity from the world.
+type removal struct {
 	entity *Entity
 }
 
@@ -68,12 +69,12 @@ type componentRemoval struct {
 	component Component
 }
 
-// entityManager keeps track of Entity's that exist within our world.
-type entityManager struct {
-	entities []*Entity
+// Manager keeps track of Entity's that exist within our world.
+type Manager struct {
+	list *List
 
-	entitiesToAdd    []entityAddition
-	entitiesToRemove []entityRemoval
+	entitiesToAdd    []addition
+	entitiesToRemove []removal
 
 	entitiesWithNewComponents []componentAddition
 	entitiesWithOldComponents []componentRemoval
@@ -86,18 +87,18 @@ func NewEntity() *Entity {
 	return &Entity{}
 }
 
-// newEntityBuilder creates a new instance of an EntityBuilder.
-func newEntityBuilder(world *World) *EntityBuilder {
-	return &EntityBuilder{world: world}
+// newBuilder creates a new instance of an EntityBuilder.
+func newBuilder(world *World) *Builder {
+	return &Builder{world: world}
 }
 
-// newEntityManager creates a new manager of entities.
-func newEntityManager(capacity int) *entityManager {
-	return &entityManager{entities: make([]*Entity, capacity)}
+// newManager creates a new manager of entities.
+func newManager(capacity int) *Manager {
+	return &Manager{list: NewList(capacity)}
 }
 
 // With includes the given series of Component's in the building process of an Entity.
-func (bldr *EntityBuilder) With(components ...Component) *EntityBuilder {
+func (bldr *Builder) With(components ...Component) *Builder {
 	for _, component := range components {
 		bldr.components = append(bldr.components, component)
 	}
@@ -106,9 +107,10 @@ func (bldr *EntityBuilder) With(components ...Component) *EntityBuilder {
 }
 
 // Build schedules the building-and registration process of an Entity to
-// be ran by the World.
-func (bldr *EntityBuilder) Build() {
-	bldr.world.entityManager.add(bldr.components)
+// be ran by the World. Returns the Entity that has been built and a boolean
+// on whether the Entity is going to be successfully added or not.
+func (bldr *Builder) Build() (*Entity, bool) {
+	return bldr.world.entityManager.add(bldr.components)
 }
 
 // Add adds the given Component to this entity's typePack of components
@@ -205,17 +207,33 @@ func (entity *Entity) GetTypePack() int {
 }
 
 // add schedules the given Entity to be added to this entity manager.
-func (manager *entityManager) add(components []Component) {
-	manager.entitiesToAdd = append(manager.entitiesToAdd, entityAddition{components: components})
+func (manager *Manager) add(components []Component) (*Entity, bool) {
+	id, ok := manager.list.GetAvailableID()
+	if !ok {
+		return nil, false
+	}
+
+	entity := NewEntity()
+
+	entity.ID = id
+	entity.install(&componentListener{manager: manager})
+
+	for _, component := range components {
+		entity.Add(component)
+	}
+
+	manager.entitiesToAdd = append(manager.entitiesToAdd, addition{entity: entity})
+
+	return entity, true
 }
 
 // remove schedules the given Entity to be removed from this entity manager.
-func (manager *entityManager) remove(entity *Entity) {
-	manager.entitiesToRemove = append(manager.entitiesToRemove, entityRemoval{entity: entity})
+func (manager *Manager) remove(entity *Entity) {
+	manager.entitiesToRemove = append(manager.entitiesToRemove, removal{entity: entity})
 }
 
 // add schedules the given Entity to be added to this entity manager.
-func (manager *entityManager) addComponent(entity *Entity, component Component) {
+func (manager *Manager) addComponent(entity *Entity, component Component) {
 	manager.entitiesWithNewComponents = append(manager.entitiesWithNewComponents, componentAddition{
 		entity:    entity,
 		component: component,
@@ -223,7 +241,7 @@ func (manager *entityManager) addComponent(entity *Entity, component Component) 
 }
 
 // remove schedules the given Entity to be removed from this entity manager.
-func (manager *entityManager) removeComponent(entity *Entity, component Component) {
+func (manager *Manager) removeComponent(entity *Entity, component Component) {
 	manager.entitiesWithOldComponents = append(manager.entitiesWithOldComponents, componentRemoval{
 		entity:    entity,
 		component: component,
@@ -231,9 +249,11 @@ func (manager *entityManager) removeComponent(entity *Entity, component Componen
 }
 
 // update updates all pending entities for removals or additions to the world.
-func (manager *entityManager) update(deltaTime time.Duration) error {
+func (manager *Manager) update(deltaTime time.Duration) error {
 	for _, removal := range manager.entitiesToRemove {
-		manager.entities[removal.entity.id] = nil
+		manager.list.Clear(removal.entity.ID)
+		manager.list.ReleaseID(removal.entity.ID)
+
 		removal.entity.clearListeners()
 
 		manager.notifyEntityRemoved(removal.entity)
@@ -241,23 +261,17 @@ func (manager *entityManager) update(deltaTime time.Duration) error {
 	}
 
 	for _, addition := range manager.entitiesToAdd {
-		entityID := manager.getAvailableID()
-		if entityID == -1 {
-			manager.entitiesToAdd = manager.entitiesToAdd[1:]
-			continue
+		empty, err := manager.list.IsEmpty(addition.entity.ID)
+		if err != nil {
+			return err
 		}
 
-		entity := NewEntity()
-
-		entity.id = entityID
-		entity.install(&componentListener{manager: manager})
-
-		for _, component := range addition.components {
-			entity.Add(component)
+		if !empty {
+			return fmt.Errorf("entity ID %v already in use", addition.entity.ID)
 		}
 
-		manager.entities[entityID] = entity
-		manager.notifyEntityAdded(entity)
+		manager.list.Insert(addition.entity.ID, addition.entity)
+		manager.notifyEntityAdded(addition.entity)
 
 		manager.entitiesToAdd = manager.entitiesToAdd[1:]
 	}
@@ -275,22 +289,9 @@ func (manager *entityManager) update(deltaTime time.Duration) error {
 	return nil
 }
 
-// getAvailableID searches for an available slot within the list of entities.
-// Returns -1 if no slot is currently available, which indicates that the
-// world has reached its capacity.
-func (manager *entityManager) getAvailableID() EntityID {
-	for i, entity := range manager.entities {
-		if entity == nil {
-			return EntityID(i)
-		}
-	}
-
-	return -1
-}
-
 // notifyComponentAdded notifies all listener's of the given Component
 // having been added to the given Entity.
-func (manager *entityManager) notifyComponentAdded(entity *Entity, component Component) {
+func (manager *Manager) notifyComponentAdded(entity *Entity, component Component) {
 	for _, listener := range manager.listeners {
 		listener.componentAdded(entity, component)
 	}
@@ -298,7 +299,7 @@ func (manager *entityManager) notifyComponentAdded(entity *Entity, component Com
 
 // notifyComponentRemoved notifies all listener's of the given Component
 // having been removed from the given Entity.
-func (manager *entityManager) notifyComponentRemoved(entity *Entity, component Component) {
+func (manager *Manager) notifyComponentRemoved(entity *Entity, component Component) {
 	for _, listener := range manager.listeners {
 		listener.componentRemoved(entity, component)
 	}
@@ -306,7 +307,7 @@ func (manager *entityManager) notifyComponentRemoved(entity *Entity, component C
 
 // notifyEntityAdded notifies all listener's of the given Entity
 // having been added to the manager.
-func (manager *entityManager) notifyEntityAdded(entity *Entity) {
+func (manager *Manager) notifyEntityAdded(entity *Entity) {
 	for _, listener := range manager.listeners {
 		listener.entityAdded(entity)
 	}
@@ -314,19 +315,19 @@ func (manager *entityManager) notifyEntityAdded(entity *Entity) {
 
 // entityRemoved notifies all listener's of the given Entity
 // having been removed from the manager.
-func (manager *entityManager) notifyEntityRemoved(entity *Entity) {
+func (manager *Manager) notifyEntityRemoved(entity *Entity) {
 	for _, listener := range manager.listeners {
 		listener.entityRemoved(entity)
 	}
 }
 
 // install installs the given listener into this manager.
-func (manager *entityManager) install(listener listener) {
+func (manager *Manager) install(listener listener) {
 	manager.listeners = append(manager.listeners, listener)
 }
 
 // uninstall uninstalls the given listener from this manager.
-func (manager *entityManager) uninstall(listener listener) {
+func (manager *Manager) uninstall(listener listener) {
 	for i, l := range manager.listeners {
 		if l == listener {
 			manager.listeners = append(manager.listeners[:i], manager.listeners[i+1:]...)
@@ -336,7 +337,7 @@ func (manager *entityManager) uninstall(listener listener) {
 }
 
 // clearListeners clears this entityManager from all of its listener's.
-func (manager *entityManager) clearListeners() {
+func (manager *Manager) clearListeners() {
 	manager.listeners = []listener{}
 }
 

@@ -2,34 +2,32 @@ package game
 
 import (
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
-	"gitlab.com/pokesync/game-service/internal/game-service/game/ecs"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 	"gitlab.com/pokesync/game-service/pkg/event"
 )
 
 // Game represents the game, mkay.
 type Game struct {
-	world         *ecs.World
-	eventBus      event.Bus
-	entityList    *EntityList
+	world         *entity.World
 	entityFactory *EntityFactory
+	eventBus      event.Bus
 	grid          *Grid
 }
 
 // NewGame constructs a new Game.
 func NewGame(assets *AssetBundle, entityCapacity int) *Game {
 	return &Game{
-		world:         ecs.NewWorld(entityCapacity),
-		eventBus:      event.NewSerialBus(),
-		entityList:    NewEntityList(entityCapacity),
+		world:         entity.NewWorld(entityCapacity),
 		entityFactory: NewEntityFactory(assets),
+		eventBus:      event.NewSerialBus(),
 	}
 }
 
 // AddPlayer adds a player Entity with the specified details.
-func (game *Game) AddPlayer(pid PID, position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) {
-	components := game.entityFactory.CreatePlayer(pid, position, South, gender, displayName, userGroup)
+func (game *Game) AddPlayer(position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) (*entity.Entity, bool) {
+	components := game.entityFactory.CreatePlayer(position, South, gender, displayName, userGroup)
 
-	game.
+	return game.
 		world.
 		CreateEntity().
 		With(components...).
@@ -37,10 +35,10 @@ func (game *Game) AddPlayer(pid PID, position Position, gender Gender, displayNa
 }
 
 // AddNpc adds a npc-like Entity with the specified details.
-func (game *Game) AddNpc(pid PID, modelID ModelID, position Position) {
-	components := game.entityFactory.CreateNpc(pid, position, South, modelID)
+func (game *Game) AddNpc(modelID ModelID, position Position) (*entity.Entity, bool) {
+	components := game.entityFactory.CreateNpc(position, South, modelID)
 
-	game.
+	return game.
 		world.
 		CreateEntity().
 		With(components...).
@@ -48,10 +46,10 @@ func (game *Game) AddNpc(pid PID, modelID ModelID, position Position) {
 }
 
 // AddMonster adds a monster-like Entity with the specified details.
-func (game *Game) AddMonster(pid PID, modelID ModelID, position Position) {
-	components := game.entityFactory.CreateMonster(pid, position, South, modelID)
+func (game *Game) AddMonster(modelID ModelID, position Position) (*entity.Entity, bool) {
+	components := game.entityFactory.CreateMonster(position, South, modelID)
 
-	game.
+	return game.
 		world.
 		CreateEntity().
 		With(components...).
