@@ -27,33 +27,37 @@ type Config struct {
 	ClockSynchronizer ClockSynchronizer
 }
 
-// PulseTask is the task to execute every pulse.
-type pulseTask func(time.Duration)
+// pulse represents a tick or a single heartbeat.
+type pulse struct{}
+
+// pulseInstance is a cached instance of the gamePulse type.
+var pulseInstance = pulse{}
 
 // pulser sends heartbeat-like pulses into the game to
 // continuously process the game world.
 type pulser struct {
-	isRunning bool
-	rate      time.Duration
-	deltaTime time.Duration
-	lastTime  time.Time
+	rate     time.Duration
+	lastTime time.Time
+
+	quit   chan bool
+	pulses chan pulse
 }
 
 // Service is an implementation of a game service that provides
 // gameplay capabilities to logged in users.
 type Service struct {
 	config Config
-
 	assets *AssetBundle
+
+	routing  *client.Router
+	sessions *session.Registry
+
+	mailbox client.Mailbox
+	pulser  *pulser
 
 	characters character.Repository
 
-	routing *client.Router
-
-	sessions *session.Registry
-
-	pulser *pulser
-	game   *Game
+	game *Game
 }
 
 const (
@@ -83,10 +87,10 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 	service.sessions = session.NewRegistry()
 	service.game = NewGame(assets, config.EntityLimit)
 
-	service.pulser = newPulser(config.IntervalRate, service.pulse)
+	service.pulser = newPulser(config.IntervalRate)
+	service.mailbox = routing.Subscribe(AuthenticationEventTopic)
 
-	mailbox := routing.Subscribe(AuthenticationEventTopic)
-	go service.receiver(mailbox)
+	go service.receive()
 
 	return service
 }
@@ -107,19 +111,22 @@ func createWorld(config Config, assets *AssetBundle) *entity.World {
 
 // newPulser constructs a new pulser that operates at the specified
 // interval rate, specified in milliseconds.
-func newPulser(intervalRate time.Duration, runTask pulseTask) *pulser {
+func newPulser(intervalRate time.Duration) *pulser {
 	pulser := new(pulser)
 
 	pulser.rate = intervalRate
-	pulser.isRunning = true
 	pulser.lastTime = time.Now()
 
-	go func() {
-		for pulser.isRunning {
-			pulser.deltaTime = time.Since(pulser.lastTime)
-			pulser.lastTime = time.Now()
+	pulser.quit = make(chan bool, 1)
+	pulser.pulses = make(chan pulse)
 
-			runTask(pulser.deltaTime)
+	go func() {
+		for {
+			if pulser.hasQuitPulsing() {
+				break
+			}
+
+			pulser.pulses <- pulseInstance
 
 			timeElapsed := time.Since(pulser.lastTime)
 			timeToSleep := intervalRate - timeElapsed
@@ -132,43 +139,77 @@ func newPulser(intervalRate time.Duration, runTask pulseTask) *pulser {
 	return pulser
 }
 
-// receiver receives and handles client messages from the specified mailbox.
-func (service *Service) receiver(mailbox client.Mailbox) {
-	for mail := range mailbox {
-		switch message := mail.Payload.(type) {
-		case Authenticated:
-			// TODO have a worker do this
+// quitPulsing sends a signal to have the pulser stop running.
+func (pulser *pulser) quitPulsing() {
+	pulser.quit <- true
+	close(pulser.pulses)
+}
 
-			// mail.Client.SendNow(&transport.LoginSuccess{
-			// 	PID:         1,
-			// 	DisplayName: string(profile.DisplayName),
-			// 	Gender:      byte(profile.Gender),
-			// 	UserGroup:   byte(profile.UserGroup),
+// hasQuitPulsing returns whether a signal was fired to quit pulsing.
+func (pulser *pulser) hasQuitPulsing() bool {
+	select {
+	case <-pulser.quit:
+		return true
+	default:
+		return false
+	}
+}
 
-			// 	MapX:   uint16(profile.MapX),
-			// 	MapZ:   uint16(profile.MapZ),
-			// 	LocalX: uint16(profile.LocalX),
-			// 	LocalZ: uint16(profile.LocalZ),
-			// })
+// receive receives and handles messages from the specified mailbox
+// and also deals with game pulses.
+func (service *Service) receive() {
+	for {
+		select {
+		case <-service.pulser.pulses:
+			service.pulse()
 
-		case client.Message:
-			session := service.sessions.Get(mail.Client.ID)
-			if session == nil {
-				continue
-			}
-
-			session.QueueCommand(message)
-
-		default:
-			service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
+		case mail := <-service.mailbox:
+			service.handleMail(mail)
 		}
 	}
 }
 
-// pulse is called every pulse or tick to process the game. The given
-// delta time parameter is the amount of time that has elapsed since
-// the last pulse.
-func (service *Service) pulse(deltaTime time.Duration) {
+// handleMail handles the given client Mail.
+func (service *Service) handleMail(mail client.Mail) {
+	switch message := mail.Payload.(type) {
+	case Authenticated:
+		service.onAuthenticated(mail.Client, message.Account)
+
+	case client.Message:
+		session := service.sessions.Get(mail.Client.ID)
+		if session == nil {
+			return
+		}
+
+		session.QueueCommand(message)
+
+	default:
+		service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
+	}
+}
+
+// onAuthenticated reacts to the given Client user having been authenticated.
+func (service *Service) onAuthenticated(cl *client.Client, account account.Account) {
+	// TODO
+
+	// mail.Client.SendNow(&transport.LoginSuccess{
+	// 	PID:         1,
+	// 	DisplayName: string(profile.DisplayName),
+	// 	Gender:      byte(profile.Gender),
+	// 	UserGroup:   byte(profile.UserGroup),
+
+	// 	MapX:   uint16(profile.MapX),
+	// 	MapZ:   uint16(profile.MapZ),
+	// 	LocalX: uint16(profile.LocalX),
+	// 	LocalZ: uint16(profile.LocalZ),
+	// })
+}
+
+// pulse is called every pulse or tick to process the game.
+func (service *Service) pulse() {
+	deltaTime := time.Since(service.pulser.lastTime)
+	service.pulser.lastTime = time.Now()
+
 	if err := service.game.pulse(deltaTime); err != nil {
 		service.config.Logger.Error(err)
 	}
@@ -176,5 +217,5 @@ func (service *Service) pulse(deltaTime time.Duration) {
 
 // TearDown terminates this Service and cleans up resources.
 func (service *Service) TearDown() {
-	// TODO
+	service.pulser.quitPulsing()
 }
