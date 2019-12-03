@@ -125,6 +125,8 @@ func main() {
 		log.Fatal("Failed to connect to a Redis server instance", err)
 	}
 
+	logger.Infof("Connected to Redis instance at %v:%v", redisHost, redisPort)
+
 	assetsConfig := game.AssetConfig{
 		ItemDirectory:    "assets/config/item",
 		NpcDirectory:     "assets/config/npc",
@@ -138,9 +140,11 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	routing := client.NewRouter(client.RouterConfig{
+	routingConfig := client.RouterConfig{
 		PublicationTimeout: 1 * time.Second,
-	})
+	}
+
+	routing := client.NewRouter(routingConfig)
 
 	accountConfig := account.Config{
 		WorkerCount: runtime.NumCPU(),
@@ -158,12 +162,13 @@ func main() {
 	}
 
 	gameConfig := game.Config{
-		IntervalRate:      50 * time.Millisecond,
-		EntityLimit:       32768,
-		ClockRate:         250 * time.Millisecond,
-		ClockSynchronizer: game.NewGMT0Synchronizer(),
-		Logger:            logger,
-		SessionConfig:     sessionConfig,
+		IntervalRate:          50 * time.Millisecond,
+		CharacterFetchTimeout: 5 * time.Second,
+		EntityLimit:           32768,
+		ClockRate:             250 * time.Millisecond,
+		ClockSynchronizer:     game.NewGMT0Synchronizer(),
+		Logger:                logger,
+		SessionConfig:         sessionConfig,
 	}
 
 	statusConfig := status.Config{
@@ -172,6 +177,10 @@ func main() {
 	}
 
 	discordConfig := discord.Config{}
+
+	authConfig := login.AuthConfig{
+		AccountFetchTimeout: 5 * time.Second,
+	}
 
 	loginConfig := login.Config{
 		Logger:      logger,
@@ -205,6 +214,7 @@ func main() {
 	chatService := chat.NewService(chatConfig, routing)
 
 	authenticator := login.NewAuthenticator(
+		authConfig,
 		accountService.LoadAccount,
 		passwordMatcher,
 	)
@@ -228,16 +238,31 @@ func main() {
 
 	logger.Info("Client build: ", ClientBuildNo)
 
-	logger.Info("Game interval rate: ", gameConfig.IntervalRate)
-	logger.Info("World entity limit: ", gameConfig.EntityLimit)
-	logger.Info("Login worker count: ", loginConfig.WorkerCount)
-
 	logger.Info("Item configs loaded: ", assetBundle.Items.Count())
 	logger.Info("Npc configs loaded: ", assetBundle.Npcs.Count())
 	logger.Info("Monster configs loaded: ", assetBundle.Monsters.Count())
 
+	logger.Info("Game pulse rate: ", gameConfig.IntervalRate)
+	logger.Info("Game clock rate: ", gameConfig.ClockRate)
+
+	logger.Info("World entity limit: ", gameConfig.EntityLimit)
+
+	logger.Info("Account worker count: ", accountConfig.WorkerCount)
+	logger.Info("Login worker count: ", loginConfig.WorkerCount)
+	logger.Info("Character worker count: ", charactersConfig.WorkerCount)
+
+	logger.Info("Account fetch timeout: ", authConfig.AccountFetchTimeout)
+	logger.Info("Character fetch timeout: ", gameConfig.CharacterFetchTimeout)
+
 	logger.Info("Upstream byte limit: ", clientConfig.ReadBufferSize)
 	logger.Info("Downstream byte limit: ", clientConfig.WriteBufferSize)
+
+	logger.Info("Session command limit: ", sessionConfig.CommandLimit)
+	logger.Info("Session event limit: ", sessionConfig.EventLimit)
+
+	logger.Info("Server status update rate: ", statusConfig.RefreshRate)
+
+	logger.Info("Router publication timeout: ", routingConfig.PublicationTimeout)
 
 	tcpListener := server.NewTcpListener(serverConfig, routing)
 	if err := tcpListener.Bind(tcpHost, tcpPort); err != nil {

@@ -21,6 +21,8 @@ type Config struct {
 
 	EntityLimit int
 
+	CharacterFetchTimeout time.Duration
+
 	SessionConfig session.Config
 
 	Logger *zap.SugaredLogger
@@ -254,7 +256,7 @@ func (service *Service) onAuthenticated(cl *client.Client, account account.Accou
 
 		service.mailbox <- mail
 
-	case <-time.After(2 * time.Second):
+	case <-time.After(service.config.CharacterFetchTimeout):
 		cl.SendNow(&transport.RequestTimedOut{})
 		cl.Terminate()
 	}

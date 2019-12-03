@@ -22,7 +22,7 @@ func returnMyAccount(email account.Email, password account.Password) <-chan acco
 	return ch
 }
 
-func TestAuthenticator_Authenticat_Success(t *testing.T) {
+func TestAuthenticator_Authenticate_Success(t *testing.T) {
 	authenticator := NewAuthenticator(returnMyAccount, account.BasicPasswordMatcher())
 	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {

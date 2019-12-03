@@ -56,7 +56,7 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 	for mail := range mailbox {
 		switch message := mail.Payload.(type) {
 		case *Request:
-			service.handleRequest(mail.Client, message)
+			service.queueRequest(mail.Client, message)
 			break
 
 		default:
@@ -65,8 +65,8 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 	}
 }
 
-// handleRequest handles the given login Request for the given Client.
-func (service *Service) handleRequest(client *client.Client, request *Request) {
+// queueRequest buffers the given login Request of the given Client for processing.
+func (service *Service) queueRequest(client *client.Client, request *Request) {
 	service.jobQueue <- Job{Client: client, Request: *request}
 }
 

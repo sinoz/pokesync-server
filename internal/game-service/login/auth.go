@@ -9,8 +9,14 @@ import (
 // AccountProvider attempts to provide an Account by the given credentials.
 type AccountProvider func(email account.Email, password account.Password) <-chan account.LoadResult
 
+// AuthConfig holds configurations specific to the Authenticator.
+type AuthConfig struct {
+	AccountFetchTimeout time.Duration
+}
+
 // Authenticator authenticates users.
 type Authenticator struct {
+	Config          AuthConfig
 	AccountProvider AccountProvider
 	PasswordMatcher account.PasswordMatcher
 }
@@ -45,8 +51,9 @@ type TimedOut struct{}
 type AuthResult interface{}
 
 // NewAuthenticator constructs a new instance of an Authenticator.
-func NewAuthenticator(accountProvider AccountProvider, matcher account.PasswordMatcher) Authenticator {
+func NewAuthenticator(config AuthConfig, accountProvider AccountProvider, matcher account.PasswordMatcher) Authenticator {
 	return Authenticator{
+		Config:          config,
 		AccountProvider: accountProvider,
 		PasswordMatcher: matcher,
 	}
@@ -75,7 +82,7 @@ func (auth Authenticator) Authenticate(email account.Email, password account.Pas
 
 		return AuthSuccess{Account: *result.Account}, nil
 
-	case <-time.After(2 * time.Second):
+	case <-time.After(auth.Config.AccountFetchTimeout):
 		return timedOut, nil
 	}
 }
