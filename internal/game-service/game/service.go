@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"time"
 
+	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
+
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 
@@ -26,6 +28,12 @@ type Config struct {
 	ClockRate         time.Duration
 	ClockSynchronizer ClockSynchronizer
 }
+
+// CharacterProvider attempts to provide a character Profile.
+type CharacterProvider func(email account.Email) <-chan character.LoadResult
+
+// CharacterSaver attempts to save character Profile's.
+type CharacterSaver func(email account.Email, profile *character.Profile)
 
 // pulse represents a tick or a single heartbeat.
 type pulse struct{}
@@ -55,7 +63,8 @@ type Service struct {
 	mailbox client.Mailbox
 	pulser  *pulser
 
-	characters character.Repository
+	characterProvider CharacterProvider
+	characterSaver    CharacterSaver
 
 	game *Game
 }
@@ -65,6 +74,23 @@ const (
 	AuthenticationEventTopic = "auth_event"
 )
 
+// messagesOfInterest is a slice of MessageConfig's of client messages
+// that the game Service has any interest in for processing.
+var messagesOfInterest = []client.MessageConfig{
+	transport.AttachFollowerConfig,
+	transport.ChangeMovementTypeConfig,
+	transport.MoveAvatarConfig,
+	transport.ClearFollowerConfig,
+	transport.ClickTeleportConfig,
+	transport.ContinueDialogueConfig,
+	transport.CloseDialogueConfig,
+	transport.FaceDirectionConfig,
+	transport.InteractWithEntityConfig,
+	transport.SwitchPartySlotsConfig,
+	transport.SelectPlayerOptionConfig,
+	transport.SelectChatChannelConfig,
+}
+
 // Authenticated is an event of a user having been authenticated
 // and is ready to have their character profile fetched so that
 // they can be registered into the game.
@@ -72,23 +98,35 @@ type Authenticated struct {
 	Account account.Account
 }
 
+// CharacterLoaded is an event of a client user having their character
+// profile loaded and is thus ready to be registered into the game world.
+type CharacterLoaded struct {
+	Account   account.Account
+	Character *character.Profile
+}
+
 // NewService constructs a new game Service.
-func NewService(config Config, routing *client.Router, characters character.Repository, assets *AssetBundle) *Service {
+func NewService(config Config, routing *client.Router, characterProvider CharacterProvider, characterSaver CharacterSaver, assets *AssetBundle) *Service {
 	service := &Service{
 		config: config,
 
 		assets: assets,
 
-		characters: characters,
+		characterProvider: characterProvider,
+		characterSaver:    characterSaver,
 
 		routing: routing,
 	}
 
 	service.sessions = session.NewRegistry()
-	service.game = NewGame(assets, config.EntityLimit)
+	service.game = NewGame(assets, createWorld(config, assets))
 
 	service.pulser = newPulser(config.IntervalRate)
 	service.mailbox = routing.Subscribe(AuthenticationEventTopic)
+
+	for _, msgConfig := range messagesOfInterest {
+		routing.SubscribeMailboxToTopic(msgConfig.Topic, service.mailbox)
+	}
 
 	go service.receive()
 
@@ -101,7 +139,7 @@ func NewService(config Config, routing *client.Router, characters character.Repo
 func createWorld(config Config, assets *AssetBundle) *entity.World {
 	world := entity.NewWorld(config.EntityLimit)
 
-	world.AddSystem(NewInboundNetworkSystem())
+	world.AddSystem(NewInboundNetworkSystem(config.Logger))
 	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))
 	world.AddSystem(NewMapViewSystem())
 	world.AddSystem(NewOutboundNetworkSystem())
@@ -173,7 +211,10 @@ func (service *Service) receive() {
 func (service *Service) handleMail(mail client.Mail) {
 	switch message := mail.Payload.(type) {
 	case Authenticated:
-		service.onAuthenticated(mail.Client, message.Account)
+		go service.onAuthenticated(mail.Client, message.Account)
+
+	case CharacterLoaded:
+		go service.onCharacterLoaded(mail.Client, message.Account, message.Character)
 
 	case client.Message:
 		session := service.sessions.Get(mail.Client.ID)
@@ -190,19 +231,70 @@ func (service *Service) handleMail(mail client.Mail) {
 
 // onAuthenticated reacts to the given Client user having been authenticated.
 func (service *Service) onAuthenticated(cl *client.Client, account account.Account) {
-	// TODO
+	select {
+	case result := <-service.characterProvider(account.Email):
+		if result.Error != nil {
+			service.config.Logger.Error(result.Error)
 
-	// mail.Client.SendNow(&transport.LoginSuccess{
-	// 	PID:         1,
-	// 	DisplayName: string(profile.DisplayName),
-	// 	Gender:      byte(profile.Gender),
-	// 	UserGroup:   byte(profile.UserGroup),
+			cl.SendNow(&transport.UnableToFetchProfile{})
+			cl.Terminate()
 
-	// 	MapX:   uint16(profile.MapX),
-	// 	MapZ:   uint16(profile.MapZ),
-	// 	LocalX: uint16(profile.LocalX),
-	// 	LocalZ: uint16(profile.LocalZ),
-	// })
+			return
+		}
+
+		if result.Profile == nil {
+			cl.SendNow(&transport.UnableToFetchProfile{})
+			cl.Terminate()
+
+			return
+		}
+
+		characterLoadEvent := CharacterLoaded{Account: account, Character: result.Profile}
+		mail := client.Mail{Client: cl, Payload: characterLoadEvent}
+
+		service.mailbox <- mail
+
+	case <-time.After(2 * time.Second):
+		cl.SendNow(&transport.RequestTimedOut{})
+		cl.Terminate()
+	}
+}
+
+// onCharacterLoaded reacts to the given Client user having a character
+// profile loaded for him/her.
+func (service *Service) onCharacterLoaded(cl *client.Client, account account.Account, character *character.Profile) {
+	position := Position{
+		MapX:   character.MapX,
+		MapZ:   character.MapZ,
+		LocalX: character.LocalX,
+		LocalZ: character.LocalZ,
+	}
+
+	plr, ok := service.game.AddPlayer(position, Gender(character.Gender), character.DisplayName, character.UserGroup)
+	if !ok {
+		cl.SendNow(&transport.WorldFull{})
+		cl.Terminate()
+
+		return
+	}
+
+	sess := session.NewInstalledSession(cl, service.config.SessionConfig, account, plr)
+	service.sessions.Put(cl.ID, sess)
+
+	plr.Add(&SessionComponent{Session: sess})
+
+	cl.SendNow(&transport.LoginSuccess{
+		PID:         uint16(plr.ID),
+		DisplayName: string(character.DisplayName),
+
+		Gender:    byte(character.Gender),
+		UserGroup: byte(character.UserGroup),
+
+		MapX:   uint16(character.MapX),
+		MapZ:   uint16(character.MapZ),
+		LocalX: uint16(character.LocalX),
+		LocalZ: uint16(character.LocalZ),
+	})
 }
 
 // pulse is called every pulse or tick to process the game.

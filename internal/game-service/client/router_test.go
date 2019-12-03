@@ -22,10 +22,7 @@ func TestRouter_SubscribeMailboxToTopic(t *testing.T) {
 	m := router.Subscribe("hello")
 
 	for i := 0; i < 25; i++ {
-		err := router.SubscribeMailboxToTopic("hello", m)
-		if err != nil {
-			t.Fatal(err)
-		}
+		router.SubscribeMailboxToTopic("hello", m)
 	}
 
 	if router.TopicCount() != 1 {

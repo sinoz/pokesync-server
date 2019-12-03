@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
+
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
@@ -15,7 +17,7 @@ func TestSession_QueueCommand(t *testing.T) {
 
 	command := &transport.SubmitChatMessage{}
 
-	session := NewSession(nil, config, account)
+	session := NewSession(nil, config, account, entity.NewEntity())
 	session.QueueCommand(command)
 
 	select {
@@ -35,7 +37,7 @@ func TestSession_QueueEvent(t *testing.T) {
 
 	event := &transport.DisplayChatMessage{}
 
-	session := NewSession(nil, config, account)
+	session := NewSession(nil, config, account, entity.NewEntity())
 	session.QueueEvent(event)
 
 	select {
@@ -53,7 +55,7 @@ func TestSession_DequeueCommand(t *testing.T) {
 	account := account.Account{}
 	config := Config{CommandLimit: 16, EventLimit: 16}
 
-	session := NewSession(nil, config, account)
+	session := NewSession(nil, config, account, entity.NewEntity())
 	commandCh := make(chan client.Message)
 
 	go func() {
@@ -75,7 +77,7 @@ func TestSession_DequeueEvent(t *testing.T) {
 	account := account.Account{}
 	config := Config{CommandLimit: 16, EventLimit: 16}
 
-	session := NewSession(nil, config, account)
+	session := NewSession(nil, config, account, entity.NewEntity())
 	eventCh := make(chan client.Message)
 
 	go func() {

@@ -4,16 +4,8 @@ package character
 // ingame to other users.
 type DisplayName string
 
-// Gender is the character's gender role.
-type Gender int
-
 // UserGroup is a type of group a user may belong to.
 type UserGroup int
-
-var (
-	Man   Gender = 0
-	Woman Gender = 1
-)
 
 var (
 	Regular       UserGroup = 0
@@ -29,7 +21,7 @@ var (
 type Profile struct {
 	DisplayName DisplayName
 	UserGroup   UserGroup
-	Gender      Gender
+	Gender      int
 
 	MapX   int
 	MapZ   int

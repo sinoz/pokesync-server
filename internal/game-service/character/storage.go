@@ -49,8 +49,8 @@ func (repo *InMemoryRepository) Get(email account.Email) (*Profile, error) {
 		profile = &Profile{
 			DisplayName: DisplayName(email),
 
-			Gender:    Man,
-			UserGroup: GameDesigner,
+			Gender:    0,
+			UserGroup: 5,
 
 			MapX:   0,
 			MapZ:   2,

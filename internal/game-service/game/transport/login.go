@@ -12,6 +12,18 @@ var (
 		New:   func() client.Message { return &UnableToFetchProfile{} },
 	}
 
+	RequestTimedOutConfig = client.MessageConfig{
+		Kind:  client.LoginRequestTimedOut,
+		Topic: "req_timeout",
+		New:   func() client.Message { return &RequestTimedOut{} },
+	}
+
+	WorldFullConfig = client.MessageConfig{
+		Kind:  client.WorldFull,
+		Topic: "world_full",
+		New:   func() client.Message { return &WorldFull{} },
+	}
+
 	LoginSuccessConfig = client.MessageConfig{
 		Kind:  client.LoginSuccess,
 		Topic: "login_success",
@@ -43,6 +55,10 @@ type LoginSuccess struct {
 }
 
 type UnableToFetchProfile struct{}
+
+type RequestTimedOut struct{}
+
+type WorldFull struct{}
 
 type CreateCharacter struct {
 }
@@ -94,6 +110,28 @@ func (r *UnableToFetchProfile) Marshal() *bytes.String {
 
 func (r *UnableToFetchProfile) GetConfig() client.MessageConfig {
 	return UnableToFetchProfileConfig
+}
+
+func (r *RequestTimedOut) Demarshal(packet *client.Packet) {
+}
+
+func (r *RequestTimedOut) Marshal() *bytes.String {
+	return bytes.EmptyString()
+}
+
+func (r *RequestTimedOut) GetConfig() client.MessageConfig {
+	return RequestTimedOutConfig
+}
+
+func (r *WorldFull) Demarshal(packet *client.Packet) {
+}
+
+func (r *WorldFull) Marshal() *bytes.String {
+	return bytes.EmptyString()
+}
+
+func (r *WorldFull) GetConfig() client.MessageConfig {
+	return WorldFullConfig
 }
 
 func (message *CreateCharacter) Demarshal(packet *client.Packet) {

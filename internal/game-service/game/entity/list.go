@@ -109,7 +109,7 @@ func (list *List) IsEmpty(id ID) (bool, error) {
 		return false, err
 	}
 
-	return list.entities[id] != nil, nil
+	return list.entities[id] == nil, nil
 }
 
 // Find searches for an Entity that satisfies the given predicate.

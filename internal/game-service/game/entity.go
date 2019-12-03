@@ -11,9 +11,8 @@ const (
 	MonsterKind EntityKind = 2
 	ObjectKind  EntityKind = 3
 
-	Man        Gender = 0
-	Woman      Gender = 1
-	Genderless Gender = 2
+	Man   Gender = 0
+	Woman Gender = 1
 )
 
 // ModelID is the ID of an Entity's model.

@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -61,17 +60,15 @@ func (r *Router) Subscribe(topic Topic) Mailbox {
 }
 
 // SubscribeMailboxToTopic subscribes the given mailbox to an existing topic.
-// May return an error if the requested topic does not exist yet.
-func (r *Router) SubscribeMailboxToTopic(topic Topic, mailbox Mailbox) error {
+func (r *Router) SubscribeMailboxToTopic(topic Topic, mailbox Mailbox) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
 	if r.mailboxes[topic] == nil {
-		return fmt.Errorf("topic %v does not exist yet", topic)
+		r.mailboxes[topic] = []Mailbox{}
 	}
 
 	r.mailboxes[topic] = append(r.mailboxes[topic], mailbox)
-	return nil
 }
 
 // Unsubscribe unsubscribes the given Mailbox from the specified topic.

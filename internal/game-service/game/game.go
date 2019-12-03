@@ -17,9 +17,9 @@ type Game struct {
 }
 
 // NewGame constructs a new Game.
-func NewGame(assets *AssetBundle, entityCapacity int) *Game {
+func NewGame(assets *AssetBundle, world *entity.World) *Game {
 	return &Game{
-		world:         entity.NewWorld(entityCapacity),
+		world:         world,
 		entityFactory: NewEntityFactory(assets),
 		eventBus:      event.NewSerialBus(),
 	}

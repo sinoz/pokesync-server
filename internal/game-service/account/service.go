@@ -60,7 +60,7 @@ func NewService(config Config, repository Repository) *Service {
 // LoadAccount loads an Account.
 func (service *Service) LoadAccount(email Email, password Password) <-chan LoadResult {
 	result := make(chan LoadResult, 1)
-	service.jobQueue <- loadAccount{email: email, password: password}
+	service.jobQueue <- loadAccount{email: email, password: password, channel: result}
 	return result
 }
 

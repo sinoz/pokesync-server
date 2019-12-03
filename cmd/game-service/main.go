@@ -147,6 +147,11 @@ func main() {
 		Logger:      logger,
 	}
 
+	charactersConfig := character.Config{
+		WorkerCount: runtime.NumCPU(),
+		Logger:      logger,
+	}
+
 	sessionConfig := session.Config{
 		CommandLimit: 16,
 		EventLimit:   256,
@@ -193,7 +198,8 @@ func main() {
 	accountRepository := account.NewInMemoryRepository()
 	passwordMatcher := account.BasicPasswordMatcher()
 
-	characters := character.NewInMemoryRepository()
+	characterRepository := character.NewInMemoryRepository()
+	characterService := character.NewService(charactersConfig, characterRepository)
 
 	accountService := account.NewService(accountConfig, accountRepository)
 	chatService := chat.NewService(chatConfig, routing)
@@ -205,7 +211,7 @@ func main() {
 
 	loginService := login.NewService(loginConfig, authenticator, routing)
 
-	gameService := game.NewService(gameConfig, routing, characters, assetBundle)
+	gameService := game.NewService(gameConfig, routing, characterService.LoadProfile, characterService.SaveProfile, assetBundle)
 	discordService := discord.NewService(discordConfig)
 	statusService := status.NewService(statusConfig, status.NewRedisNotifier(redisClient), status.NewProvider(gameService))
 

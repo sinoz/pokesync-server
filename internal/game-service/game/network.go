@@ -1,7 +1,10 @@
 package game
 
 import (
+	"reflect"
 	"time"
+
+	"go.uber.org/zap"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 )
@@ -15,7 +18,7 @@ const (
 // InboundNetworkProcessor processes received messages for entities that
 // have a Session associated with them.
 type InboundNetworkProcessor struct {
-	// TODO
+	Logger *zap.SugaredLogger
 }
 
 // OutboundNetworkProcessor processes queued messages for entities that
@@ -26,8 +29,8 @@ type OutboundNetworkProcessor struct {
 
 // NewInboundNetworkSystem constructs a new instance of an entity.System with
 // a InboundNetworkProcessor as its internal processor.
-func NewInboundNetworkSystem() *entity.System {
-	return entity.NewSystem(entity.NewIntervalPolicy(100*time.Millisecond), NewInboundNetworkProcessor())
+func NewInboundNetworkSystem(logger *zap.SugaredLogger) *entity.System {
+	return entity.NewSystem(entity.NewIntervalPolicy(100*time.Millisecond), NewInboundNetworkProcessor(logger))
 }
 
 // NewOutboundNetworkSystem constructs a new instance of an entity.System with
@@ -38,8 +41,8 @@ func NewOutboundNetworkSystem() *entity.System {
 
 // NewInboundNetworkProcessor constructs a new instance of a
 // InboundNetworkProcessor.
-func NewInboundNetworkProcessor() *InboundNetworkProcessor {
-	return &InboundNetworkProcessor{}
+func NewInboundNetworkProcessor(logger *zap.SugaredLogger) *InboundNetworkProcessor {
+	return &InboundNetworkProcessor{Logger: logger}
 }
 
 // NewOutboundNetworkProcessor constructs a new instance of a
@@ -86,7 +89,10 @@ func (processor *InboundNetworkProcessor) Update(world *entity.World, deltaTime 
 				break
 			}
 
-			// TODO switch over command type
+			switch cmd := command.(type) {
+			default:
+				processor.Logger.Errorf("Unexpected session command type of %v", reflect.TypeOf(cmd))
+			}
 		}
 	}
 

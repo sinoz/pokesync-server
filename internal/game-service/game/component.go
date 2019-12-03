@@ -7,17 +7,17 @@ import (
 )
 
 const (
-	ModelIDTag   entity.ComponentTag = 1 << 0
-	RankTag      entity.ComponentTag = 1 << 1
-	UsernameTag  entity.ComponentTag = 1 << 2
-	HealthTag    entity.ComponentTag = 1 << 3
-	CanRunTag    entity.ComponentTag = 1 << 4
-	TransformTag entity.ComponentTag = 1 << 5
-	KindTag      entity.ComponentTag = 1 << 6
-	TrackingTag  entity.ComponentTag = 1 << 7
-	SessionTag   entity.ComponentTag = 1 << 8
-	MapViewTag   entity.ComponentTag = 1 << 9
-	BlockingTag  entity.ComponentTag = 1 << 10
+	ModelIDTag   entity.ComponentTag = 0
+	RankTag      entity.ComponentTag = 1
+	UsernameTag  entity.ComponentTag = 2
+	HealthTag    entity.ComponentTag = 3
+	CanRunTag    entity.ComponentTag = 4
+	TransformTag entity.ComponentTag = 5
+	KindTag      entity.ComponentTag = 6
+	TrackingTag  entity.ComponentTag = 7
+	SessionTag   entity.ComponentTag = 8
+	MapViewTag   entity.ComponentTag = 9
+	BlockingTag  entity.ComponentTag = 10
 )
 
 // ModelIDComponent holds a model id of an entity.
