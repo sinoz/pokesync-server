@@ -2,6 +2,7 @@ package login
 
 import (
 	"testing"
+	"time"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 )
@@ -23,7 +24,8 @@ func returnMyAccount(email account.Email, password account.Password) <-chan acco
 }
 
 func TestAuthenticator_Authenticate_Success(t *testing.T) {
-	authenticator := NewAuthenticator(returnMyAccount, account.BasicPasswordMatcher())
+	config := AuthConfig{AccountFetchTimeout: 1 * time.Second}
+	authenticator := NewAuthenticator(config, returnMyAccount, account.BasicPasswordMatcher())
 	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
@@ -38,7 +40,8 @@ func TestAuthenticator_Authenticate_Success(t *testing.T) {
 }
 
 func TestAuthenticator_Authenticat_CouldNotFindAccount(t *testing.T) {
-	authenticator := NewAuthenticator(returnNilAccount, account.BasicPasswordMatcher())
+	config := AuthConfig{AccountFetchTimeout: 1 * time.Second}
+	authenticator := NewAuthenticator(config, returnNilAccount, account.BasicPasswordMatcher())
 	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
@@ -53,7 +56,8 @@ func TestAuthenticator_Authenticat_CouldNotFindAccount(t *testing.T) {
 }
 
 func TestAuthenticator_Authenticat_WrongPassword(t *testing.T) {
-	authenticator := NewAuthenticator(returnMyAccount, func(p1, p2 account.Password) (bool, error) {
+	config := AuthConfig{AccountFetchTimeout: 1 * time.Second}
+	authenticator := NewAuthenticator(config, returnMyAccount, func(p1, p2 account.Password) (bool, error) {
 		return false, nil
 	})
 
