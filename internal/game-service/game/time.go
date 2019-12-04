@@ -98,7 +98,7 @@ func NewGMT0Synchronizer() ClockSynchronizer {
 // Synchronize synchronizes with the GMT0 timezone, returning a Clock
 // with the amount of seconds that has passed since midnight.
 func (gmt *GMT0Synchronizer) Synchronize() (*Clock, error) {
-	location, err := time.LoadLocation("GMT-0")
+	location, err := time.LoadLocation("UTC")
 	if err != nil {
 		return nil, err
 	}
