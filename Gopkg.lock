@@ -50,14 +50,6 @@
   version = "v1.4.2"
 
 [[projects]]
-  branch = "master"
-  digest = "1:8d586294103145d3630615ad769f485302a5356001323c70bd3457faa0ccd5c7"
-  name = "gitlab.com/pokesync/ecs"
-  packages = ["src"]
-  pruneopts = "UT"
-  revision = "a165afeb5511eb405c44f63f42b043a44df54e2f"
-
-[[projects]]
   digest = "1:c708d00d1097e62bf4f3a72f239efa7dafc257581421b0b7d3789e1ff5299f30"
   name = "go.uber.org/atomic"
   packages = ["."]
