@@ -12,9 +12,8 @@ COPY . $GOPATH/src/gitlab.com/pokesync/game-service/
 
 # Installs dep, ensures that all dependencies are downloaded and creates
 # the binary of our server application to copy over to the final image
-RUN go get -u github.com/golang/dep/cmd/dep \
- && cd $GOPATH/src/gitlab.com/pokesync/game-service/cmd/game-service/ \
- && dep ensure \
+RUN cd $GOPATH/src/gitlab.com/pokesync/game-service/cmd/game-service/ \
+ && go get ./... \
  && GOOS=linux GOARCH=amd64 go install -ldflags="-w -s" .
 
 # Let's start with a tiny Alpine image
