@@ -1,4 +1,4 @@
-image: golang:latest
+image: golang:latest-alpine
 
 variables:
   BIN_NAME: game-service
@@ -12,14 +12,13 @@ stages:
 before_script:
   - mkdir -p ${GOPATH}/src/${GO_PROJECT}
   - mkdir -p ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}
-  - go get -u github.com/golang/dep/cmd/dep
   - cp -r ${CI_PROJECT_DIR}/* ${GOPATH}/src/${GO_PROJECT}/
   - cd ${GOPATH}/src/${GO_PROJECT}
 
 build-game-service:
   stage: build
   script:
-    - dep ensure
+    - go get ./...
     - cd cmd/${BIN_NAME}
     - go build -o ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}/${BIN_NAME}
   artifacts:
@@ -29,5 +28,5 @@ build-game-service:
 test-game-service:
   stage: test
   script:
-    - dep ensure
+    - go get ./...
     - go test -v -cover ./...
