@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"net"
 	"strconv"
 
@@ -46,6 +47,8 @@ func (l *TcpListener) Bind(address string, port int) error {
 	l.listener = listener
 	l.config.Logger.Info("Channel bound at: ", fullAddress)
 
+	background := context.Background()
+
 	for {
 		connection, err := listener.Accept()
 		if err != nil {
@@ -53,9 +56,10 @@ func (l *TcpListener) Bind(address string, port int) error {
 		}
 
 		c := client.NewClient(connection, l.config.ClientConfig, l.Router)
+		ctx, cancel := context.WithCancel(background)
 
-		go c.Pull()
-		go c.Push()
+		go c.Pull(ctx, cancel)
+		go c.Push(ctx)
 	}
 }
 

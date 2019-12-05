@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"sync"
 	"time"
 )
@@ -16,6 +17,7 @@ type Payload interface{}
 // and/or sender of the underlying message (or payload).
 type Mail struct {
 	Client  *Client
+	Context context.Context
 	Payload Payload
 }
 

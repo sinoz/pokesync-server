@@ -1,6 +1,7 @@
 package login
 
 import (
+	"context"
 	"time"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
@@ -60,7 +61,7 @@ func NewAuthenticator(config AuthConfig, accountProvider AccountProvider, matche
 }
 
 // Authenticate authenticates a user by the given E-mail / Password combination.
-func (auth Authenticator) Authenticate(email account.Email, password account.Password) (AuthResult, error) {
+func (auth Authenticator) Authenticate(ctx context.Context, email account.Email, password account.Password) (AuthResult, error) {
 	select {
 	case result := <-auth.AccountProvider(email, password):
 		if result.Error != nil {
@@ -81,6 +82,9 @@ func (auth Authenticator) Authenticate(email account.Email, password account.Pas
 		}
 
 		return AuthSuccess{Account: *result.Account}, nil
+
+	case <-ctx.Done():
+		return timedOut, nil
 
 	case <-time.After(auth.Config.AccountFetchTimeout):
 		return timedOut, nil

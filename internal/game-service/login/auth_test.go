@@ -1,6 +1,7 @@
 package login
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -26,7 +27,11 @@ func returnMyAccount(email account.Email, password account.Password) <-chan acco
 func TestAuthenticator_Authenticate_Success(t *testing.T) {
 	config := AuthConfig{AccountFetchTimeout: 1 * time.Second}
 	authenticator := NewAuthenticator(config, returnMyAccount, account.BasicPasswordMatcher())
-	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
+
+	background := context.Background()
+	ctx, cancel := context.WithCancel(background)
+
+	result, err := authenticator.Authenticate(ctx, account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
 	}
@@ -37,12 +42,18 @@ func TestAuthenticator_Authenticate_Success(t *testing.T) {
 	default:
 		t.Error("expected result to be of type AuthSuccess")
 	}
+
+	cancel()
 }
 
 func TestAuthenticator_Authenticat_CouldNotFindAccount(t *testing.T) {
 	config := AuthConfig{AccountFetchTimeout: 1 * time.Second}
 	authenticator := NewAuthenticator(config, returnNilAccount, account.BasicPasswordMatcher())
-	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
+
+	background := context.Background()
+	ctx, cancel := context.WithCancel(background)
+
+	result, err := authenticator.Authenticate(ctx, account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
 	}
@@ -53,6 +64,8 @@ func TestAuthenticator_Authenticat_CouldNotFindAccount(t *testing.T) {
 	default:
 		t.Error("expected result to be of type CouldNotFindAccount")
 	}
+
+	cancel()
 }
 
 func TestAuthenticator_Authenticat_WrongPassword(t *testing.T) {
@@ -61,7 +74,10 @@ func TestAuthenticator_Authenticat_WrongPassword(t *testing.T) {
 		return false, nil
 	})
 
-	result, err := authenticator.Authenticate(account.Email("Sino@gmail.com"), account.Password("hello123"))
+	background := context.Background()
+	ctx, cancel := context.WithCancel(background)
+
+	result, err := authenticator.Authenticate(ctx, account.Email("Sino@gmail.com"), account.Password("hello123"))
 	if err != nil {
 		t.Error(err)
 	}
@@ -72,4 +88,6 @@ func TestAuthenticator_Authenticat_WrongPassword(t *testing.T) {
 	default:
 		t.Error("expected result to be of type PasswordMismatch")
 	}
+
+	cancel()
 }

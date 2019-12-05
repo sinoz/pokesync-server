@@ -1,6 +1,7 @@
 package login
 
 import (
+	"context"
 	"reflect"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
@@ -17,6 +18,7 @@ type Config struct {
 
 // Job is a login job picked up and processed by a worker.
 type Job struct {
+	Context context.Context
 	Client  *client.Client
 	Request Request
 }
@@ -56,7 +58,7 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 	for mail := range mailbox {
 		switch message := mail.Payload.(type) {
 		case *Request:
-			service.queueRequest(mail.Client, message)
+			service.queueRequest(mail.Context, mail.Client, message)
 			break
 
 		default:
@@ -66,8 +68,8 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 }
 
 // queueRequest buffers the given login Request of the given Client for processing.
-func (service *Service) queueRequest(client *client.Client, request *Request) {
-	service.jobQueue <- Job{Client: client, Request: *request}
+func (service *Service) queueRequest(ctx context.Context, client *client.Client, request *Request) {
+	service.jobQueue <- Job{Context: ctx, Client: client, Request: *request}
 }
 
 // spawnWorker spawns a worker goroutine that reads from the
@@ -84,7 +86,7 @@ func (service *Service) spawnWorker() {
 			continue
 		}
 
-		result, err := service.authenticator.Authenticate(email, password)
+		result, err := service.authenticator.Authenticate(job.Context, email, password)
 		if err != nil {
 			job.Client.SendNow(&ErrorDuringAccountFetch{})
 			job.Client.Terminate()
@@ -95,6 +97,7 @@ func (service *Service) spawnWorker() {
 		switch res := result.(type) {
 		case AuthSuccess:
 			service.routing.Publish(game.AuthenticationEventTopic, client.Mail{
+				Context: job.Context,
 				Client:  job.Client,
 				Payload: game.Authenticated{Account: res.Account},
 			})

@@ -2,11 +2,11 @@ package client
 
 import (
 	"bufio"
+	"context"
 	"net"
 	"reflect"
 
 	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
 	"go.uber.org/zap"
 )
 
@@ -28,7 +28,8 @@ type ID uuid.UUID
 type Client struct {
 	config Config
 
-	ID         ID
+	ID ID
+
 	connection net.Conn
 
 	reader *bufio.Reader
@@ -39,8 +40,6 @@ type Client struct {
 	codec Codec
 
 	router *Router
-
-	quit chan bool
 }
 
 // flushCommand is a cached instance of the 'flush' type.
@@ -65,6 +64,15 @@ type terminate struct{}
 // connection.
 type flush struct{}
 
+// TerminationTopic is the topic of the Terminated event.
+const TerminationTopic = "client_terminated"
+
+// Terminated is an event that is broadcasted to all services to notify
+// them of a Client's termination.
+type Terminated struct {
+	ID ID
+}
+
 // BuildNumber is the build number of the game client.
 type BuildNumber int
 
@@ -77,7 +85,6 @@ func NewClient(connection net.Conn, config Config, router *Router) *Client {
 		writer: bufio.NewWriterSize(connection, config.WriteBufferSize),
 
 		commands: make(chan command, config.CommandLimit),
-		quit:     make(chan bool, 1),
 
 		config: config,
 		codec:  config.MessageCodec,
@@ -86,26 +93,34 @@ func NewClient(connection net.Conn, config Config, router *Router) *Client {
 	}
 }
 
-// Pull pulls messages from the underlying socket connection
-// until the socket connection is closed.
-func (c *Client) Pull() {
+// Pull pulls messages from the underlying socket connection until the socket
+// connection is closed. The given Context is passed on to every message for
+// services to be notified of when the Client's underlying connection has been
+// terminated. This allows services to interrupt any remaining operation that
+// is associated with the disconnected Client.
+func (c *Client) Pull(ctx context.Context, cancel context.CancelFunc) {
 	for {
 		packet, err := ForkPacket(c.reader)
 		if err != nil {
-			c.quit <- true
+			// notify all services that possess the context that they should
+			// abandon the associated request they are processing as the client
+			// has disconnected.
+			cancel()
+
 			return
 		}
 
 		config, exists := c.codec.GetConfig(packet.Kind)
 		if !exists {
-			logrus.Warnf("No MessageConfig associated with packet of kind %v\n", packet.Kind)
+			c.config.Log.Errorf("No MessageConfig associated with packet of kind %v\n", packet.Kind)
 			continue
 		}
 
 		message := config.New()
 		message.Demarshal(packet)
 
-		delivered := c.router.Publish(config.Topic, Mail{Client: c, Payload: message})
+		mail := Mail{Client: c, Context: ctx, Payload: message}
+		delivered := c.router.Publish(config.Topic, mail)
 		if !delivered {
 			c.config.Log.Errorf("Failed to deliver message of type %v with topic %v to a recipient", reflect.TypeOf(message), config.Topic)
 		}
@@ -114,12 +129,10 @@ func (c *Client) Pull() {
 
 // Push pushes messages to the underlying socket connection
 // until the socket connection is closed.
-func (c *Client) Push() {
-	defer c.dispose()
-
+func (c *Client) Push(ctx context.Context) {
 	for {
 		select {
-		case <-c.quit:
+		case <-ctx.Done():
 			return
 
 		case command := <-c.commands:
@@ -127,7 +140,7 @@ func (c *Client) Push() {
 			case send:
 				config := cmd.message.GetConfig()
 				if _, exists := c.codec.GetConfig(config.Kind); !exists {
-					logrus.Warnf("No MessageConfig associated with packet of kind %v\n", config.Kind)
+					c.config.Log.Errorf("No MessageConfig associated with packet of kind %v\n", config.Kind)
 					continue
 				}
 
@@ -142,16 +155,13 @@ func (c *Client) Push() {
 
 			case flush:
 				if err := c.writer.Flush(); err != nil {
-					// disconnected
 					return
 				}
 
 			case terminate:
 				if err := c.connection.Close(); err != nil {
-					// don't care
+					return
 				}
-
-				return
 			}
 		}
 	}
@@ -173,17 +183,12 @@ func (c *Client) SendNow(message Message) {
 // Terminate calls for a termination of the client.
 func (c *Client) Terminate() {
 	c.commands <- terminateCommand
+	close(c.commands)
 }
 
 // Flush calls for a flush of queued up bytes.
 func (c *Client) Flush() {
 	c.commands <- flushCommand
-}
-
-// dispose disposes off any consumed resources such as channels.
-func (c *Client) dispose() {
-	close(c.quit)
-	close(c.commands)
 }
 
 // IsUpToDateWith returns whether this BuildNumber is up-to-date with the

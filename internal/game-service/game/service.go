@@ -1,6 +1,7 @@
 package game
 
 import (
+	"context"
 	"reflect"
 	"time"
 
@@ -213,7 +214,7 @@ func (service *Service) receive() {
 func (service *Service) handleMail(mail client.Mail) {
 	switch message := mail.Payload.(type) {
 	case Authenticated:
-		go service.onAuthenticated(mail.Client, message.Account)
+		go service.onAuthenticated(mail.Context, mail.Client, message.Account)
 
 	case CharacterLoaded:
 		go service.onCharacterLoaded(mail.Client, message.Account, message.Character)
@@ -232,7 +233,7 @@ func (service *Service) handleMail(mail client.Mail) {
 }
 
 // onAuthenticated reacts to the given Client user having been authenticated.
-func (service *Service) onAuthenticated(cl *client.Client, account account.Account) {
+func (service *Service) onAuthenticated(ctx context.Context, cl *client.Client, account account.Account) {
 	select {
 	case result := <-service.characterProvider(account.Email):
 		if result.Error != nil {
@@ -252,9 +253,12 @@ func (service *Service) onAuthenticated(cl *client.Client, account account.Accou
 		}
 
 		characterLoadEvent := CharacterLoaded{Account: account, Character: result.Profile}
-		mail := client.Mail{Client: cl, Payload: characterLoadEvent}
+		mail := client.Mail{Context: ctx, Client: cl, Payload: characterLoadEvent}
 
 		service.mailbox <- mail
+
+	case <-ctx.Done():
+		return
 
 	case <-time.After(service.config.CharacterFetchTimeout):
 		cl.SendNow(&transport.RequestTimedOut{})
