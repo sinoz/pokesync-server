@@ -85,9 +85,13 @@ func (s *String) Take(amount int) *String {
 func (s *String) Concat(other *String) *String {
 	if s.IsEmpty() && other.IsEmpty() {
 		return emptyString
-	} else if s.IsEmpty() && !other.IsEmpty() {
+	}
+
+	if s.IsEmpty() && !other.IsEmpty() {
 		return other
-	} else if !s.IsEmpty() && other.IsEmpty() {
+	}
+
+	if !s.IsEmpty() && other.IsEmpty() {
 		return s
 	}
 
