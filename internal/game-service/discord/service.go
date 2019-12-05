@@ -15,7 +15,7 @@ func NewService(config Config) *Service {
 	return &Service{config: config}
 }
 
-// TearDown terminates this Service and cleans up resources.
-func (service *Service) TearDown() {
+// Stop stops this Service and cleans up resources.
+func (service *Service) Stop() {
 	// TODO
 }

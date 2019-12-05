@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"io"
 	"net"
 	"strconv"
 
@@ -12,7 +13,6 @@ import (
 // Config holds configurations specific to the server listener.
 type Config struct {
 	ClientConfig client.Config
-	Logger       *zap.SugaredLogger
 }
 
 // Listener listens for incoming connections at a port.
@@ -21,23 +21,25 @@ type Listener interface {
 	Unbind() error
 }
 
-// TcpListener is a Listener that listens at a TCP port.
-type TcpListener struct {
+// TCPListener is a Listener that listens at a TCP port.
+type TCPListener struct {
 	config   Config
 	listener net.Listener
 	Router   *client.Router
+	logger   *zap.SugaredLogger
 }
 
-// NewTcpListener constructs a TcpListener.
-func NewTcpListener(config Config, routing *client.Router) *TcpListener {
-	return &TcpListener{
+// NewTCPListener constructs a TcpListener.
+func NewTCPListener(config Config, routing *client.Router, logger *zap.SugaredLogger) *TCPListener {
+	return &TCPListener{
 		config: config,
 		Router: routing,
+		logger: logger,
 	}
 }
 
-// Bind binds the TcpListener to listen at the specified address and port.
-func (l *TcpListener) Bind(address string, port int) error {
+// Bind binds the TCPListener to listen at the specified address and port.
+func (l *TCPListener) Bind(address string, port int) error {
 	fullAddress := address + ":" + strconv.Itoa(port)
 	listener, err := net.Listen("tcp", fullAddress)
 	if err != nil {
@@ -45,7 +47,7 @@ func (l *TcpListener) Bind(address string, port int) error {
 	}
 
 	l.listener = listener
-	l.config.Logger.Info("Channel bound at: ", fullAddress)
+	l.logger.Info("Channel bound at: ", fullAddress)
 
 	background := context.Background()
 
@@ -55,15 +57,33 @@ func (l *TcpListener) Bind(address string, port int) error {
 			return err
 		}
 
-		c := client.NewClient(connection, l.config.ClientConfig, l.Router)
+		c := client.NewClient(connection, l.config.ClientConfig)
 		ctx, cancel := context.WithCancel(background)
 
-		go c.Pull(ctx, cancel)
-		go c.Push(ctx)
+		go func() {
+			for {
+				if err := c.Pull(ctx, cancel, l.Router); err != nil {
+					if err != io.EOF {
+						l.logger.Error(err)
+					}
+
+					break
+				}
+			}
+		}()
+
+		go func() {
+			for {
+				if err := c.Push(ctx); err != nil {
+					l.logger.Error(err)
+					break
+				}
+			}
+		}()
 	}
 }
 
 // Unbind unbinds the TcpListener from listening at a port.
-func (l *TcpListener) Unbind() error {
+func (l *TCPListener) Unbind() error {
 	return l.listener.Close()
 }

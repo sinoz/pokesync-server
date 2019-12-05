@@ -120,8 +120,8 @@ func (service *Service) spawnWorker() {
 	}
 }
 
-// TearDown tears down this service, closing its job queue and
+// Stop stops this service, closing its job queue and
 // cleaning up any resources it is holding.
-func (service *Service) TearDown() {
+func (service *Service) Stop() {
 	close(service.jobQueue)
 }

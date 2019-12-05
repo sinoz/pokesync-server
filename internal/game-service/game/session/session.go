@@ -82,13 +82,13 @@ func (session *Session) DequeueCommand() client.Message {
 
 // QueueCommand stores the given command into a queue of commands. The command
 // may be dropped if this Session's command buffer has reached its capacity.
-func (session *Session) QueueCommand(command client.Message) {
+func (session *Session) QueueCommand(command client.Message) bool {
 	select {
 	case session.commands <- command:
-		// successfully stored into the queue
+		return true // successfully stored into the queue
 
 	default:
-		// message wasn't stored the buffer is full.
+		return false // message wasn't stored the buffer is full.
 	}
 }
 
@@ -106,13 +106,13 @@ func (session *Session) DequeueEvent() client.Message {
 
 // QueueEvent stores the given event into a queue of events. The event may be
 // dropped if this Session's event buffer has reached its capacity.
-func (session *Session) QueueEvent(event client.Message) {
+func (session *Session) QueueEvent(event client.Message) bool {
 	select {
 	case session.events <- event:
-		// successfully stored into the queue
+		return true // successfully stored into the queue
 
 	default:
-		// message wasn't stored the buffer is full.
+		return false // message wasn't stored the buffer is full.
 	}
 }
 
@@ -143,11 +143,17 @@ func (registry *Registry) Put(id client.ID, session *Session) {
 
 // Remove removes any Session that is associated with the specified client ID,
 // from this registry.
-func (registry *Registry) Remove(id client.ID) {
+func (registry *Registry) Remove(id client.ID) *Session {
 	registry.mutex.Lock()
 	defer registry.mutex.Unlock()
 
+	session, exists := registry.sessions[id]
+	if !exists {
+		return nil
+	}
+
 	delete(registry.sessions, id)
+	return session
 }
 
 // Get looks up a Session instance by the given client ID. May return nil.

@@ -192,7 +192,6 @@ func main() {
 	}
 
 	clientConfig := client.Config{
-		Log:             logger,
 		MessageCodec:    *messageCodec,
 		ReadBufferSize:  512,
 		WriteBufferSize: 2048,
@@ -201,7 +200,6 @@ func main() {
 
 	serverConfig := server.Config{
 		ClientConfig: clientConfig,
-		Logger:       logger,
 	}
 
 	accountRepository := account.NewInMemoryRepository()
@@ -228,12 +226,12 @@ func main() {
 	// should something go wrong and cause a panic, always safely
 	// tear down these services
 	defer func() {
-		accountService.TearDown()
-		chatService.TearDown()
-		loginService.TearDown()
-		discordService.TearDown()
-		gameService.TearDown()
-		statusService.TearDown()
+		accountService.Stop()
+		chatService.Stop()
+		loginService.Stop()
+		discordService.Stop()
+		gameService.Stop()
+		statusService.Stop()
 	}()
 
 	logger.Info("Client build: ", ClientBuildNo)
@@ -264,7 +262,7 @@ func main() {
 
 	logger.Info("Router publication timeout: ", routingConfig.PublicationTimeout)
 
-	tcpListener := server.NewTcpListener(serverConfig, routing)
+	tcpListener := server.NewTCPListener(serverConfig, routing, logger)
 	if err := tcpListener.Bind(tcpHost, tcpPort); err != nil {
 		logger.Fatal(err)
 	}

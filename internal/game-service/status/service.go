@@ -67,8 +67,8 @@ func (service *Service) notify() error {
 	return service.notifier.Notify(status)
 }
 
-// TearDown tears down this Service, no longer notifying external services.
+// Stop stop this Service, no longer notifying external services.
 // It also cleans up resources used by this Service.
-func (service *Service) TearDown() {
+func (service *Service) Stop() {
 	service.quit <- true
 }

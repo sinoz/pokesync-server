@@ -77,21 +77,22 @@ const (
 	AuthenticationEventTopic = "auth_event"
 )
 
-// messagesOfInterest is a slice of MessageConfig's of client messages
-// that the game Service has any interest in for processing.
-var messagesOfInterest = []client.MessageConfig{
-	transport.AttachFollowerConfig,
-	transport.ChangeMovementTypeConfig,
-	transport.MoveAvatarConfig,
-	transport.ClearFollowerConfig,
-	transport.ClickTeleportConfig,
-	transport.ContinueDialogueConfig,
-	transport.CloseDialogueConfig,
-	transport.FaceDirectionConfig,
-	transport.InteractWithEntityConfig,
-	transport.SwitchPartySlotsConfig,
-	transport.SelectPlayerOptionConfig,
-	transport.SelectChatChannelConfig,
+// messageTopicsOfInterest is a slice of message Topic's that the game
+// Service has any interest in for processing.
+var messageTopicsOfInterest = []client.Topic{
+	transport.AttachFollowerConfig.Topic,
+	transport.ChangeMovementTypeConfig.Topic,
+	transport.MoveAvatarConfig.Topic,
+	transport.ClearFollowerConfig.Topic,
+	transport.ClickTeleportConfig.Topic,
+	transport.ContinueDialogueConfig.Topic,
+	transport.CloseDialogueConfig.Topic,
+	transport.FaceDirectionConfig.Topic,
+	transport.InteractWithEntityConfig.Topic,
+	transport.SwitchPartySlotsConfig.Topic,
+	transport.SelectPlayerOptionConfig.Topic,
+	transport.SelectChatChannelConfig.Topic,
+	client.TerminationTopic,
 }
 
 // Authenticated is an event of a user having been authenticated
@@ -127,8 +128,8 @@ func NewService(config Config, routing *client.Router, characterProvider Charact
 	service.pulser = newPulser(config.IntervalRate)
 	service.mailbox = routing.Subscribe(AuthenticationEventTopic)
 
-	for _, msgConfig := range messagesOfInterest {
-		routing.SubscribeMailboxToTopic(msgConfig.Topic, service.mailbox)
+	for _, topic := range messageTopicsOfInterest {
+		routing.SubscribeMailboxToTopic(topic, service.mailbox)
 	}
 
 	go service.receive()
@@ -227,6 +228,16 @@ func (service *Service) handleMail(mail client.Mail) {
 
 		session.QueueCommand(message)
 
+	case client.Terminated:
+		session := service.sessions.Remove(mail.Client.ID)
+		if session == nil {
+			return
+		}
+
+		service.config.Logger.Infof("Client %v has been terminated, deregistering session!", message.ID)
+
+		service.game.RemovePlayer(session.Entity)
+
 	default:
 		service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
 	}
@@ -235,6 +246,9 @@ func (service *Service) handleMail(mail client.Mail) {
 // onAuthenticated reacts to the given Client user having been authenticated.
 func (service *Service) onAuthenticated(ctx context.Context, cl *client.Client, account account.Account) {
 	select {
+	case <-ctx.Done():
+		return
+
 	case result := <-service.characterProvider(account.Email):
 		if result.Error != nil {
 			service.config.Logger.Error(result.Error)
@@ -256,9 +270,6 @@ func (service *Service) onAuthenticated(ctx context.Context, cl *client.Client, 
 		mail := client.Mail{Context: ctx, Client: cl, Payload: characterLoadEvent}
 
 		service.mailbox <- mail
-
-	case <-ctx.Done():
-		return
 
 	case <-time.After(service.config.CharacterFetchTimeout):
 		cl.SendNow(&transport.RequestTimedOut{})
@@ -313,7 +324,7 @@ func (service *Service) pulse() {
 	}
 }
 
-// TearDown terminates this Service and cleans up resources.
-func (service *Service) TearDown() {
+// Stop stops this Service and cleans up resources.
+func (service *Service) Stop() {
 	service.pulser.quitPulsing()
 }
