@@ -3,8 +3,8 @@ services:
   game-service:
     build: .
     environment:
-      POKESYNC_TCP_HOST: "0.0.0.0"
-      POKESYNC_TCP_PORT: 23192
+      POKESYNC_HOST: "0.0.0.0"
+      POKESYNC_PORT: 23192
       POKESYNC_REDIS_HOST: "redis"
       POKESYNC_REDIS_PORT: 6379
     ports:
