@@ -5,7 +5,7 @@
 First, make sure you have a Redis instance running:
 
 ```
-docker run --name some-redis -d -p 6379:6379 redis
+docker run --name redis -d -p 6379:6379 redis
 ```
 
 Now that Redis is fired up, you can freely run the game service:
