@@ -52,14 +52,6 @@ func NewSession(cl *client.Client, config Config, email account.Email, entity *e
 	return session
 }
 
-// NewInstalledSession constructs a new Session that installs listeners
-// into the given Entity's components.
-func NewInstalledSession(cl *client.Client, config Config, email account.Email, entity *entity.Entity) *Session {
-	session := NewSession(cl, config, email, entity)
-
-	return session
-}
-
 // NewRegistry constructs a new instance of a Registry.
 func NewRegistry() *Registry {
 	return &Registry{

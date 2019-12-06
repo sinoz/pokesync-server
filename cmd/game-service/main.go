@@ -100,6 +100,7 @@ var gameCodec = client.NewCodec().
 	Include(gameTransport.SelectChatChannelConfig).
 	Include(gameTransport.SetDonatorPointsConfig).
 	Include(gameTransport.SetPokeDollarsConfig).
+	Include(gameTransport.SetPartySlotConfig).
 	Include(gameTransport.SwitchPartySlotsConfig).
 	Include(gameTransport.SubmitChatMessageConfig).
 	Include(gameTransport.SwitchChatChannelConfig).

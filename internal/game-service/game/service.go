@@ -324,10 +324,20 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 		return
 	}
 
-	sess := session.NewInstalledSession(cl, service.config.SessionConfig, account.Email, plr)
+	sess := service.createNewInstalledSession(cl, service.config.SessionConfig, account.Email, plr)
 	service.sessions.Put(cl.ID, sess)
 
 	plr.Add(&SessionComponent{Session: sess})
+
+	plr.
+		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.
+		AddPokeDollars(5000)
+
+	plr.
+		GetComponent(PartyBeltTag).(*PartyBeltComponent).PartyBelt.
+		Add(&Monster{
+			ID: MonsterID(150),
+		})
 
 	cl.SendNow(&transport.LoginSuccess{
 		PID:         uint16(plr.ID),
@@ -341,6 +351,22 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 		LocalX: uint16(character.LocalX),
 		LocalZ: uint16(character.LocalZ),
 	})
+}
+
+// createNewInstalledSession constructs a new Session that installs listeners
+// into the given Entity's components.
+func (service *Service) createNewInstalledSession(cl *client.Client, config session.Config, email account.Email, entity *entity.Entity) *session.Session {
+	session := session.NewSession(cl, config, email, entity)
+
+	entity.
+		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.
+		AddListener(&CoinBagSessionListener{session: session})
+
+	entity.
+		GetComponent(PartyBeltTag).(*PartyBeltComponent).PartyBelt.
+		AddListener(&PartyBeltSessionListener{session: session})
+
+	return session
 }
 
 // pulse is called every pulse or tick to process the game.

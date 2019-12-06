@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 )
 
 const (
@@ -90,6 +91,12 @@ func (processor *InboundNetworkProcessor) Update(world *entity.World, deltaTime 
 			}
 
 			switch cmd := command.(type) {
+			case *transport.FaceDirection:
+				faceDirection(entity, Direction(cmd.Direction))
+			case *transport.ChangeMovementType:
+				changeMovementType(entity, MovementType(cmd.Type))
+			case *transport.MoveAvatar:
+				moveAvatar(entity, Direction(cmd.Direction))
 			default:
 				processor.Logger.Errorf("Unexpected session command type of %v", reflect.TypeOf(cmd))
 			}

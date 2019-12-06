@@ -11,8 +11,9 @@ const (
 	MonsterKind EntityKind = 2
 	ObjectKind  EntityKind = 3
 
-	Man   Gender = 0
-	Woman Gender = 1
+	Man        Gender = 0
+	Woman      Gender = 1
+	Genderless Gender = 2
 )
 
 // ModelID is the ID of an Entity's model.
@@ -41,6 +42,8 @@ func (factory *EntityFactory) CreatePlayer(position Position, direction Directio
 		&UsernameComponent{DisplayName: displayName},
 		&RankComponent{UserGroup: userGroup},
 		&KindComponent{Kind: PlayerKind},
+		&CoinBagComponent{CoinBag: NewCoinBag()},
+		&PartyBeltComponent{PartyBelt: NewPartyBelt()},
 	}
 }
 

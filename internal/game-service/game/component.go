@@ -18,6 +18,8 @@ const (
 	SessionTag   entity.ComponentTag = 8
 	MapViewTag   entity.ComponentTag = 9
 	BlockingTag  entity.ComponentTag = 10
+	PartyBeltTag entity.ComponentTag = 11
+	CoinBagTag   entity.ComponentTag = 12
 )
 
 // ModelIDComponent holds a model id of an entity.
@@ -73,6 +75,16 @@ type SessionComponent struct {
 
 // MapViewComponent keeps track of an entity's map view.
 type MapViewComponent struct {
+}
+
+// PartyBeltComponent is an entity Component that holds the PartyBelt.
+type PartyBeltComponent struct {
+	PartyBelt *PartyBelt
+}
+
+// CoinBagComponent is an entity Component that holds the CoinBag.
+type CoinBagComponent struct {
+	CoinBag *CoinBag
 }
 
 // Tag returns the tag of a Component instance for identification
@@ -139,4 +151,16 @@ func (component *SessionComponent) Tag() entity.ComponentTag {
 // and storage purposes.
 func (component *MapViewComponent) Tag() entity.ComponentTag {
 	return MapViewTag
+}
+
+// Tag returns the tag of a Component instance for identification
+// and storage purposes.
+func (component *PartyBeltComponent) Tag() entity.ComponentTag {
+	return PartyBeltTag
+}
+
+// Tag returns the tag of a Component instance for identification
+// and storage purposes.
+func (component *CoinBagComponent) Tag() entity.ComponentTag {
+	return CoinBagTag
 }
