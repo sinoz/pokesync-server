@@ -2,19 +2,17 @@
 
 ## Building and Running the Application
 
-First, make `start.sh` an executable:
+First, make sure you have a Redis instance running:
 
 ```
-chmod u+x start.sh
+docker run --name some-redis -d -p 6379:6379 redis
 ```
 
-And now you can freely run it at the root directory of the project:
+Now that Redis is fired up, you can freely run the game service:
 
 ```
 ./start.sh
 ```
-
-Alternatively, you can also just stick to calling `sh start.sh` but this may require `sudo`.
 
 ## Docker
 
