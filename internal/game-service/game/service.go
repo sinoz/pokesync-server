@@ -237,9 +237,38 @@ func (service *Service) handleMail(mail client.Mail) {
 		}
 
 		service.game.RemovePlayer(session.Entity)
+		service.characterSaver(session.Email, service.transformEntityToCharacterProfile(session.Entity))
 
 	default:
 		service.logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
+	}
+}
+
+// transformEntityToCharacterProfile transforms the given Entity instance
+// into a character Profile that can then be persisted.
+func (service *Service) transformEntityToCharacterProfile(entity *entity.Entity) *character.Profile {
+	usernameComponent := entity.GetComponent(UsernameTag).(*UsernameComponent)
+	displayName := usernameComponent.DisplayName
+
+	rankComponent := entity.GetComponent(RankTag).(*RankComponent)
+	userGroup := rankComponent.UserGroup
+
+	transformComponent := entity.GetComponent(TransformTag).(*TransformComponent)
+	position := transformComponent.Position
+
+	lastLoggedIn := time.Now()
+
+	return &character.Profile{
+		DisplayName:  displayName,
+		LastLoggedIn: &lastLoggedIn,
+		UserGroup:    userGroup,
+
+		Gender: 0,
+
+		MapX:   position.MapX,
+		MapZ:   position.MapZ,
+		LocalX: position.LocalX,
+		LocalZ: position.LocalZ,
 	}
 }
 
@@ -295,7 +324,7 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 		return
 	}
 
-	sess := session.NewInstalledSession(cl, service.config.SessionConfig, account, plr)
+	sess := session.NewInstalledSession(cl, service.config.SessionConfig, account.Email, plr)
 	service.sessions.Put(cl.ID, sess)
 
 	plr.Add(&SessionComponent{Session: sess})

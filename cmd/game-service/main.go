@@ -159,6 +159,10 @@ func main() {
 		WorkerCount: runtime.NumCPU(),
 	}
 
+	characterCacheConfig := character.CacheConfig{
+		ExpireAfter: 5 * time.Minute,
+	}
+
 	charactersConfig := character.Config{
 		WorkerCount: runtime.NumCPU(),
 	}
@@ -172,9 +176,15 @@ func main() {
 		IntervalRate:          50 * time.Millisecond,
 		CharacterFetchTimeout: 5 * time.Second,
 		EntityLimit:           32768,
-		ClockRate:             250 * time.Millisecond,
-		ClockSynchronizer:     game.NewGMT0Synchronizer(),
-		SessionConfig:         sessionConfig,
+
+		// not to be confused with IntervalRate, ClockRate is the rate at
+		// which the game time progresses (think day/night, seasons) and
+		// is not actually the tick rate. The ClockRate can also be seen
+		// as the ratio of game time to real time, which is currently 4:1
+		ClockRate:         250 * time.Millisecond,
+		ClockSynchronizer: game.NewGMT0Synchronizer(),
+
+		SessionConfig: sessionConfig,
 	}
 
 	statusConfig := status.Config{
@@ -209,8 +219,9 @@ func main() {
 	accountRepository := account.NewInMemoryRepository()
 	passwordMatcher := account.BasicPasswordMatcher()
 
+	characterCache := character.NewRedisCache(characterCacheConfig, redisClient)
 	characterRepository := character.NewInMemoryRepository()
-	characterService := character.NewService(charactersConfig, logger, characterRepository)
+	characterService := character.NewService(charactersConfig, logger, characterCache, characterRepository)
 
 	accountService := account.NewService(accountConfig, logger, accountRepository)
 	chatService := chat.NewService(chatConfig, logger, routing)

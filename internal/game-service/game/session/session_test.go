@@ -12,12 +12,12 @@ import (
 )
 
 func TestSession_QueueCommand(t *testing.T) {
-	account := account.Account{}
+	email := account.Email("Sino@gmail.com")
 	config := Config{CommandLimit: 16, EventLimit: 16}
 
 	command := &transport.SubmitChatMessage{}
 
-	session := NewSession(nil, config, account, entity.NewEntity())
+	session := NewSession(nil, config, email, entity.NewEntity())
 	session.QueueCommand(command)
 
 	select {
@@ -32,12 +32,12 @@ func TestSession_QueueCommand(t *testing.T) {
 }
 
 func TestSession_QueueEvent(t *testing.T) {
-	account := account.Account{}
+	email := account.Email("Sino@gmail.com")
 	config := Config{CommandLimit: 16, EventLimit: 16}
 
 	event := &transport.DisplayChatMessage{}
 
-	session := NewSession(nil, config, account, entity.NewEntity())
+	session := NewSession(nil, config, email, entity.NewEntity())
 	session.QueueEvent(event)
 
 	select {
@@ -52,10 +52,10 @@ func TestSession_QueueEvent(t *testing.T) {
 }
 
 func TestSession_DequeueCommand(t *testing.T) {
-	account := account.Account{}
+	email := account.Email("Sino@gmail.com")
 	config := Config{CommandLimit: 16, EventLimit: 16}
 
-	session := NewSession(nil, config, account, entity.NewEntity())
+	session := NewSession(nil, config, email, entity.NewEntity())
 	commandCh := make(chan client.Message)
 
 	go func() {
@@ -74,10 +74,10 @@ func TestSession_DequeueCommand(t *testing.T) {
 }
 
 func TestSession_DequeueEvent(t *testing.T) {
-	account := account.Account{}
+	email := account.Email("Sino@gmail.com")
 	config := Config{CommandLimit: 16, EventLimit: 16}
 
-	session := NewSession(nil, config, account, entity.NewEntity())
+	session := NewSession(nil, config, email, entity.NewEntity())
 	eventCh := make(chan client.Message)
 
 	go func() {

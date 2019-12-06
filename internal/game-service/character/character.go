@@ -1,5 +1,9 @@
 package character
 
+import (
+	"time"
+)
+
 // DisplayName is a name of a user's account that is exposed
 // ingame to other users.
 type DisplayName string
@@ -19,12 +23,14 @@ var (
 
 // Profile represents a player character's last saved game state.
 type Profile struct {
-	DisplayName DisplayName
-	UserGroup   UserGroup
-	Gender      int
+	DisplayName  DisplayName `json:"displayName"`
+	UserGroup    UserGroup   `json:"userGroup"`
+	LastLoggedIn *time.Time  `json:"lastLoggedIn"`
 
-	MapX   int
-	MapZ   int
-	LocalX int
-	LocalZ int
+	Gender int `json:"gender"`
+
+	MapX   int `json:"mapX"`
+	MapZ   int `json:"mapZ"`
+	LocalX int `json:"localX"`
+	LocalZ int `json:"localZ"`
 }

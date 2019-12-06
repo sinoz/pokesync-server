@@ -21,10 +21,13 @@ type LoadResult struct {
 // Service is in charge of delegating of character-related jobs to
 // its workers.
 type Service struct {
-	config     Config
-	logger     *zap.SugaredLogger
-	Repository Repository
-	jobQueue   chan Job
+	config Config
+	logger *zap.SugaredLogger
+
+	cache      Cache
+	repository Repository
+
+	jobQueue chan Job
 }
 
 // loadProfile is a type of job to load a character profile from the storage.
@@ -43,11 +46,12 @@ type saveProfile struct {
 type Job interface{}
 
 // NewService constructs a new Service.
-func NewService(config Config, logger *zap.SugaredLogger, repository Repository) *Service {
+func NewService(config Config, logger *zap.SugaredLogger, cache Cache, repository Repository) *Service {
 	service := &Service{
 		config:     config,
 		logger:     logger,
-		Repository: repository,
+		cache:      cache,
+		repository: repository,
 		jobQueue:   make(chan Job),
 	}
 
@@ -76,7 +80,18 @@ func (service *Service) worker() {
 	for job := range service.jobQueue {
 		switch j := job.(type) {
 		case loadProfile:
-			profile, err := service.Repository.Get(j.email)
+			profile, err := service.cache.Get(j.email)
+			if err != nil {
+				j.channel <- LoadResult{Error: err}
+				continue
+			}
+
+			if profile != nil {
+				j.channel <- LoadResult{Profile: profile}
+				break
+			}
+
+			profile, err = service.repository.Get(j.email)
 			if err != nil {
 				j.channel <- LoadResult{Error: err}
 				continue
@@ -86,11 +101,18 @@ func (service *Service) worker() {
 			break
 
 		case saveProfile:
-			err := service.Repository.Put(j.email, j.profile)
+			// override what's potentially in the cache
+			err := service.cache.Put(j.email, j.profile)
+			if err != nil {
+				service.logger.Error(err)
+			}
+
+			// and also update the backup store, which is our db
+			err = service.repository.Put(j.email, j.profile)
 			if err != nil {
 				service.logger.Error(err)
 
-				// TODO what to do with this account?
+				// TODO what to do with this character profile?
 			}
 
 			break

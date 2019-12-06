@@ -22,8 +22,8 @@ type Session struct {
 
 	config Config
 
-	Account account.Account
-	Entity  *entity.Entity
+	Email  account.Email
+	Entity *entity.Entity
 
 	commands chan client.Message
 	events   chan client.Message
@@ -36,14 +36,14 @@ type Registry struct {
 }
 
 // NewSession constructs a new instance of a Session.
-func NewSession(cl *client.Client, config Config, account account.Account, entity *entity.Entity) *Session {
+func NewSession(cl *client.Client, config Config, email account.Email, entity *entity.Entity) *Session {
 	session := &Session{
 		client: cl,
 
 		config: config,
 
-		Account: account,
-		Entity:  entity,
+		Email:  email,
+		Entity: entity,
 
 		commands: make(chan client.Message, config.CommandLimit),
 		events:   make(chan client.Message, config.EventLimit),
@@ -54,8 +54,8 @@ func NewSession(cl *client.Client, config Config, account account.Account, entit
 
 // NewInstalledSession constructs a new Session that installs listeners
 // into the given Entity's components.
-func NewInstalledSession(cl *client.Client, config Config, account account.Account, entity *entity.Entity) *Session {
-	session := NewSession(cl, config, account, entity)
+func NewInstalledSession(cl *client.Client, config Config, email account.Email, entity *entity.Entity) *Session {
+	session := NewSession(cl, config, email, entity)
 
 	return session
 }

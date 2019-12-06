@@ -38,6 +38,8 @@ func NewEntityFactory(assets *AssetBundle) *EntityFactory {
 func (factory *EntityFactory) CreatePlayer(position Position, direction Direction, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) []entity.Component {
 	return []entity.Component{
 		&TransformComponent{Position: position},
+		&UsernameComponent{DisplayName: displayName},
+		&RankComponent{UserGroup: userGroup},
 		&KindComponent{Kind: PlayerKind},
 	}
 }
