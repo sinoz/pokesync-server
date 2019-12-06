@@ -7,6 +7,7 @@ import (
 
 // Config holds configurations specifically for the chat service.
 type Config struct {
+	WorkerCount int
 }
 
 // Service is an implementation of a public chat service and provides

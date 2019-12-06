@@ -3,6 +3,7 @@ services:
   game-service:
     image: "registry.gitlab.com/pokesync/game-service:latest"
     environment:
+      POKESYNC_WORLD_ID: 1
       POKESYNC_HOST: "0.0.0.0"
       POKESYNC_PORT: 23192
       POKESYNC_REDIS_HOST: "redis"

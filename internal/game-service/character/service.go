@@ -52,7 +52,7 @@ func NewService(config Config, logger *zap.SugaredLogger, repository Repository)
 	}
 
 	for i := 0; i < config.WorkerCount; i++ {
-		go service.spawnWorker()
+		go service.worker()
 	}
 
 	return service
@@ -70,9 +70,9 @@ func (service *Service) SaveProfile(email account.Email, profile *Profile) {
 	service.jobQueue <- saveProfile{email: email, profile: profile}
 }
 
-// spawnWorker spawns a character profile Job worker that processes jobs
-// for the Service.
-func (service *Service) spawnWorker() {
+// worker continuously reads from the service's job queue until the
+// queue is closed.
+func (service *Service) worker() {
 	for job := range service.jobQueue {
 		switch j := job.(type) {
 		case loadProfile:

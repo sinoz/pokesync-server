@@ -48,7 +48,7 @@ func NewService(config Config, logger *zap.SugaredLogger, authenticator Authenti
 	go service.receiver(mailbox)
 
 	for i := 0; i < config.WorkerCount; i++ {
-		go service.spawnWorker()
+		go service.worker()
 	}
 
 	return service
@@ -73,9 +73,9 @@ func (service *Service) queueRequest(ctx context.Context, client *client.Client,
 	service.jobQueue <- Job{Context: ctx, Client: client, Request: *request}
 }
 
-// spawnWorker spawns a worker goroutine that reads from the
-// service's job queue.
-func (service *Service) spawnWorker() {
+// worker continuously reads from the service's job queue until the
+// queue is closed.
+func (service *Service) worker() {
 	for job := range service.jobQueue {
 		email := account.Email(job.Request.Email)
 		password := account.Password(job.Request.Password)

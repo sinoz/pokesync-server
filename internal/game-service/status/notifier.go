@@ -14,6 +14,7 @@ type VoidNotifier struct{}
 // RedisNotifier is a Notifier that stores status information in a
 // Redis in-memory server instance.
 type RedisNotifier struct {
+	worldID     int
 	redisClient *redis.Client
 }
 
@@ -23,8 +24,11 @@ func NewVoidNotifier() *VoidNotifier {
 }
 
 // NewRedisNotifier constructs a new instance of a RedisNotifier.
-func NewRedisNotifier(redisClient *redis.Client) *RedisNotifier {
-	return &RedisNotifier{redisClient: redisClient}
+func NewRedisNotifier(redisClient *redis.Client, worldID int) *RedisNotifier {
+	return &RedisNotifier{
+		redisClient: redisClient,
+		worldID:     worldID,
+	}
 }
 
 // Notify doesn't do anything as intended.

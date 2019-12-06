@@ -1,5 +1,5 @@
 # Deployments
 
 ```
-scp docker-compose.yml root@world1.pokesync.com:
+scp world-1.yml root@world1.pokesync.com:
 ```

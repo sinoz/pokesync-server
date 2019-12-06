@@ -6,7 +6,6 @@ import (
 
 // Parameters holds information about this game server's notifiable status.
 type Parameters struct {
-	ID          int
 	PlayerCount int
 }
 
@@ -28,7 +27,7 @@ func NewProvider(gameService *game.Service) *ProviderImpl {
 
 // Provide provides the list of status Parameters from other internal services.
 func (provider *ProviderImpl) Provide() (Parameters, error) {
-	parameters := new(Parameters)
+	parameters := &Parameters{}
 
 	return *parameters, nil
 }

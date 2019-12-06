@@ -28,6 +28,9 @@ import (
 // server is supporting.
 const ClientBuildNo = client.BuildNumber(1)
 
+// WorldIDEnv is the name of the environment variable of the world id.
+const WorldIDEnv = "POKESYNC_WORLD_ID"
+
 // TCPServerHostEnv is the name of the environment variable of
 // the server host.
 const TCPServerHostEnv = "POKESYNC_HOST"
@@ -43,6 +46,10 @@ const RedisHostEnv = "POKESYNC_REDIS_HOST"
 // RedisPortEnv is the name of the environment variable of
 // the port of the Redis server to connect to.
 const RedisPortEnv = "POKESYNC_REDIS_PORT"
+
+// DefaultWorldID is the id of the game world to fallback to if no environment
+// variable is set.
+const DefaultWorldID = 1
 
 // DefaultTCPServerHost is the host to fallback to if no environment
 // variable is set.
@@ -112,7 +119,9 @@ func main() {
 		log.Fatal("Failed to create zap logger", err)
 	}
 
-	logger.Info("Starting PokeSync...")
+	logger.Info("Starting PokeSync ...")
+
+	worldID := getWorldIDFromEnv()
 
 	tcpHost := getTCPServerHostFromEnv()
 	tcpPort := getTCPServerPortFromEnv()
@@ -182,7 +191,9 @@ func main() {
 		WorkerCount: runtime.NumCPU(),
 	}
 
-	chatConfig := chat.Config{}
+	chatConfig := chat.Config{
+		WorkerCount: runtime.NumCPU(),
+	}
 
 	clientConfig := client.Config{
 		MessageCodec:    *messageCodec,
@@ -214,7 +225,7 @@ func main() {
 
 	gameService := game.NewService(gameConfig, routing, characterService.LoadProfile, characterService.SaveProfile, assetBundle, logger)
 	discordService := discord.NewService(discordConfig, logger)
-	statusService := status.NewService(statusConfig, logger, status.NewRedisNotifier(redisClient), status.NewProvider(gameService))
+	statusService := status.NewService(statusConfig, logger, status.NewRedisNotifier(redisClient, worldID), status.NewProvider(gameService))
 
 	// should something go wrong and cause a panic, always safely
 	// tear down these services
@@ -228,6 +239,7 @@ func main() {
 	}()
 
 	logger.Info("Client build: ", ClientBuildNo)
+	logger.Info("World ID: ", worldID)
 
 	logger.Info("Item configs loaded: ", assetBundle.Items.Count())
 	logger.Info("Npc configs loaded: ", assetBundle.Npcs.Count())
@@ -289,6 +301,15 @@ func createZapLogger() (*zap.SugaredLogger, error) {
 	}
 
 	return logger.Sugar(), nil
+}
+
+func getWorldIDFromEnv() int {
+	port, err := strconv.Atoi(os.Getenv(WorldIDEnv))
+	if err != nil {
+		return DefaultWorldID
+	}
+
+	return port
 }
 
 func getRedisHostFromEnv() string {
