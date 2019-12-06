@@ -9,7 +9,6 @@ import (
 // Config holds configurations specific to the account Service.
 type Config struct {
 	WorkerCount int
-	Logger      *zap.SugaredLogger
 }
 
 // LoadResult is the result from attempting to load an account.
@@ -22,7 +21,8 @@ type LoadResult struct {
 // its workers.
 type Service struct {
 	config     Config
-	Repository Repository
+	logger     *zap.SugaredLogger
+	repository Repository
 	jobQueue   chan Job
 }
 
@@ -43,10 +43,11 @@ type saveAccount struct {
 type Job interface{}
 
 // NewService constructs a new Service.
-func NewService(config Config, repository Repository) *Service {
+func NewService(config Config, logger *zap.SugaredLogger, repository Repository) *Service {
 	service := &Service{
 		config:     config,
-		Repository: repository,
+		logger:     logger,
+		repository: repository,
 		jobQueue:   make(chan Job),
 	}
 
@@ -74,7 +75,7 @@ func (service *Service) spawnWorker() {
 	for job := range service.jobQueue {
 		switch j := job.(type) {
 		case loadAccount:
-			account, err := service.Repository.Get(j.email, j.password)
+			account, err := service.repository.Get(j.email, j.password)
 			if err != nil {
 				j.channel <- LoadResult{Error: err}
 				continue
@@ -84,9 +85,9 @@ func (service *Service) spawnWorker() {
 			break
 
 		case saveAccount:
-			err := service.Repository.Put(j.email, j.account)
+			err := service.repository.Put(j.email, j.account)
 			if err != nil {
-				service.config.Logger.Error(err)
+				service.logger.Error(err)
 
 				// TODO what to do with this account?
 			}
@@ -94,7 +95,7 @@ func (service *Service) spawnWorker() {
 			break
 
 		default:
-			service.config.Logger.Errorf("Unexpected job of type %v", reflect.TypeOf(j))
+			service.logger.Errorf("Unexpected job of type %v", reflect.TypeOf(j))
 		}
 	}
 }

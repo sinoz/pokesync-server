@@ -148,12 +148,10 @@ func main() {
 
 	accountConfig := account.Config{
 		WorkerCount: runtime.NumCPU(),
-		Logger:      logger,
 	}
 
 	charactersConfig := character.Config{
 		WorkerCount: runtime.NumCPU(),
-		Logger:      logger,
 	}
 
 	sessionConfig := session.Config{
@@ -167,12 +165,10 @@ func main() {
 		EntityLimit:           32768,
 		ClockRate:             250 * time.Millisecond,
 		ClockSynchronizer:     game.NewGMT0Synchronizer(),
-		Logger:                logger,
 		SessionConfig:         sessionConfig,
 	}
 
 	statusConfig := status.Config{
-		Logger:      logger,
 		RefreshRate: 15 * time.Second,
 	}
 
@@ -183,13 +179,10 @@ func main() {
 	}
 
 	loginConfig := login.Config{
-		Logger:      logger,
 		WorkerCount: runtime.NumCPU(),
 	}
 
-	chatConfig := chat.Config{
-		Logger: logger,
-	}
+	chatConfig := chat.Config{}
 
 	clientConfig := client.Config{
 		MessageCodec:    *messageCodec,
@@ -206,10 +199,10 @@ func main() {
 	passwordMatcher := account.BasicPasswordMatcher()
 
 	characterRepository := character.NewInMemoryRepository()
-	characterService := character.NewService(charactersConfig, characterRepository)
+	characterService := character.NewService(charactersConfig, logger, characterRepository)
 
-	accountService := account.NewService(accountConfig, accountRepository)
-	chatService := chat.NewService(chatConfig, routing)
+	accountService := account.NewService(accountConfig, logger, accountRepository)
+	chatService := chat.NewService(chatConfig, logger, routing)
 
 	authenticator := login.NewAuthenticator(
 		authConfig,
@@ -217,11 +210,11 @@ func main() {
 		passwordMatcher,
 	)
 
-	loginService := login.NewService(loginConfig, authenticator, routing)
+	loginService := login.NewService(loginConfig, logger, authenticator, routing)
 
-	gameService := game.NewService(gameConfig, routing, characterService.LoadProfile, characterService.SaveProfile, assetBundle)
-	discordService := discord.NewService(discordConfig)
-	statusService := status.NewService(statusConfig, status.NewRedisNotifier(redisClient), status.NewProvider(gameService))
+	gameService := game.NewService(gameConfig, routing, characterService.LoadProfile, characterService.SaveProfile, assetBundle, logger)
+	discordService := discord.NewService(discordConfig, logger)
+	statusService := status.NewService(statusConfig, logger, status.NewRedisNotifier(redisClient), status.NewProvider(gameService))
 
 	// should something go wrong and cause a panic, always safely
 	// tear down these services

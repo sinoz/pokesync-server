@@ -10,7 +10,6 @@ import (
 // Config holds configurations specific to the character Service.
 type Config struct {
 	WorkerCount int
-	Logger      *zap.SugaredLogger
 }
 
 // LoadResult is the result from attempting to load a character profile.
@@ -23,6 +22,7 @@ type LoadResult struct {
 // its workers.
 type Service struct {
 	config     Config
+	logger     *zap.SugaredLogger
 	Repository Repository
 	jobQueue   chan Job
 }
@@ -43,9 +43,10 @@ type saveProfile struct {
 type Job interface{}
 
 // NewService constructs a new Service.
-func NewService(config Config, repository Repository) *Service {
+func NewService(config Config, logger *zap.SugaredLogger, repository Repository) *Service {
 	service := &Service{
 		config:     config,
+		logger:     logger,
 		Repository: repository,
 		jobQueue:   make(chan Job),
 	}
@@ -87,7 +88,7 @@ func (service *Service) spawnWorker() {
 		case saveProfile:
 			err := service.Repository.Put(j.email, j.profile)
 			if err != nil {
-				service.config.Logger.Error(err)
+				service.logger.Error(err)
 
 				// TODO what to do with this account?
 			}
@@ -95,7 +96,7 @@ func (service *Service) spawnWorker() {
 			break
 
 		default:
-			service.config.Logger.Errorf("Unexpected job of type %v", reflect.TypeOf(j))
+			service.logger.Errorf("Unexpected job of type %v", reflect.TypeOf(j))
 		}
 	}
 }

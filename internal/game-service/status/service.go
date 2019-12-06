@@ -8,7 +8,6 @@ import (
 
 // Config holds configurations specific to this Service.
 type Config struct {
-	Logger      *zap.SugaredLogger
 	RefreshRate time.Duration
 }
 
@@ -17,6 +16,8 @@ type Config struct {
 type Service struct {
 	config Config
 
+	logger *zap.SugaredLogger
+
 	notifier Notifier
 	provider Provider
 
@@ -24,9 +25,10 @@ type Service struct {
 }
 
 // NewService constructs a new instance of a Service.
-func NewService(config Config, notifier Notifier, provider Provider) *Service {
+func NewService(config Config, logger *zap.SugaredLogger, notifier Notifier, provider Provider) *Service {
 	service := &Service{
 		config: config,
+		logger: logger,
 
 		notifier: notifier,
 		provider: provider,
@@ -49,7 +51,7 @@ func (service *Service) worker() {
 
 		case <-time.After(service.config.RefreshRate):
 			if err := service.notify(); err != nil {
-				service.config.Logger.Error(err.Error())
+				service.logger.Error(err.Error())
 			}
 
 			continue

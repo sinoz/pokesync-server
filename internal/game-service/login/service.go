@@ -12,7 +12,6 @@ import (
 
 // Config holds configurations for the login service.
 type Config struct {
-	Logger      *zap.SugaredLogger
 	WorkerCount int
 }
 
@@ -27,17 +26,19 @@ type Job struct {
 // login and authentication capabilities.
 type Service struct {
 	config        Config
+	logger        *zap.SugaredLogger
 	jobQueue      chan Job
 	authenticator Authenticator
 	routing       *client.Router
 }
 
 // NewService constructs a new login Service.
-func NewService(config Config, authenticator Authenticator, routing *client.Router) *Service {
+func NewService(config Config, logger *zap.SugaredLogger, authenticator Authenticator, routing *client.Router) *Service {
 	jobQueue := make(chan Job)
 
 	service := &Service{
 		config:        config,
+		logger:        logger,
 		jobQueue:      jobQueue,
 		authenticator: authenticator,
 		routing:       routing,
@@ -62,7 +63,7 @@ func (service *Service) receiver(mailbox client.Mailbox) {
 			break
 
 		default:
-			service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
+			service.logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
 		}
 	}
 }
@@ -115,7 +116,7 @@ func (service *Service) spawnWorker() {
 			continue
 
 		default:
-			service.config.Logger.Errorf("unexpected authentication result type of %v", reflect.TypeOf(res))
+			service.logger.Errorf("unexpected authentication result type of %v", reflect.TypeOf(res))
 		}
 	}
 }

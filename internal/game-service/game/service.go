@@ -26,8 +26,6 @@ type Config struct {
 
 	SessionConfig session.Config
 
-	Logger *zap.SugaredLogger
-
 	ClockRate         time.Duration
 	ClockSynchronizer ClockSynchronizer
 }
@@ -59,6 +57,8 @@ type pulser struct {
 type Service struct {
 	config Config
 	assets *AssetBundle
+
+	logger *zap.SugaredLogger
 
 	routing  *client.Router
 	sessions *session.Registry
@@ -110,9 +110,11 @@ type CharacterLoaded struct {
 }
 
 // NewService constructs a new game Service.
-func NewService(config Config, routing *client.Router, characterProvider CharacterProvider, characterSaver CharacterSaver, assets *AssetBundle) *Service {
+func NewService(config Config, routing *client.Router, characterProvider CharacterProvider, characterSaver CharacterSaver, assets *AssetBundle, logger *zap.SugaredLogger) *Service {
 	service := &Service{
 		config: config,
+
+		logger: logger,
 
 		assets: assets,
 
@@ -123,7 +125,7 @@ func NewService(config Config, routing *client.Router, characterProvider Charact
 	}
 
 	service.sessions = session.NewRegistry()
-	service.game = NewGame(assets, createWorld(config, assets))
+	service.game = NewGame(assets, createWorld(config, logger, assets))
 
 	service.pulser = newPulser(config.IntervalRate)
 	service.mailbox = routing.Subscribe(AuthenticationEventTopic)
@@ -140,10 +142,10 @@ func NewService(config Config, routing *client.Router, characterProvider Charact
 // createWorld constructs a new instance of a World, preconfigured
 // with all of its necessary system and processors for the game service
 // to process game logic.
-func createWorld(config Config, assets *AssetBundle) *entity.World {
+func createWorld(config Config, logger *zap.SugaredLogger, assets *AssetBundle) *entity.World {
 	world := entity.NewWorld(config.EntityLimit)
 
-	world.AddSystem(NewInboundNetworkSystem(config.Logger))
+	world.AddSystem(NewInboundNetworkSystem(logger))
 	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))
 	world.AddSystem(NewMapViewSystem())
 	world.AddSystem(NewOutboundNetworkSystem())
@@ -234,12 +236,10 @@ func (service *Service) handleMail(mail client.Mail) {
 			return
 		}
 
-		service.config.Logger.Infof("Client %v has been terminated, deregistering session!", message.ID)
-
 		service.game.RemovePlayer(session.Entity)
 
 	default:
-		service.config.Logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
+		service.logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
 	}
 }
 
@@ -251,7 +251,7 @@ func (service *Service) onAuthenticated(ctx context.Context, cl *client.Client, 
 
 	case result := <-service.characterProvider(account.Email):
 		if result.Error != nil {
-			service.config.Logger.Error(result.Error)
+			service.logger.Error(result.Error)
 
 			cl.SendNow(&transport.UnableToFetchProfile{})
 			cl.Terminate()
@@ -320,7 +320,7 @@ func (service *Service) pulse() {
 	service.pulser.lastTime = time.Now()
 
 	if err := service.game.pulse(deltaTime); err != nil {
-		service.config.Logger.Error(err)
+		service.logger.Error(err)
 	}
 }
 
