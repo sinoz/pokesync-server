@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"time"
 
+	"gitlab.com/pokesync/game-service/internal/game-service/chat"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
-	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
@@ -24,7 +24,7 @@ type Config struct {
 
 	CharacterFetchTimeout time.Duration
 
-	SessionConfig session.Config
+	SessionConfig SessionConfig
 
 	ClockRate         time.Duration
 	ClockSynchronizer ClockSynchronizer
@@ -61,7 +61,7 @@ type Service struct {
 	logger *zap.SugaredLogger
 
 	routing  *client.Router
-	sessions *session.Registry
+	sessions *SessionRegistry
 
 	mailbox client.Mailbox
 	pulser  *pulser
@@ -80,6 +80,7 @@ const (
 // messageTopicsOfInterest is a slice of message Topic's that the game
 // Service has any interest in for processing.
 var messageTopicsOfInterest = []client.Topic{
+	AuthenticationEventTopic,
 	transport.AttachFollowerConfig.Topic,
 	transport.ChangeMovementTypeConfig.Topic,
 	transport.MoveAvatarConfig.Topic,
@@ -91,7 +92,7 @@ var messageTopicsOfInterest = []client.Topic{
 	transport.InteractWithEntityConfig.Topic,
 	transport.SwitchPartySlotsConfig.Topic,
 	transport.SelectPlayerOptionConfig.Topic,
-	transport.SelectChatChannelConfig.Topic,
+	transport.SubmitChatCommandConfig.Topic,
 	client.TerminationTopic,
 }
 
@@ -124,11 +125,11 @@ func NewService(config Config, routing *client.Router, characterProvider Charact
 		routing: routing,
 	}
 
-	service.sessions = session.NewRegistry()
+	service.sessions = NewSessionRegistry()
 	service.game = NewGame(assets, createWorld(config, logger, assets))
 
 	service.pulser = newPulser(config.IntervalRate)
-	service.mailbox = routing.Subscribe(AuthenticationEventTopic)
+	service.mailbox = routing.CreateMailbox()
 
 	for _, topic := range messageTopicsOfInterest {
 		routing.SubscribeMailboxToTopic(topic, service.mailbox)
@@ -220,7 +221,7 @@ func (service *Service) handleMail(mail client.Mail) {
 		go service.onAuthenticated(mail.Context, mail.Client, message.Account)
 
 	case CharacterLoaded:
-		go service.onCharacterLoaded(mail.Client, message.Account, message.Character)
+		service.onCharacterLoaded(mail.Client, message.Account, message.Character)
 
 	case client.Message:
 		session := service.sessions.Get(mail.Client.ID)
@@ -324,10 +325,10 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 		return
 	}
 
-	sess := service.createNewInstalledSession(cl, service.config.SessionConfig, account.Email, plr)
-	service.sessions.Put(cl.ID, sess)
+	session := service.createNewInstalledSession(cl, service.config.SessionConfig, account.Email, plr)
+	service.sessions.Put(cl.ID, session)
 
-	plr.Add(&SessionComponent{Session: sess})
+	plr.Add(&SessionComponent{Session: session})
 
 	plr.
 		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.
@@ -351,12 +352,19 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 		LocalX: uint16(character.LocalX),
 		LocalZ: uint16(character.LocalZ),
 	})
+
+	service.routing.Publish(chat.ServiceConnectTopic, client.Mail{
+		Client: cl,
+		Payload: chat.ConnectToChatService{
+			DisplayName: character.DisplayName,
+		},
+	})
 }
 
 // createNewInstalledSession constructs a new Session that installs listeners
 // into the given Entity's components.
-func (service *Service) createNewInstalledSession(cl *client.Client, config session.Config, email account.Email, entity *entity.Entity) *session.Session {
-	session := session.NewSession(cl, config, email, entity)
+func (service *Service) createNewInstalledSession(cl *client.Client, config SessionConfig, email account.Email, entity *entity.Entity) *Session {
+	session := NewSession(cl, config, email, entity)
 
 	entity.
 		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.

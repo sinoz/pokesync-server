@@ -1,16 +1,14 @@
-package session
+package game
 
 import (
-	"sync"
-
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
 )
 
-// Config holds configurations specific to Session's.
-type Config struct {
+// SessionConfig holds configurations specific to Session's.
+type SessionConfig struct {
 	CommandLimit int
 	EventLimit   int
 }
@@ -20,7 +18,7 @@ type Config struct {
 type Session struct {
 	client *client.Client
 
-	config Config
+	config SessionConfig
 
 	Email  account.Email
 	Entity *entity.Entity
@@ -29,14 +27,13 @@ type Session struct {
 	events   chan client.Message
 }
 
-// Registry keeps track of Session's.
-type Registry struct {
+// SessionRegistry keeps track of Session's.
+type SessionRegistry struct {
 	sessions map[client.ID]*Session
-	mutex    *sync.RWMutex
 }
 
 // NewSession constructs a new instance of a Session.
-func NewSession(cl *client.Client, config Config, email account.Email, entity *entity.Entity) *Session {
+func NewSession(cl *client.Client, config SessionConfig, email account.Email, entity *entity.Entity) *Session {
 	session := &Session{
 		client: cl,
 
@@ -52,12 +49,9 @@ func NewSession(cl *client.Client, config Config, email account.Email, entity *e
 	return session
 }
 
-// NewRegistry constructs a new instance of a Registry.
-func NewRegistry() *Registry {
-	return &Registry{
-		sessions: make(map[client.ID]*Session),
-		mutex:    &sync.RWMutex{},
-	}
+// NewSessionRegistry constructs a new instance of a SessionRegistry.
+func NewSessionRegistry() *SessionRegistry {
+	return &SessionRegistry{sessions: make(map[client.ID]*Session)}
 }
 
 // DequeueCommand polls a command from the Session's buffer. May return nil
@@ -126,19 +120,13 @@ func (session *Session) Terminate() {
 }
 
 // Put puts the given Session into the registry under the specified client ID.
-func (registry *Registry) Put(id client.ID, session *Session) {
-	registry.mutex.Lock()
-	defer registry.mutex.Unlock()
-
+func (registry *SessionRegistry) Put(id client.ID, session *Session) {
 	registry.sessions[id] = session
 }
 
 // Remove removes any Session that is associated with the specified client ID,
 // from this registry.
-func (registry *Registry) Remove(id client.ID) *Session {
-	registry.mutex.Lock()
-	defer registry.mutex.Unlock()
-
+func (registry *SessionRegistry) Remove(id client.ID) *Session {
 	session, exists := registry.sessions[id]
 	if !exists {
 		return nil
@@ -149,9 +137,6 @@ func (registry *Registry) Remove(id client.ID) *Session {
 }
 
 // Get looks up a Session instance by the given client ID. May return nil.
-func (registry *Registry) Get(id client.ID) *Session {
-	registry.mutex.RLock()
-	defer registry.mutex.RUnlock()
-
+func (registry *SessionRegistry) Get(id client.ID) *Session {
 	return registry.sessions[id]
 }

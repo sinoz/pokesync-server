@@ -3,7 +3,6 @@ package game
 import (
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
-	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 )
 
 const (
@@ -70,7 +69,7 @@ type TrackingComponent struct {
 // SessionComponent holds a Session instance, which indicates
 // that the entity was created out of a request from a client user.
 type SessionComponent struct {
-	Session *session.Session
+	Session *Session
 }
 
 // MapViewComponent keeps track of an entity's map view.

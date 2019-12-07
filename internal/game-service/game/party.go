@@ -2,8 +2,6 @@ package game
 
 import (
 	"errors"
-
-	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 )
 
@@ -22,7 +20,7 @@ type PartyBeltUpdateListener interface {
 // for changes made to the PartyBelt to visually apply these
 // changes to the Client as well.
 type PartyBeltSessionListener struct {
-	session *session.Session
+	session *Session
 }
 
 // PartyBelt is the belt of monsters a player carries with him/her.

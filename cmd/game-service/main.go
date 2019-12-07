@@ -15,7 +15,6 @@ import (
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
 	"gitlab.com/pokesync/game-service/internal/game-service/discord"
 	"gitlab.com/pokesync/game-service/internal/game-service/game"
-	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 	gameTransport "gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 	"gitlab.com/pokesync/game-service/internal/game-service/login"
 	"gitlab.com/pokesync/game-service/internal/game-service/server"
@@ -77,6 +76,14 @@ var loginCodec = client.NewCodec().
 	Include(login.AlreadyLoggedInConfig).
 	Include(login.InvalidCredentialsConfig)
 
+// chatCodec is a message Codec that holds marshallers and demarshallers
+// specific for the public chatting aspect of the server.
+var chatCodec = client.NewCodec().
+	Include(chat.DisplayChatMessageConfig).
+	Include(chat.SelectChatChannelConfig).
+	Include(chat.SubmitChatMessageConfig).
+	Include(chat.SwitchChatChannelConfig)
+
 // gameCodec is a message Codec that holds marshallers and demarshallers
 // specific for the game aspect of the server.
 var gameCodec = client.NewCodec().
@@ -92,25 +99,22 @@ var gameCodec = client.NewCodec().
 	Include(gameTransport.ClickTeleportConfig).
 	Include(gameTransport.CloseDialogueConfig).
 	Include(gameTransport.ContinueDialogueConfig).
-	Include(gameTransport.DisplayChatMessageConfig).
 	Include(gameTransport.FaceDirectionConfig).
 	Include(gameTransport.EntityUpdateConfig).
 	Include(gameTransport.InteractWithEntityConfig).
+	Include(gameTransport.SubmitChatCommandConfig).
 	Include(gameTransport.SelectCharacterConfig).
-	Include(gameTransport.SelectChatChannelConfig).
 	Include(gameTransport.SetDonatorPointsConfig).
 	Include(gameTransport.SetPokeDollarsConfig).
 	Include(gameTransport.SetPartySlotConfig).
 	Include(gameTransport.SwitchPartySlotsConfig).
-	Include(gameTransport.SubmitChatMessageConfig).
-	Include(gameTransport.SwitchChatChannelConfig).
-	Include(gameTransport.SubmitChatCommandConfig).
 	Include(gameTransport.SelectPlayerOptionConfig).
 	Include(gameTransport.SetServerTimeConfig)
 
 // messageCodec holds demarshallers and marshallers of messages.
 var messageCodec = client.NewCodec().
 	Join(loginCodec).
+	Join(chatCodec).
 	Join(gameCodec)
 
 // The main entry point to this game server application.
@@ -168,11 +172,6 @@ func main() {
 		WorkerCount: runtime.NumCPU(),
 	}
 
-	sessionConfig := session.Config{
-		CommandLimit: 16,
-		EventLimit:   256,
-	}
-
 	gameConfig := game.Config{
 		IntervalRate:          50 * time.Millisecond,
 		CharacterFetchTimeout: 5 * time.Second,
@@ -185,7 +184,10 @@ func main() {
 		ClockRate:         250 * time.Millisecond,
 		ClockSynchronizer: game.NewGMT0Synchronizer(),
 
-		SessionConfig: sessionConfig,
+		SessionConfig: game.SessionConfig{
+			CommandLimit: 16,
+			EventLimit:   256,
+		},
 	}
 
 	statusConfig := status.Config{
@@ -204,6 +206,10 @@ func main() {
 
 	chatConfig := chat.Config{
 		WorkerCount: runtime.NumCPU(),
+
+		SessionConfig: chat.SessionConfig{
+			BufferLimit: 32,
+		},
 	}
 
 	clientConfig := client.Config{
@@ -265,6 +271,7 @@ func main() {
 	logger.Info("Account worker count: ", accountConfig.WorkerCount)
 	logger.Info("Login worker count: ", loginConfig.WorkerCount)
 	logger.Info("Character worker count: ", charactersConfig.WorkerCount)
+	logger.Info("Chat worker count: ", chatConfig.WorkerCount)
 
 	logger.Info("Account fetch timeout: ", authConfig.AccountFetchTimeout)
 	logger.Info("Character fetch timeout: ", gameConfig.CharacterFetchTimeout)
@@ -272,8 +279,10 @@ func main() {
 	logger.Info("Upstream byte limit: ", clientConfig.ReadBufferSize)
 	logger.Info("Downstream byte limit: ", clientConfig.WriteBufferSize)
 
-	logger.Info("Session command limit: ", sessionConfig.CommandLimit)
-	logger.Info("Session event limit: ", sessionConfig.EventLimit)
+	logger.Info("Chat message buffer limit: ", chatConfig.SessionConfig.BufferLimit)
+
+	logger.Info("Game Session command limit: ", gameConfig.SessionConfig.CommandLimit)
+	logger.Info("Game Session event limit: ", gameConfig.SessionConfig.EventLimit)
 
 	logger.Info("Server status update rate: ", statusConfig.RefreshRate)
 

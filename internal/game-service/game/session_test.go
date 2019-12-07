@@ -1,4 +1,4 @@
-package session
+package game
 
 import (
 	"testing"
@@ -13,9 +13,9 @@ import (
 
 func TestSession_QueueCommand(t *testing.T) {
 	email := account.Email("Sino@gmail.com")
-	config := Config{CommandLimit: 16, EventLimit: 16}
+	config := SessionConfig{CommandLimit: 16, EventLimit: 16}
 
-	command := &transport.SubmitChatMessage{}
+	command := &transport.AttachFollower{}
 
 	session := NewSession(nil, config, email, entity.NewEntity())
 	session.QueueCommand(command)
@@ -33,9 +33,9 @@ func TestSession_QueueCommand(t *testing.T) {
 
 func TestSession_QueueEvent(t *testing.T) {
 	email := account.Email("Sino@gmail.com")
-	config := Config{CommandLimit: 16, EventLimit: 16}
+	config := SessionConfig{CommandLimit: 16, EventLimit: 16}
 
-	event := &transport.DisplayChatMessage{}
+	event := &transport.AttachFollower{}
 
 	session := NewSession(nil, config, email, entity.NewEntity())
 	session.QueueEvent(event)
@@ -53,7 +53,7 @@ func TestSession_QueueEvent(t *testing.T) {
 
 func TestSession_DequeueCommand(t *testing.T) {
 	email := account.Email("Sino@gmail.com")
-	config := Config{CommandLimit: 16, EventLimit: 16}
+	config := SessionConfig{CommandLimit: 16, EventLimit: 16}
 
 	session := NewSession(nil, config, email, entity.NewEntity())
 	commandCh := make(chan client.Message)
@@ -75,7 +75,7 @@ func TestSession_DequeueCommand(t *testing.T) {
 
 func TestSession_DequeueEvent(t *testing.T) {
 	email := account.Email("Sino@gmail.com")
-	config := Config{CommandLimit: 16, EventLimit: 16}
+	config := SessionConfig{CommandLimit: 16, EventLimit: 16}
 
 	session := NewSession(nil, config, email, entity.NewEntity())
 	eventCh := make(chan client.Message)

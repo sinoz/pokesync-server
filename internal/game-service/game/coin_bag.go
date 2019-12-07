@@ -2,7 +2,6 @@ package game
 
 import (
 	"errors"
-	"gitlab.com/pokesync/game-service/internal/game-service/game/session"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 )
 
@@ -16,7 +15,7 @@ type CoinBagListener interface {
 // for changes made to the CoinBag to visually apply these
 // changes to the Client as well.
 type CoinBagSessionListener struct {
-	session *session.Session
+	session *Session
 }
 
 // CoinBag is a player's bag of coins.

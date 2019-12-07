@@ -45,6 +45,11 @@ func NewRouter(config RouterConfig) *Router {
 	}
 }
 
+// CreateMailbox constructs a Mailbox of messages.
+func (r *Router) CreateMailbox() Mailbox {
+	return make(Mailbox)
+}
+
 // Subscribe subscribes a new Mailbox to the specified topic, which is
 // then returned so that the client caller can make use of the mailbox.
 func (r *Router) Subscribe(topic Topic) Mailbox {
@@ -55,7 +60,7 @@ func (r *Router) Subscribe(topic Topic) Mailbox {
 		r.mailboxes[topic] = []Mailbox{}
 	}
 
-	mailbox := make(Mailbox)
+	mailbox := r.CreateMailbox()
 	r.mailboxes[topic] = append(r.mailboxes[topic], mailbox)
 
 	return mailbox
