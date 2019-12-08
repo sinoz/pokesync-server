@@ -36,9 +36,9 @@ func NewEntityFactory(assets *AssetBundle) *EntityFactory {
 }
 
 // CreatePlayer creates the set of Component's to create a Player-like Entity from.
-func (factory *EntityFactory) CreatePlayer(position Position, direction Direction, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) []entity.Component {
+func (factory *EntityFactory) CreatePlayer(position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) []entity.Component {
 	return []entity.Component{
-		&TransformComponent{Position: position},
+		&TransformComponent{MovementQueue: NewMovementQueue(position)},
 		&UsernameComponent{DisplayName: displayName},
 		&RankComponent{UserGroup: userGroup},
 		&TrackingComponent{},
@@ -51,10 +51,10 @@ func (factory *EntityFactory) CreatePlayer(position Position, direction Directio
 }
 
 // CreateNpc creates the set of Component's to create a Npc-like Entity from.
-func (factory *EntityFactory) CreateNpc(position Position, direction Direction, modelID ModelID) []entity.Component {
+func (factory *EntityFactory) CreateNpc(position Position, modelID ModelID) []entity.Component {
 	return []entity.Component{
 		&ModelIDComponent{ModelID: modelID},
-		&TransformComponent{Position: position},
+		&TransformComponent{MovementQueue: NewMovementQueue(position)},
 		&KindComponent{Kind: NpcKind},
 		&BlockingComponent{},
 		&TrackingComponent{},
@@ -62,10 +62,10 @@ func (factory *EntityFactory) CreateNpc(position Position, direction Direction, 
 }
 
 // CreateMonster creates the set of Component's to create a Monster-like Entity from.
-func (factory *EntityFactory) CreateMonster(position Position, direction Direction, modelID ModelID) []entity.Component {
+func (factory *EntityFactory) CreateMonster(position Position, modelID ModelID) []entity.Component {
 	return []entity.Component{
 		&ModelIDComponent{ModelID: modelID},
-		&TransformComponent{Position: position},
+		&TransformComponent{MovementQueue: NewMovementQueue(position)},
 		&TrackingComponent{},
 		&HealthComponent{Max: 1, Current: 1}, // TODO
 		&KindComponent{Kind: MonsterKind},
@@ -73,6 +73,8 @@ func (factory *EntityFactory) CreateMonster(position Position, direction Directi
 }
 
 // CreateObject creates the set of Component's to create a Object-like Entity from.
-func (factory *EntityFactory) CreateObject(position Position, direction Direction) []entity.Component {
-	return []entity.Component{}
+func (factory *EntityFactory) CreateObject(position Position) []entity.Component {
+	return []entity.Component{
+		&TransformComponent{MovementQueue: NewMovementQueue(position)},
+	}
 }

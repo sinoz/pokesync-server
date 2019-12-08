@@ -17,7 +17,14 @@ func PlayerBy(entity *entity.Entity) *Player {
 
 // Face updates the Player's character sprite to face the speciifed direction.
 func (plr *Player) Face(direction Direction) {
-	// TODO
+	transform := plr.GetComponent(TransformTag).(*TransformComponent)
+	transform.MovementQueue.AddDirectionToFace(direction)
+}
+
+// Move tells the Player to move towards the specified Direction.
+func (plr *Player) Move(direction Direction) {
+	transform := plr.GetComponent(TransformTag).(*TransformComponent)
+	transform.MovementQueue.AddStep(direction)
 }
 
 // MoveTo tells the Player to move to the specified coordinates.
@@ -64,7 +71,7 @@ func (plr *Player) Rank() character.UserGroup {
 
 // Position returns the player's current Position on the game map.
 func (plr *Player) Position() Position {
-	return plr.GetComponent(TransformTag).(*TransformComponent).Position
+	return plr.GetComponent(TransformTag).(*TransformComponent).MovementQueue.Position
 }
 
 // CoinBag returns the player's bag of coins.

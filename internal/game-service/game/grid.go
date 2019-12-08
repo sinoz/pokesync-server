@@ -290,12 +290,13 @@ func AddStep(position Position, direction Direction, grid *Grid) (Position, erro
 
 	if localX < 0 {
 		mapX--
-		localX = mapWidth - 1
 
-		_, err := grid.GetMap(mapX, mapZ)
+		newMap, err := grid.GetMap(mapX, mapZ)
 		if err != nil {
 			return position, err
 		}
+
+		localX = newMap.Width() - 1
 	} else if localX >= mapWidth {
 		mapX++
 		localX = 0
@@ -306,12 +307,13 @@ func AddStep(position Position, direction Direction, grid *Grid) (Position, erro
 		}
 	} else if localZ < 0 {
 		mapZ--
-		localZ = mapLength - 1
 
-		_, err := grid.GetMap(mapX, mapZ)
+		newMap, err := grid.GetMap(mapX, mapZ)
 		if err != nil {
 			return position, err
 		}
+
+		localZ = newMap.Length() - 1
 	} else if localZ >= mapLength {
 		mapZ++
 		localZ = 0

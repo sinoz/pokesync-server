@@ -170,7 +170,8 @@ func NewGame(config Config, assets *AssetBundle, logger *zap.SugaredLogger) *Gam
 		world:         world,
 		entityFactory: entityFactory,
 		eventBus:      eventBus,
-		chatCommands: chatCommands,
+		grid:          assets.Grid,
+		chatCommands:  chatCommands,
 	}
 
 	world.AddSystem(NewInboundNetworkSystem(
@@ -188,7 +189,7 @@ func NewGame(config Config, assets *AssetBundle, logger *zap.SugaredLogger) *Gam
 		withSubmitChatCommandHandler(submitChatCommand(chatCommands)),
 	))
 
-	world.AddSystem(NewWalkingSystem())
+	world.AddSystem(NewWalkingSystem(assets.Grid))
 	world.AddSystem(NewRunningSystem())
 	world.AddSystem(NewCyclingSystem())
 	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))
@@ -299,7 +300,7 @@ func (service *Service) transformEntityToCharacterProfile(entity *entity.Entity)
 	userGroup := rankComponent.UserGroup
 
 	transformComponent := entity.GetComponent(TransformTag).(*TransformComponent)
-	position := transformComponent.Position
+	position := transformComponent.MovementQueue.Position
 
 	lastLoggedIn := time.Now()
 
@@ -423,7 +424,7 @@ func (service *Service) createNewInstalledSession(cl *client.Client, config Sess
 
 // AddPlayer adds a player Entity with the specified details.
 func (game *Game) AddPlayer(position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) (*entity.Entity, bool) {
-	components := game.entityFactory.CreatePlayer(position, South, gender, displayName, userGroup)
+	components := game.entityFactory.CreatePlayer(position, gender, displayName, userGroup)
 
 	return game.
 		world.
@@ -434,7 +435,7 @@ func (game *Game) AddPlayer(position Position, gender Gender, displayName charac
 
 // AddNpc adds a npc-like Entity with the specified details.
 func (game *Game) AddNpc(modelID ModelID, position Position) (*entity.Entity, bool) {
-	components := game.entityFactory.CreateNpc(position, South, modelID)
+	components := game.entityFactory.CreateNpc(position, modelID)
 
 	return game.
 		world.
@@ -445,7 +446,7 @@ func (game *Game) AddNpc(modelID ModelID, position Position) (*entity.Entity, bo
 
 // AddMonster adds a monster-like Entity with the specified details.
 func (game *Game) AddMonster(modelID ModelID, position Position) (*entity.Entity, bool) {
-	components := game.entityFactory.CreateMonster(position, South, modelID)
+	components := game.entityFactory.CreateMonster(position, modelID)
 
 	return game.
 		world.

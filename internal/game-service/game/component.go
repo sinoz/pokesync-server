@@ -48,7 +48,7 @@ type CanRunComponent struct{}
 // TransformComponent holds the entity's Position in the game world
 // and keeps track of its recent movements.
 type TransformComponent struct {
-	Position Position
+	MovementQueue *MovementQueue
 }
 
 // BlockingComponent marks an Entity as blocking all other entities paths.

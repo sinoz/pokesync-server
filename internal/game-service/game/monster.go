@@ -39,7 +39,24 @@ func MonsterBy(entity *entity.Entity, id MonsterID, gender Gender, condition Sta
 	return &Monster{entity, id, gender, condition, coloration}
 }
 
+// Face updates the Monster's sprite to face the specified direction.
+func (mon *Monster) Face(direction Direction) {
+	transform := mon.GetComponent(TransformTag).(*TransformComponent)
+	transform.MovementQueue.AddDirectionToFace(direction)
+}
+
+// Move tells the Monster to move towards the specified Direction.
+func (mon *Monster) Move(direction Direction) {
+	transform := mon.GetComponent(TransformTag).(*TransformComponent)
+	transform.MovementQueue.AddStep(direction)
+}
+
+// MoveTo tells the Monster to move to the specified coordinates.
+func (mon *Monster) MoveTo(mapX, mapZ, localX, localZ int) {
+	// TODO
+}
+
 // Position returns the monster's current Position on the game map.
 func (mon *Monster) Position() Position {
-	return mon.GetComponent(TransformTag).(*TransformComponent).Position
+	return mon.GetComponent(TransformTag).(*TransformComponent).MovementQueue.Position
 }
