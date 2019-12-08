@@ -1,5 +1,7 @@
 package game
 
+import "gitlab.com/pokesync/game-service/internal/game-service/game/entity"
+
 const (
 	RegularColour MonsterColoration = 0
 	ShinyColour   MonsterColoration = 1
@@ -22,10 +24,22 @@ type MonsterColoration int
 // StatusCondition describes a condition a monster is in.
 type StatusCondition int
 
-// Monster represents a monster.
+// Monster is a type of Entity.
 type Monster struct {
+	*entity.Entity
+
 	ID              MonsterID
 	Gender          Gender
 	StatusCondition StatusCondition
 	Coloration      MonsterColoration
+}
+
+// MonsterBy wraps the given Entity as a Monster.
+func MonsterBy(entity *entity.Entity, id MonsterID, gender Gender, condition StatusCondition, coloration MonsterColoration) *Monster {
+	return &Monster{entity, id, gender, condition, coloration}
+}
+
+// Position returns the monster's current Position on the game map.
+func (mon *Monster) Position() Position {
+	return mon.GetComponent(TransformTag).(*TransformComponent).Position
 }

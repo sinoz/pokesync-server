@@ -1,9 +1,7 @@
 package game
 
-import "gitlab.com/pokesync/game-service/internal/game-service/game/entity"
-
 func continueDialogue() continueDialogueHandler {
-	return func(entity *entity.Entity) error {
+	return func(plr *Player) error {
 		return nil
 	}
 }

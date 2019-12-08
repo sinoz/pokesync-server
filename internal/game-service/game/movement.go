@@ -148,28 +148,26 @@ func (processor *CyclingProcessor) Components() entity.ComponentTag {
 	return TransformTag
 }
 
-// faceDirection tells the given Entity to change its currently
-// facing direction to the specified one.
 func faceDirection() faceDirectionHandler {
-	return func(entity *entity.Entity, direction Direction) error {
+	return func(plr *Player, direction Direction) error {
 		return nil
 	}
 }
 
 func changeMovementType() changeMovementTypeHandler {
-	return func(entity *entity.Entity, movementType MovementType) error {
+	return func(plr *Player, movementType MovementType) error {
 		return nil
 	}
 }
 
 func moveAvatar() moveAvatarHandler {
-	return func(entity *entity.Entity, direction Direction) error {
+	return func(plr *Player, direction Direction) error {
 		return nil
 	}
 }
 
 func clickTeleport() clickTeleportHandler {
-	return func(entity *entity.Entity, mapX, mapZ, localX, localZ int) error {
+	return func(plr *Player, mapX, mapZ, localX, localZ int) error {
 		return nil
 	}
 }
