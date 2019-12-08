@@ -42,7 +42,7 @@ func (factory *EntityFactory) CreatePlayer(position Position, gender Gender, dis
 		&UsernameComponent{DisplayName: displayName},
 		&RankComponent{UserGroup: userGroup},
 		&TrackingComponent{},
-		&MapViewComponent{},
+		&MapViewComponent{MapView: NewMapView()},
 		&CanRunComponent{},
 		&KindComponent{Kind: PlayerKind},
 		&CoinBagComponent{CoinBag: NewCoinBag()},

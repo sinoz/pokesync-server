@@ -132,7 +132,10 @@ func (processor *WalkingProcessor) Update(world *entity.World, deltaTime time.Du
 			}
 
 			if oldPos.MapX != newPos.MapX || oldPos.MapZ != newPos.MapZ {
-				// TODO
+				if ent.Contains(MapViewTag) {
+					mapView := ent.GetComponent(MapViewTag).(*MapViewComponent).MapView
+					mapView.Refresh(newPos.MapX, newPos.MapZ)
+				}
 			}
 
 			transform.MovementQueue.Position = newPos

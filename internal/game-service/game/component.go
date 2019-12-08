@@ -74,6 +74,7 @@ type SessionComponent struct {
 
 // MapViewComponent keeps track of an entity's map view.
 type MapViewComponent struct {
+	MapView *MapView
 }
 
 // PartyBeltComponent is an entity Component that holds the PartyBelt.

@@ -189,11 +189,11 @@ func NewGame(config Config, assets *AssetBundle, logger *zap.SugaredLogger) *Gam
 		withSubmitChatCommandHandler(submitChatCommand(chatCommands)),
 	))
 
-	world.AddSystem(NewWalkingSystem(assets.Grid))
+	world.AddSystem(NewWalkingSystem(game.grid))
 	world.AddSystem(NewRunningSystem())
 	world.AddSystem(NewCyclingSystem())
 	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))
-	world.AddSystem(NewMapViewSystem(eventBus))
+	world.AddSystem(NewMapViewSystem(game.grid))
 	world.AddSystem(NewOutboundNetworkSystem())
 
 	return game
@@ -410,6 +410,10 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 // into the given Entity's components.
 func (service *Service) createNewInstalledSession(cl *client.Client, config SessionConfig, email account.Email, entity *entity.Entity) *Session {
 	session := NewSession(cl, config, email, entity)
+
+	entity.
+		GetComponent(MapViewTag).(*MapViewComponent).MapView.
+		AddListener(&MapViewSessionListener{session: session})
 
 	entity.
 		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.
