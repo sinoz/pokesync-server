@@ -41,6 +41,9 @@ func (factory *EntityFactory) CreatePlayer(position Position, direction Directio
 		&TransformComponent{Position: position},
 		&UsernameComponent{DisplayName: displayName},
 		&RankComponent{UserGroup: userGroup},
+		&TrackingComponent{},
+		&MapViewComponent{},
+		&CanRunComponent{},
 		&KindComponent{Kind: PlayerKind},
 		&CoinBagComponent{CoinBag: NewCoinBag()},
 		&PartyBeltComponent{PartyBelt: NewPartyBelt()},
@@ -63,6 +66,7 @@ func (factory *EntityFactory) CreateMonster(position Position, direction Directi
 	return []entity.Component{
 		&ModelIDComponent{ModelID: modelID},
 		&TransformComponent{Position: position},
+		&TrackingComponent{},
 		&HealthComponent{Max: 1, Current: 1}, // TODO
 		&KindComponent{Kind: MonsterKind},
 	}

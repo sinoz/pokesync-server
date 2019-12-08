@@ -4,22 +4,23 @@ import (
 	"time"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
+	"gitlab.com/pokesync/game-service/pkg/event"
 )
 
 // MapViewProcessor processes map view changes.
 type MapViewProcessor struct {
-	// TODO
+	eventBus event.Bus
 }
 
 // NewMapViewSystem constructs a new instance of an entity.System with
 // a MapViewProcessor as its internal processor.
-func NewMapViewSystem() *entity.System {
-	return entity.NewSystem(entity.NewDefaultSystemPolicy(), NewMapViewProcessor())
+func NewMapViewSystem(eventBus event.Bus) *entity.System {
+	return entity.NewSystem(entity.NewDefaultSystemPolicy(), NewMapViewProcessor(eventBus))
 }
 
 // NewMapViewProcessor constructs a new instance of a MapViewProcessor.
-func NewMapViewProcessor() *MapViewProcessor {
-	return &MapViewProcessor{}
+func NewMapViewProcessor(eventBus event.Bus) *MapViewProcessor {
+	return &MapViewProcessor{eventBus: eventBus}
 }
 
 // AddedToWorld is called when the System of this Processor is added

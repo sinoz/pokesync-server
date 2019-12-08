@@ -36,6 +36,9 @@ func NewPartyBelt() *PartyBelt {
 	return &PartyBelt{}
 }
 
+// Add adds the given Monster instance to the Party. Returns whether
+// this operation was successful or not. If false, it is an indication
+// that the Party belt is currently full and cannot accept new Monster's.
 func (belt *PartyBelt) Add(monster *Monster) bool {
 	if belt.IsFull() {
 		return false
@@ -49,6 +52,8 @@ func (belt *PartyBelt) Add(monster *Monster) bool {
 	return true
 }
 
+// Swap swaps the Monster instances found in the two given slots. May return
+// an error if either slots are out of bounds of the party's current size.
 func (belt *PartyBelt) Swap(slotFrom, slotTo int) error {
 	if err := belt.checkBoundaries(slotFrom); err != nil {
 		return err
@@ -70,6 +75,9 @@ func (belt *PartyBelt) Swap(slotFrom, slotTo int) error {
 	return nil
 }
 
+// Clear nullifies any Monster instance that is set at the specified slot.
+// May return an error if the given slot is out of bounds of the party's
+// current size.
 func (belt *PartyBelt) Clear(slot int) (*Monster, error) {
 	if err := belt.checkBoundaries(slot); err != nil {
 		return nil, err
@@ -82,6 +90,8 @@ func (belt *PartyBelt) Clear(slot int) (*Monster, error) {
 	return before, nil
 }
 
+// Set overrides the specified slot with the given Monster instance. May return
+// an error if the given slot is out of bounds of the party's current size.
 func (belt *PartyBelt) Set(slot int, monster *Monster) (*Monster, error) {
 	if err := belt.checkBoundaries(slot); err != nil {
 		return nil, err
@@ -95,6 +105,8 @@ func (belt *PartyBelt) Set(slot int, monster *Monster) (*Monster, error) {
 	return before, nil
 }
 
+// Get looks up a Monster in the specified slot. May return an error if
+// the given slot is out of bounds of the party's current size.
 func (belt *PartyBelt) Get(slot int) (*Monster, error) {
 	if err := belt.checkBoundaries(slot); err != nil {
 		return nil, err

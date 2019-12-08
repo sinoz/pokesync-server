@@ -5,6 +5,8 @@ import (
 	"reflect"
 	"time"
 
+	"gitlab.com/pokesync/game-service/pkg/event"
+
 	"gitlab.com/pokesync/game-service/internal/game-service/chat"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 
@@ -28,6 +30,8 @@ type Config struct {
 
 	ClockRate         time.Duration
 	ClockSynchronizer ClockSynchronizer
+
+	Modules []Module
 }
 
 // CharacterProvider attempts to provide a character Profile.
@@ -72,6 +76,15 @@ type Service struct {
 	game *Game
 }
 
+// Game represents the game, mkay.
+type Game struct {
+	world         *entity.World
+	entityFactory *EntityFactory
+	eventBus      event.Bus
+	grid          *Grid
+	chatCommands  *ChatCommandRegistry
+}
+
 const (
 	// AuthenticationEventTopic is a topic for authentication events.
 	AuthenticationEventTopic = "auth_event"
@@ -87,10 +100,8 @@ var messageTopicsOfInterest = []client.Topic{
 	transport.ClearFollowerConfig.Topic,
 	transport.ClickTeleportConfig.Topic,
 	transport.ContinueDialogueConfig.Topic,
-	transport.CloseDialogueConfig.Topic,
 	transport.FaceDirectionConfig.Topic,
 	transport.InteractWithEntityConfig.Topic,
-	transport.SwitchPartySlotsConfig.Topic,
 	transport.SelectPlayerOptionConfig.Topic,
 	transport.SubmitChatCommandConfig.Topic,
 	client.TerminationTopic,
@@ -126,7 +137,7 @@ func NewService(config Config, routing *client.Router, characterProvider Charact
 	}
 
 	service.sessions = NewSessionRegistry()
-	service.game = NewGame(assets, createWorld(config, logger, assets))
+	service.game = NewGame(config, assets, logger)
 
 	service.pulser = newPulser(config.IntervalRate)
 	service.mailbox = routing.CreateMailbox()
@@ -135,23 +146,56 @@ func NewService(config Config, routing *client.Router, characterProvider Charact
 		routing.SubscribeMailboxToTopic(topic, service.mailbox)
 	}
 
+	for _, module := range config.Modules {
+		module(&DependencyKit{
+			assets: assets,
+			game:   service.game,
+			logger: logger,
+		})
+	}
+
 	go service.receive()
 
 	return service
 }
 
-// createWorld constructs a new instance of a World, preconfigured
-// with all of its necessary system and processors for the game service
-// to process game logic.
-func createWorld(config Config, logger *zap.SugaredLogger, assets *AssetBundle) *entity.World {
+// NewGame constructs a new Game.
+func NewGame(config Config, assets *AssetBundle, logger *zap.SugaredLogger) *Game {
 	world := entity.NewWorld(config.EntityLimit)
+	entityFactory := NewEntityFactory(assets)
+	eventBus := event.NewSerialBus()
+	chatCommands := NewChatCommandRegistry()
 
-	world.AddSystem(NewInboundNetworkSystem(logger))
+	game := &Game{
+		world:         world,
+		entityFactory: entityFactory,
+		eventBus:      eventBus,
+		chatCommands: chatCommands,
+	}
+
+	world.AddSystem(NewInboundNetworkSystem(
+		logger,
+
+		withAttachFollowerHandler(attachFollower()),
+		withClearFollowerHandler(clearFollower()),
+		withClickTeleportHandler(clickTeleport()),
+		withContinueDialogueHandler(continueDialogue()),
+		withSelectPlayerOptionHandler(selectPlayerOption()),
+		withEntityInteraction(interactWithEntity()),
+		withDirectionFacingHandler(faceDirection()),
+		withMoveAvatarHandler(moveAvatar()),
+		withMovementTypeChangeHandler(changeMovementType()),
+		withSubmitChatCommandHandler(submitChatCommand(chatCommands)),
+	))
+
+	world.AddSystem(NewWalkingSystem())
+	world.AddSystem(NewRunningSystem())
+	world.AddSystem(NewCyclingSystem())
 	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))
-	world.AddSystem(NewMapViewSystem())
+	world.AddSystem(NewMapViewSystem(eventBus))
 	world.AddSystem(NewOutboundNetworkSystem())
 
-	return world
+	return game
 }
 
 // newPulser constructs a new pulser that operates at the specified
@@ -328,7 +372,7 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 	session := service.createNewInstalledSession(cl, service.config.SessionConfig, account.Email, plr)
 	service.sessions.Put(cl.ID, session)
 
-	plr.Add(&SessionComponent{Session: session})
+	plr.Add(&SessionComponent{session: session})
 
 	plr.
 		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.
@@ -375,6 +419,64 @@ func (service *Service) createNewInstalledSession(cl *client.Client, config Sess
 		AddListener(&PartyBeltSessionListener{session: session})
 
 	return session
+}
+
+// AddPlayer adds a player Entity with the specified details.
+func (game *Game) AddPlayer(position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) (*entity.Entity, bool) {
+	components := game.entityFactory.CreatePlayer(position, South, gender, displayName, userGroup)
+
+	return game.
+		world.
+		CreateEntity().
+		With(components...).
+		Build()
+}
+
+// AddNpc adds a npc-like Entity with the specified details.
+func (game *Game) AddNpc(modelID ModelID, position Position) (*entity.Entity, bool) {
+	components := game.entityFactory.CreateNpc(position, South, modelID)
+
+	return game.
+		world.
+		CreateEntity().
+		With(components...).
+		Build()
+}
+
+// AddMonster adds a monster-like Entity with the specified details.
+func (game *Game) AddMonster(modelID ModelID, position Position) (*entity.Entity, bool) {
+	components := game.entityFactory.CreateMonster(position, South, modelID)
+
+	return game.
+		world.
+		CreateEntity().
+		With(components...).
+		Build()
+}
+
+// RemovePlayer removes the given Player-like entity.
+func (game *Game) RemovePlayer(entity *entity.Entity) {
+	game.RemoveEntity(entity)
+}
+
+// RemoveNpc removes the given Npc-like entity.
+func (game *Game) RemoveNpc(entity *entity.Entity) {
+	game.RemoveEntity(entity)
+}
+
+// RemoveMonster removes the given Monster-like entity.
+func (game *Game) RemoveMonster(entity *entity.Entity) {
+	game.RemoveEntity(entity)
+}
+
+// RemoveEntity removes the given Entity from the game world.
+func (game *Game) RemoveEntity(entity *entity.Entity) {
+	game.world.DestroyEntity(entity)
+}
+
+// pulse is called every game pulse to process the game.
+func (game *Game) pulse(deltaTime time.Duration) error {
+	return game.world.Update(deltaTime)
 }
 
 // pulse is called every pulse or tick to process the game.

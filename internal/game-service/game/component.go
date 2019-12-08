@@ -63,13 +63,13 @@ type KindComponent struct {
 // TrackingComponent keeps track of entities that are nearby the
 // Entity this Component is for.
 type TrackingComponent struct {
-	Nearby []*entity.Entity
+	nearby []*entity.Entity
 }
 
 // SessionComponent holds a Session instance, which indicates
 // that the entity was created out of a request from a client user.
 type SessionComponent struct {
-	Session *Session
+	session *Session
 }
 
 // MapViewComponent keeps track of an entity's map view.

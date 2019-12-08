@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis"
+	"gitlab.com/pokesync/game-service/internal/game-logic/commands"
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/character"
 	"gitlab.com/pokesync/game-service/internal/game-service/chat"
@@ -107,7 +108,6 @@ var gameCodec = client.NewCodec().
 	Include(gameTransport.SetDonatorPointsConfig).
 	Include(gameTransport.SetPokeDollarsConfig).
 	Include(gameTransport.SetPartySlotConfig).
-	Include(gameTransport.SwitchPartySlotsConfig).
 	Include(gameTransport.SelectPlayerOptionConfig).
 	Include(gameTransport.SetServerTimeConfig)
 
@@ -188,6 +188,10 @@ func main() {
 			CommandLimit: 16,
 			EventLimit:   256,
 		},
+
+		Modules: []game.Module{
+			commands.Module,
+		},
 	}
 
 	statusConfig := status.Config{
@@ -207,9 +211,7 @@ func main() {
 	chatConfig := chat.Config{
 		WorkerCount: runtime.NumCPU(),
 
-		SessionConfig: chat.SessionConfig{
-			BufferLimit: 32,
-		},
+		SessionConfig: chat.SessionConfig{},
 	}
 
 	clientConfig := client.Config{
@@ -278,8 +280,6 @@ func main() {
 
 	logger.Info("Upstream byte limit: ", clientConfig.ReadBufferSize)
 	logger.Info("Downstream byte limit: ", clientConfig.WriteBufferSize)
-
-	logger.Info("Chat message buffer limit: ", chatConfig.SessionConfig.BufferLimit)
 
 	logger.Info("Game Session command limit: ", gameConfig.SessionConfig.CommandLimit)
 	logger.Info("Game Session event limit: ", gameConfig.SessionConfig.EventLimit)
