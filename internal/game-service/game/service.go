@@ -52,8 +52,10 @@ type pulser struct {
 	rate     time.Duration
 	lastTime time.Time
 
-	quit   chan bool
+	quit chan bool
+
 	pulses chan pulse
+	resume chan time.Duration
 }
 
 // Service is an implementation of a game service that provides
@@ -208,6 +210,7 @@ func newPulser(intervalRate time.Duration) *pulser {
 	pulser.lastTime = time.Now()
 
 	pulser.quit = make(chan bool, 1)
+	pulser.resume = make(chan time.Duration)
 	pulser.pulses = make(chan pulse)
 
 	go func() {
@@ -216,9 +219,16 @@ func newPulser(intervalRate time.Duration) *pulser {
 				break
 			}
 
+			// send out a heartbeat into the stream
 			pulser.pulses <- pulseInstance
 
-			timeElapsed := time.Since(pulser.lastTime)
+			// and then we wait for confirmation to resume, which is to
+			// indicate that processing of the pulse has been completed.
+			// the 'resume' channel gives us back the amount of time it
+			// had taken to process the pulse, which we can then use to
+			// calculate the amount of time we have left to sleep until
+			// we send out the next heartbeat.
+			timeElapsed := <-pulser.resume
 			timeToSleep := intervalRate - timeElapsed
 			if timeToSleep > 0 {
 				time.Sleep(timeToSleep)
@@ -302,6 +312,13 @@ func (service *Service) transformEntityToCharacterProfile(entity *entity.Entity)
 	transformComponent := entity.GetComponent(TransformTag).(*TransformComponent)
 	position := transformComponent.MovementQueue.Position
 
+	bicycleComponent := entity.GetComponent(BicycleTag).(*BicycleComponent)
+	bicycleType := bicycleComponent.BicycleType
+
+	coinBagComponent := entity.GetComponent(CoinBagTag).(*CoinBagComponent)
+	pokedollars := coinBagComponent.CoinBag.Dollars
+	donatorPoints := coinBagComponent.CoinBag.DonatorPoints
+
 	lastLoggedIn := time.Now()
 
 	return &character.Profile{
@@ -309,7 +326,11 @@ func (service *Service) transformEntityToCharacterProfile(entity *entity.Entity)
 		LastLoggedIn: &lastLoggedIn,
 		UserGroup:    userGroup,
 
-		Gender: 0,
+		Gender:      0,
+		BicycleType: int(bicycleType),
+
+		PokeDollars:   pokedollars,
+		DonatorPoints: donatorPoints,
 
 		MapX:   position.MapX,
 		MapZ:   position.MapZ,
@@ -375,15 +396,18 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 
 	plr.Add(&SessionComponent{session: session})
 
-	plr.
-		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.
-		AddPokeDollars(5000)
+	coinBagComponent := plr.GetComponent(CoinBagTag).(*CoinBagComponent)
+	coinBagComponent.CoinBag.AddPokeDollars(character.PokeDollars)
+	coinBagComponent.CoinBag.AddDonatorPoints(character.DonatorPoints)
 
 	plr.
 		GetComponent(PartyBeltTag).(*PartyBeltComponent).PartyBelt.
 		Add(&Monster{
 			ID: MonsterID(150),
 		})
+
+	bicycleComponent := plr.GetComponent(BicycleTag).(*BicycleComponent)
+	bicycleComponent.BicycleType = BicycleType(character.BicycleType)
 
 	cl.SendNow(&transport.LoginSuccess{
 		PID:         uint16(plr.ID),
@@ -492,6 +516,8 @@ func (service *Service) pulse() {
 	if err := service.game.pulse(deltaTime); err != nil {
 		service.logger.Error(err)
 	}
+
+	service.pulser.resume <- time.Since(service.pulser.lastTime)
 }
 
 // Stop stops this Service and cleans up resources.

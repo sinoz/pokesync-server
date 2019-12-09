@@ -10,15 +10,16 @@ const (
 	RankTag      entity.ComponentTag = 1
 	UsernameTag  entity.ComponentTag = 2
 	HealthTag    entity.ComponentTag = 3
-	CanRunTag    entity.ComponentTag = 4
-	TransformTag entity.ComponentTag = 5
-	KindTag      entity.ComponentTag = 6
-	TrackingTag  entity.ComponentTag = 7
-	SessionTag   entity.ComponentTag = 8
-	MapViewTag   entity.ComponentTag = 9
-	BlockingTag  entity.ComponentTag = 10
-	PartyBeltTag entity.ComponentTag = 11
-	CoinBagTag   entity.ComponentTag = 12
+	BicycleTag   entity.ComponentTag = 4
+	CanRunTag    entity.ComponentTag = 5
+	TransformTag entity.ComponentTag = 6
+	KindTag      entity.ComponentTag = 7
+	TrackingTag  entity.ComponentTag = 8
+	SessionTag   entity.ComponentTag = 9
+	MapViewTag   entity.ComponentTag = 10
+	BlockingTag  entity.ComponentTag = 11
+	PartyBeltTag entity.ComponentTag = 12
+	CoinBagTag   entity.ComponentTag = 13
 )
 
 // ModelIDComponent holds a model id of an entity.
@@ -40,6 +41,11 @@ type UsernameComponent struct {
 type HealthComponent struct {
 	Max     int
 	Current int
+}
+
+// BicycleComponent holds the type of Bicycle an Entity owns.
+type BicycleComponent struct {
+	BicycleType BicycleType
 }
 
 // CanRunComponent marks an entity as being able to run.
@@ -109,6 +115,12 @@ func (component *HealthComponent) Tag() entity.ComponentTag {
 // and storage purposes.
 func (component *UsernameComponent) Tag() entity.ComponentTag {
 	return UsernameTag
+}
+
+// Tag returns the tag of a Component instance for identification
+// and storage purposes.
+func (component *BicycleComponent) Tag() entity.ComponentTag {
+	return BicycleTag
 }
 
 // Tag returns the tag of a Component instance for identification

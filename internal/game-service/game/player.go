@@ -51,7 +51,9 @@ func (plr *Player) Run() {
 
 // HasBicycle returns whether the Player owns a bicycle to ride on.
 func (plr *Player) HasBicycle() bool {
-	return false
+	return plr.
+		GetComponent(BicycleTag).(*BicycleComponent).
+		BicycleType != NoBike
 }
 
 // Cycle tells the Player to start cycling from now on. Returns false

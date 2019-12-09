@@ -71,6 +71,8 @@ func (repo *InMemoryRepository) Get(email account.Email) (*Profile, error) {
 			Gender:    0,
 			UserGroup: 5,
 
+			BicycleType: 1,
+
 			MapX:   0,
 			MapZ:   2,
 			LocalX: 60,

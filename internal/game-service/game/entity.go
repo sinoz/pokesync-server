@@ -43,6 +43,7 @@ func (factory *EntityFactory) CreatePlayer(position Position, gender Gender, dis
 		&RankComponent{UserGroup: userGroup},
 		&TrackingComponent{},
 		&MapViewComponent{MapView: NewMapView()},
+		&BicycleComponent{BicycleType: NoBike},
 		&CanRunComponent{},
 		&KindComponent{Kind: PlayerKind},
 		&CoinBagComponent{CoinBag: NewCoinBag()},

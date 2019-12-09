@@ -29,6 +29,10 @@ type Profile struct {
 
 	Gender int `json:"gender"`
 
+	BicycleType   int `json:"bicycleType"`
+	PokeDollars   int `json:"pokedollars"`
+	DonatorPoints int `json:"donatorPoints"`
+
 	MapX   int `json:"mapX"`
 	MapZ   int `json:"mapZ"`
 	LocalX int `json:"localX"`
