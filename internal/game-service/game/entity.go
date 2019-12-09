@@ -48,6 +48,7 @@ func (factory *EntityFactory) CreatePlayer(position Position, gender Gender, dis
 		&KindComponent{Kind: PlayerKind},
 		&CoinBagComponent{CoinBag: NewCoinBag()},
 		&PartyBeltComponent{PartyBelt: NewPartyBelt()},
+		&WaryOfTimeComponent{},
 	}
 }
 

@@ -6,20 +6,21 @@ import (
 )
 
 const (
-	ModelIDTag   entity.ComponentTag = 0
-	RankTag      entity.ComponentTag = 1
-	UsernameTag  entity.ComponentTag = 2
-	HealthTag    entity.ComponentTag = 3
-	BicycleTag   entity.ComponentTag = 4
-	CanRunTag    entity.ComponentTag = 5
-	TransformTag entity.ComponentTag = 6
-	KindTag      entity.ComponentTag = 7
-	TrackingTag  entity.ComponentTag = 8
-	SessionTag   entity.ComponentTag = 9
-	MapViewTag   entity.ComponentTag = 10
-	BlockingTag  entity.ComponentTag = 11
-	PartyBeltTag entity.ComponentTag = 12
-	CoinBagTag   entity.ComponentTag = 13
+	ModelIDTag    entity.ComponentTag = 0
+	RankTag       entity.ComponentTag = 1
+	UsernameTag   entity.ComponentTag = 2
+	HealthTag     entity.ComponentTag = 3
+	BicycleTag    entity.ComponentTag = 4
+	CanRunTag     entity.ComponentTag = 5
+	TransformTag  entity.ComponentTag = 6
+	KindTag       entity.ComponentTag = 7
+	TrackingTag   entity.ComponentTag = 8
+	SessionTag    entity.ComponentTag = 9
+	MapViewTag    entity.ComponentTag = 10
+	BlockingTag   entity.ComponentTag = 11
+	PartyBeltTag  entity.ComponentTag = 12
+	CoinBagTag    entity.ComponentTag = 13
+	WaryOfTimeTag entity.ComponentTag = 14
 )
 
 // ModelIDComponent holds a model id of an entity.
@@ -92,6 +93,10 @@ type PartyBeltComponent struct {
 type CoinBagComponent struct {
 	CoinBag *CoinBag
 }
+
+// WaryOfTimeComponent is an entity component that marks an entity
+// as being able to be wary of the game time.
+type WaryOfTimeComponent struct{}
 
 // Tag returns the tag of a Component instance for identification
 // and storage purposes.
@@ -175,4 +180,10 @@ func (component *PartyBeltComponent) Tag() entity.ComponentTag {
 // and storage purposes.
 func (component *CoinBagComponent) Tag() entity.ComponentTag {
 	return CoinBagTag
+}
+
+// Tag returns the tag of a Component instance for identification
+// and storage purposes.
+func (component *WaryOfTimeComponent) Tag() entity.ComponentTag {
+	return WaryOfTimeTag
 }

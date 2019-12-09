@@ -2,8 +2,10 @@ package game
 
 import (
 	"time"
+	"fmt"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
+	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 )
 
 // MinutesInAnHour is the amount of minutes in an hour.
@@ -36,6 +38,8 @@ type GMT0Synchronizer struct{}
 type DayNightProcessor struct {
 	clock        *Clock
 	synchronizer ClockSynchronizer
+
+	lastMinute int
 }
 
 // NewClock constructs a new Clock.
@@ -128,11 +132,30 @@ func (processor *DayNightProcessor) RemovedFromWorld(world *entity.World) error 
 // Update is called every game pulse to check if entities need their map view
 // refreshed and if so, refreshes them.
 func (processor *DayNightProcessor) Update(world *entity.World, deltaTime time.Duration) error {
+	processor.clock.Pulse()
+
+	entities := world.GetEntitiesFor(processor)
+	fmt.Println(len(entities))
+	for _, ent := range entities {
+		sessionComponent := ent.GetComponent(SessionTag).(*SessionComponent)
+
+		currentHour := processor.clock.CurrentHour()
+		currentMinute := processor.clock.CurrentMinute()
+		if currentMinute != processor.lastMinute {
+			sessionComponent.session.QueueEvent(&transport.SetServerTime{
+				Hour:   byte(currentHour),
+				Minute: byte(currentMinute),
+			})
+
+			processor.lastMinute = currentMinute
+		}
+	}
+
 	return nil
 }
 
 // Components returns a pack of ComponentTag's the DayNightProcessor has
 // interest in.
 func (processor *DayNightProcessor) Components() entity.ComponentTag {
-	return 0
+	return WaryOfTimeTag | SessionTag
 }
