@@ -190,8 +190,8 @@ func NewGame(config Config, assets *AssetBundle, logger *zap.SugaredLogger) *Gam
 	))
 
 	world.AddSystem(NewWalkingSystem(game.grid))
-	world.AddSystem(NewRunningSystem())
-	world.AddSystem(NewCyclingSystem())
+	world.AddSystem(NewRunningSystem(game.grid))
+	world.AddSystem(NewCyclingSystem(game.grid))
 	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))
 	world.AddSystem(NewMapViewSystem(game.grid))
 	world.AddSystem(NewOutboundNetworkSystem())

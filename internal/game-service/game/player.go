@@ -29,17 +29,24 @@ func (plr *Player) Move(direction Direction) {
 
 // MoveTo tells the Player to move to the specified coordinates.
 func (plr *Player) MoveTo(mapX, mapZ, localX, localZ int) {
-	// TODO
+	transform := plr.GetComponent(TransformTag).(*TransformComponent)
+	transform.MovementQueue.MoveTo(mapX, mapZ, localX, localZ)
 }
 
 // Walk tells the Player to walk from now on.
 func (plr *Player) Walk() {
-	// TODO
+	transform := plr.GetComponent(TransformTag).(*TransformComponent)
+	transform.MovementQueue.MovementType = Walk
+
+	// TODO append to tracking
 }
 
 // Run tells the Player to run from now on.
 func (plr *Player) Run() {
-	// TODO
+	transform := plr.GetComponent(TransformTag).(*TransformComponent)
+	transform.MovementQueue.MovementType = Run
+
+	// TODO append to tracking
 }
 
 // HasBicycle returns whether the Player owns a bicycle to ride on.
@@ -54,7 +61,11 @@ func (plr *Player) Cycle() bool {
 		return false
 	}
 
-	// TODO
+	transform := plr.GetComponent(TransformTag).(*TransformComponent)
+	transform.MovementQueue.MovementType = Cycle
+
+	// TODO append to tracking
+
 	return true
 }
 

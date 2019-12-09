@@ -39,6 +39,8 @@ type MovementQueue struct {
 	Facing       Direction
 	MovementType MovementType
 
+	targetPoint Position
+
 	directionsToFace []Direction
 	stepsToTake      []Direction
 }
@@ -49,10 +51,14 @@ type WalkingProcessor struct {
 }
 
 // RunningProcessor processes running steps.
-type RunningProcessor struct{}
+type RunningProcessor struct {
+	Grid *Grid
+}
 
 // CyclingProcessor processes cycling steps.
-type CyclingProcessor struct{}
+type CyclingProcessor struct {
+	Grid *Grid
+}
 
 // NewMovementQueue constructs a new instance of a MovementQueue.
 func NewMovementQueue(position Position) *MovementQueue {
@@ -69,13 +75,13 @@ func NewWalkingProcessor(grid *Grid) *WalkingProcessor {
 }
 
 // NewRunningProcessor TODO
-func NewRunningProcessor() *RunningProcessor {
-	return &RunningProcessor{}
+func NewRunningProcessor(grid *Grid) *RunningProcessor {
+	return &RunningProcessor{Grid: grid}
 }
 
 // NewCyclingProcessor TODO
-func NewCyclingProcessor() *CyclingProcessor {
-	return &CyclingProcessor{}
+func NewCyclingProcessor(grid *Grid) *CyclingProcessor {
+	return &CyclingProcessor{Grid: grid}
 }
 
 // NewWalkingSystem constructs a System that processes walking
@@ -86,14 +92,14 @@ func NewWalkingSystem(grid *Grid) *entity.System {
 
 // NewRunningSystem constructs a System that processes running
 // steps for entities.
-func NewRunningSystem() *entity.System {
-	return entity.NewSystem(entity.NewIntervalPolicy(runningVelocity), NewRunningProcessor())
+func NewRunningSystem(grid *Grid) *entity.System {
+	return entity.NewSystem(entity.NewIntervalPolicy(runningVelocity), NewRunningProcessor(grid))
 }
 
 // NewCyclingSystem constructs a System that processes cycling
 // steps for entities.
-func NewCyclingSystem() *entity.System {
-	return entity.NewSystem(entity.NewIntervalPolicy(cyclingVelocity), NewCyclingProcessor())
+func NewCyclingSystem(grid *Grid) *entity.System {
+	return entity.NewSystem(entity.NewIntervalPolicy(cyclingVelocity), NewCyclingProcessor(grid))
 }
 
 // AddedToWorld is called when the System of this Processor is added
@@ -118,29 +124,8 @@ func (processor *WalkingProcessor) Update(world *entity.World, deltaTime time.Du
 			continue
 		}
 
-		direction := transform.MovementQueue.PollDirectionToFace()
-		if direction != nil {
-			fmt.Println(*direction)
-		}
-
-		nextStep := transform.MovementQueue.PollStep()
-		if nextStep != nil {
-			oldPos := transform.MovementQueue.Position
-			newPos, err := AddStep(oldPos, *nextStep, processor.Grid)
-			if err != nil {
-				return err
-			}
-
-			if oldPos.MapX != newPos.MapX || oldPos.MapZ != newPos.MapZ {
-				if ent.Contains(MapViewTag) {
-					mapView := ent.GetComponent(MapViewTag).(*MapViewComponent).MapView
-					mapView.Refresh(newPos.MapX, newPos.MapZ)
-				}
-			}
-
-			transform.MovementQueue.Position = newPos
-			fmt.Println(newPos)
-			// TODO
+		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.Grid); err != nil {
+			return err
 		}
 	}
 
@@ -162,6 +147,18 @@ func (processor *RunningProcessor) RemovedFromWorld(world *entity.World) error {
 // Update is called every game pulse to check if entities need to take any
 // running steps and if so, applies them.
 func (processor *RunningProcessor) Update(world *entity.World, deltaTime time.Duration) error {
+	entities := world.GetEntitiesFor(processor)
+	for _, ent := range entities {
+		transform := ent.GetComponent(TransformTag).(*TransformComponent)
+		if transform.MovementQueue.MovementType != Run {
+			continue
+		}
+
+		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.Grid); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -180,6 +177,18 @@ func (processor *CyclingProcessor) RemovedFromWorld(world *entity.World) error {
 // Update is called every game pulse to check if entities need to take any
 // cycling steps and if so, applies them.
 func (processor *CyclingProcessor) Update(world *entity.World, deltaTime time.Duration) error {
+	entities := world.GetEntitiesFor(processor)
+	for _, ent := range entities {
+		transform := ent.GetComponent(TransformTag).(*TransformComponent)
+		if transform.MovementQueue.MovementType != Cycle {
+			continue
+		}
+
+		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.Grid); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -199,6 +208,50 @@ func (processor *RunningProcessor) Components() entity.ComponentTag {
 // interest in.
 func (processor *CyclingProcessor) Components() entity.ComponentTag {
 	return TransformTag
+}
+
+// takeMovementSimulationStep takes a single movement-based step within
+// the simulation of the game, for the given Entity on the given map Grid.
+func takeMovementSimulationStep(ent *entity.Entity, movementQueue *MovementQueue, grid *Grid) error {
+	direction := movementQueue.PollDirectionToFace()
+	if direction != nil {
+		fmt.Println(*direction)
+	}
+
+	nextStep := movementQueue.PollStep()
+	if nextStep != nil {
+		oldPos := movementQueue.Position
+		newPos, err := AddStep(oldPos, *nextStep, grid)
+		if err != nil {
+			return err
+		}
+
+		if oldPos.MapX != newPos.MapX || oldPos.MapZ != newPos.MapZ {
+			if ent.Contains(MapViewTag) {
+				mapView := ent.GetComponent(MapViewTag).(*MapViewComponent).MapView
+				mapView.Refresh(newPos.MapX, newPos.MapZ)
+			}
+		}
+
+		movementQueue.Position = newPos
+		fmt.Println(newPos)
+
+		// TODO add to tracking
+	}
+
+	return nil
+}
+
+// MoveTo sets the given point on the map as the target for the Entity
+// to walk towards. The route to reach the target destination is progressively
+// generated on every movement tick.
+func (queue *MovementQueue) MoveTo(mapX, mapZ, localX, localZ int) {
+	queue.targetPoint = Position{
+		MapX:   mapX,
+		MapZ:   mapZ,
+		LocalX: localX,
+		LocalZ: localZ,
+	}
 }
 
 // AddStep adds the given Direction as the next step to take.
@@ -245,6 +298,17 @@ func faceDirection() faceDirectionHandler {
 
 func changeMovementType() changeMovementTypeHandler {
 	return func(plr *Player, movementType MovementType) error {
+		switch movementType {
+		case Walk:
+			plr.Walk()
+		case Run:
+			plr.Run()
+		case Cycle:
+			plr.Cycle()
+		default:
+			return fmt.Errorf("unexpected movement type of value %v", movementType)
+		}
+
 		return nil
 	}
 }
