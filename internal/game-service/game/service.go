@@ -191,9 +191,9 @@ func NewGame(config Config, assets *AssetBundle, logger *zap.SugaredLogger) *Gam
 		withSubmitChatCommandHandler(submitChatCommand(chatCommands)),
 	))
 
-	world.AddSystem(NewWalkingSystem(game.grid))
-	world.AddSystem(NewRunningSystem(game.grid))
-	world.AddSystem(NewCyclingSystem(game.grid))
+	world.AddSystem(NewWalkingSystem(game.grid, AStarRouteFinder()))
+	world.AddSystem(NewRunningSystem(game.grid, AStarRouteFinder()))
+	world.AddSystem(NewCyclingSystem(game.grid, AStarRouteFinder()))
 	world.AddSystem(NewDayNightSystem(config.ClockRate, config.ClockSynchronizer))
 	world.AddSystem(NewMapViewSystem(game.grid))
 	world.AddSystem(NewOutboundNetworkSystem())
