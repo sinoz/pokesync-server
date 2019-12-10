@@ -17,10 +17,17 @@ const (
 	Dive     MovementType = 6
 	Glide    MovementType = 7
 
+	NoBike   BicycleType = 0
+	MachBike BicycleType = 1
+	AcroBike BicycleType = 2
+
 	walkingVelocity = 250 * time.Millisecond
 	runningVelocity = (1 * time.Second) / 6
 	cyclingVelocity = 100 * time.Millisecond
 )
+
+// BicycleType is a type of Bicycle an entity owns.
+type BicycleType int
 
 // MovementType is a type of movement an entity can perform.
 type MovementType int
@@ -39,7 +46,8 @@ type MovementQueue struct {
 	Facing       Direction
 	MovementType MovementType
 
-	targetPoint Position
+	targetPoint    *Position
+	routeStepQueue chan Direction
 
 	directionsToFace []Direction
 	stepsToTake      []Direction
@@ -47,17 +55,20 @@ type MovementQueue struct {
 
 // WalkingProcessor processes walking steps.
 type WalkingProcessor struct {
-	Grid *Grid
+	grid        *Grid
+	routeFinder RouteFinder
 }
 
 // RunningProcessor processes running steps.
 type RunningProcessor struct {
-	Grid *Grid
+	grid        *Grid
+	routeFinder RouteFinder
 }
 
 // CyclingProcessor processes cycling steps.
 type CyclingProcessor struct {
-	Grid *Grid
+	grid        *Grid
+	routeFinder RouteFinder
 }
 
 // NewMovementQueue constructs a new instance of a MovementQueue.
@@ -70,36 +81,45 @@ func NewMovementQueue(position Position) *MovementQueue {
 }
 
 // NewWalkingProcessor TODO
-func NewWalkingProcessor(grid *Grid) *WalkingProcessor {
-	return &WalkingProcessor{Grid: grid}
+func NewWalkingProcessor(grid *Grid, routeFinder RouteFinder) *WalkingProcessor {
+	return &WalkingProcessor{
+		grid:        grid,
+		routeFinder: routeFinder,
+	}
 }
 
 // NewRunningProcessor TODO
-func NewRunningProcessor(grid *Grid) *RunningProcessor {
-	return &RunningProcessor{Grid: grid}
+func NewRunningProcessor(grid *Grid, routeFinder RouteFinder) *RunningProcessor {
+	return &RunningProcessor{
+		grid:        grid,
+		routeFinder: routeFinder,
+	}
 }
 
 // NewCyclingProcessor TODO
-func NewCyclingProcessor(grid *Grid) *CyclingProcessor {
-	return &CyclingProcessor{Grid: grid}
+func NewCyclingProcessor(grid *Grid, routeFinder RouteFinder) *CyclingProcessor {
+	return &CyclingProcessor{
+		grid:        grid,
+		routeFinder: routeFinder,
+	}
 }
 
 // NewWalkingSystem constructs a System that processes walking
 // steps for entities.
-func NewWalkingSystem(grid *Grid) *entity.System {
-	return entity.NewSystem(entity.NewIntervalPolicy(walkingVelocity), NewWalkingProcessor(grid))
+func NewWalkingSystem(grid *Grid, routeFinder RouteFinder) *entity.System {
+	return entity.NewSystem(entity.NewIntervalPolicy(walkingVelocity), NewWalkingProcessor(grid, routeFinder))
 }
 
 // NewRunningSystem constructs a System that processes running
 // steps for entities.
-func NewRunningSystem(grid *Grid) *entity.System {
-	return entity.NewSystem(entity.NewIntervalPolicy(runningVelocity), NewRunningProcessor(grid))
+func NewRunningSystem(grid *Grid, routeFinder RouteFinder) *entity.System {
+	return entity.NewSystem(entity.NewIntervalPolicy(runningVelocity), NewRunningProcessor(grid, routeFinder))
 }
 
 // NewCyclingSystem constructs a System that processes cycling
 // steps for entities.
-func NewCyclingSystem(grid *Grid) *entity.System {
-	return entity.NewSystem(entity.NewIntervalPolicy(cyclingVelocity), NewCyclingProcessor(grid))
+func NewCyclingSystem(grid *Grid, routeFinder RouteFinder) *entity.System {
+	return entity.NewSystem(entity.NewIntervalPolicy(cyclingVelocity), NewCyclingProcessor(grid, routeFinder))
 }
 
 // AddedToWorld is called when the System of this Processor is added
@@ -124,7 +144,7 @@ func (processor *WalkingProcessor) Update(world *entity.World, deltaTime time.Du
 			continue
 		}
 
-		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.Grid); err != nil {
+		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.routeFinder, processor.grid); err != nil {
 			return err
 		}
 	}
@@ -154,7 +174,7 @@ func (processor *RunningProcessor) Update(world *entity.World, deltaTime time.Du
 			continue
 		}
 
-		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.Grid); err != nil {
+		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.routeFinder, processor.grid); err != nil {
 			return err
 		}
 	}
@@ -184,7 +204,7 @@ func (processor *CyclingProcessor) Update(world *entity.World, deltaTime time.Du
 			continue
 		}
 
-		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.Grid); err != nil {
+		if err := takeMovementSimulationStep(ent, transform.MovementQueue, processor.routeFinder, processor.grid); err != nil {
 			return err
 		}
 	}
@@ -212,10 +232,21 @@ func (processor *CyclingProcessor) Components() entity.ComponentTag {
 
 // takeMovementSimulationStep takes a single movement-based step within
 // the simulation of the game, for the given Entity on the given map Grid.
-func takeMovementSimulationStep(ent *entity.Entity, movementQueue *MovementQueue, grid *Grid) error {
+func takeMovementSimulationStep(ent *entity.Entity, movementQueue *MovementQueue, routeFinder RouteFinder, grid *Grid) error {
 	direction := movementQueue.PollDirectionToFace()
 	if direction != nil {
 		fmt.Println(*direction)
+	}
+
+	if movementQueue.targetPoint != nil {
+		destination := *movementQueue.targetPoint
+
+		movementQueue.routeStepQueue = make(chan Direction)
+		movementQueue.targetPoint = nil
+
+		fmt.Println(destination)
+
+		movementQueue.AddStep(<-movementQueue.routeStepQueue)
 	}
 
 	nextStep := movementQueue.PollStep()
@@ -242,11 +273,20 @@ func takeMovementSimulationStep(ent *entity.Entity, movementQueue *MovementQueue
 	return nil
 }
 
+func cake(destination Position, routeFinder RouteFinder) (chan<- bool, <-chan Direction) {
+	abort := make(chan bool, 1)
+	steps := make(chan Direction)
+
+	// TODO
+
+	return abort, steps
+}
+
 // MoveTo sets the given point on the map as the target for the Entity
 // to walk towards. The route to reach the target destination is progressively
 // generated on every movement tick.
 func (queue *MovementQueue) MoveTo(mapX, mapZ, localX, localZ int) {
-	queue.targetPoint = Position{
+	queue.targetPoint = &Position{
 		MapX:   mapX,
 		MapZ:   mapZ,
 		LocalX: localX,
