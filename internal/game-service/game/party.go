@@ -2,6 +2,7 @@ package game
 
 import (
 	"errors"
+
 	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
 )
 
@@ -13,7 +14,7 @@ const (
 
 // PartyBeltUpdateListener listens for changes made to the PartyBelt.
 type PartyBeltUpdateListener interface {
-	Updated(slot int, monster Monster)
+	Updated(slot int, monster *Monster)
 }
 
 // PartyBeltSessionListener is a PartyBeltUpdateListener that listens
@@ -47,7 +48,7 @@ func (belt *PartyBelt) Add(monster *Monster) bool {
 	belt.monsters = append(belt.monsters, monster)
 	belt.Size++
 
-	belt.notifySlotUpdated(belt.Size-1, *monster)
+	belt.notifySlotUpdated(belt.Size-1, monster)
 
 	return true
 }
@@ -69,8 +70,8 @@ func (belt *PartyBelt) Swap(slotFrom, slotTo int) error {
 	belt.monsters[slotFrom] = monsterB
 	belt.monsters[slotTo] = monsterA
 
-	belt.notifySlotUpdated(slotFrom, *monsterB)
-	belt.notifySlotUpdated(slotTo, *monsterA)
+	belt.notifySlotUpdated(slotFrom, monsterB)
+	belt.notifySlotUpdated(slotTo, monsterA)
 
 	return nil
 }
@@ -84,9 +85,11 @@ func (belt *PartyBelt) Clear(slot int) (*Monster, error) {
 	}
 
 	before := belt.monsters[slot]
-	belt.Size--
 
-	belt.notifySlotUpdated(slot, *before)
+	belt.Size--
+	belt.monsters = append(belt.monsters[:slot], belt.monsters[slot+1:]...)
+
+	belt.notifySlotUpdated(slot, nil)
 	return before, nil
 }
 
@@ -97,12 +100,26 @@ func (belt *PartyBelt) Set(slot int, monster *Monster) (*Monster, error) {
 		return nil, err
 	}
 
+	if monster == nil {
+		return nil, errors.New("make use of PartyBelt.Clear() to remove a Monster from a slot")
+	}
+
 	before := belt.monsters[slot]
 	belt.monsters[slot] = monster
 	belt.Size++
 
-	belt.notifySlotUpdated(slot, *monster)
+	belt.notifySlotUpdated(slot, monster)
 	return before, nil
+}
+
+// ClearAll clears the entire PartyBelt of Monster's.
+func (belt *PartyBelt) ClearAll() {
+	for i := 0; i < belt.Size; i++ {
+		belt.notifySlotUpdated(i, nil)
+	}
+
+	belt.monsters = []*Monster{}
+	belt.Size--
 }
 
 // Get looks up a Monster in the specified slot. May return an error if
@@ -141,7 +158,7 @@ func (belt *PartyBelt) checkBoundaries(slot int) error {
 
 // notifySlotUpdated notifies every subscribed listener
 // of the PartyBelt's updated slot.
-func (belt *PartyBelt) notifySlotUpdated(slot int, monster Monster) {
+func (belt *PartyBelt) notifySlotUpdated(slot int, monster *Monster) {
 	for _, listener := range belt.listeners {
 		listener.Updated(slot, monster)
 	}
@@ -163,12 +180,26 @@ func (belt *PartyBelt) RemoveListener(listener PartyBeltUpdateListener) {
 }
 
 // Updated sends a visual update to the Session.
-func (listener *PartyBeltSessionListener) Updated(slot int, monster Monster) {
-	listener.session.QueueEvent(&transport.SetPartySlot{
-		Slot:            byte(slot),
-		MonsterID:       uint16(monster.ID),
-		Gender:          byte(monster.Gender),
-		Coloration:      byte(monster.Coloration),
-		StatusCondition: byte(monster.StatusCondition),
-	})
+func (listener *PartyBeltSessionListener) Updated(slot int, monster *Monster) {
+	if monster == nil {
+		listener.session.QueueEvent(&transport.SetPartySlot{
+			Slot:      byte(slot),
+			MonsterID: 65535,
+		})
+	} else {
+		listener.session.QueueEvent(&transport.SetPartySlot{
+			Slot:            byte(slot),
+			MonsterID:       uint16(monster.ModelID),
+			Gender:          byte(monster.Gender),
+			Coloration:      byte(monster.Coloration),
+			StatusCondition: byte(monster.StatusCondition),
+		})
+	}
+}
+
+// switchPartySlots is a message handler for the SwitchPartySlots command
+func switchPartySlots() switchPartySlotsHandler {
+	return func(plr *Player, slotFrom, slotTo int) error {
+		return plr.PartyBelt().Swap(slotFrom, slotTo)
+	}
 }

@@ -71,6 +71,11 @@ func (plr *Player) Cycle() bool {
 	return true
 }
 
+// SetBicycleType updates the type of bicycle the Player owns.
+func (plr *Player) SetBicycleType(b BicycleType) {
+	plr.GetComponent(BicycleTag).(*BicycleComponent).BicycleType = b
+}
+
 // DisplayName returns the player's display name.
 func (plr *Player) DisplayName() character.DisplayName {
 	return plr.GetComponent(UsernameTag).(*UsernameComponent).DisplayName
@@ -80,6 +85,11 @@ func (plr *Player) DisplayName() character.DisplayName {
 // associated with.
 func (plr *Player) Rank() character.UserGroup {
 	return plr.GetComponent(RankTag).(*RankComponent).UserGroup
+}
+
+// BicycleType returns the type of Bicycle the player owns.
+func (plr *Player) BicycleType() BicycleType {
+	return plr.GetComponent(BicycleTag).(*BicycleComponent).BicycleType
 }
 
 // Position returns the player's current Position on the game map.

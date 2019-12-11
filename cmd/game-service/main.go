@@ -96,6 +96,7 @@ var gameCodec = client.NewCodec().
 	Include(gameTransport.ResetCameraConfig).
 	Include(gameTransport.AttachFollowerConfig).
 	Include(gameTransport.ClearFollowerConfig).
+	Include(gameTransport.SwitchPartySlotsConfig).
 	Include(gameTransport.ChangeMovementTypeConfig).
 	Include(gameTransport.ClickTeleportConfig).
 	Include(gameTransport.CloseDialogueConfig).

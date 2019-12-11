@@ -20,6 +20,8 @@ type attachFollowerHandler func(plr *Player, slot int) error
 
 type clearFollowerHandler func(plr *Player) error
 
+type switchPartySlotsHandler func(plr *Player, slotFrom, slotTo int) error
+
 type selectPlayerOptionHandler func(plr *Player, entityID entity.ID, slot int) error
 
 type continueDialogueHandler func(plr *Player) error
@@ -45,6 +47,7 @@ type InboundNetworkProcessor struct {
 
 	handleAttachFollower     attachFollowerHandler
 	handleClearFollower      clearFollowerHandler
+	handleSwitchPartySlot    switchPartySlotsHandler
 	handleContinueDialogue   continueDialogueHandler
 	handleChatCommandSubmit  submitChatCommandHandler
 	handleClickTeleport      clickTeleportHandler
@@ -70,6 +73,12 @@ func withAttachFollowerHandler(handler attachFollowerHandler) commandHandlerOpti
 func withClearFollowerHandler(handler clearFollowerHandler) commandHandlerOption {
 	return func(processor *InboundNetworkProcessor) {
 		processor.handleClearFollower = handler
+	}
+}
+
+func withSwitchPartySlotHandler(handler switchPartySlotsHandler) commandHandlerOption {
+	return func(processor *InboundNetworkProcessor) {
+		processor.handleSwitchPartySlot = handler
 	}
 }
 
@@ -190,29 +199,36 @@ func (processor *InboundNetworkProcessor) Update(world *entity.World, deltaTime 
 				break
 			}
 
+			var err error
 			switch cmd := command.(type) {
 			case *transport.AttachFollower:
-				processor.handleAttachFollower(&Player{ent}, int(cmd.PartySlot))
+				err = processor.handleAttachFollower(session.Player, int(cmd.PartySlot))
 			case *transport.ClearFollower:
-				processor.handleClearFollower(&Player{ent})
+				err = processor.handleClearFollower(session.Player)
 			case *transport.SubmitChatCommand:
-				processor.handleChatCommandSubmit(&Player{ent}, cmd.Trigger, cmd.Arguments)
+				err = processor.handleChatCommandSubmit(session.Player, cmd.Trigger, cmd.Arguments)
+			case *transport.SwitchPartySlots:
+				err = processor.handleSwitchPartySlot(session.Player, int(cmd.SlotFrom), int(cmd.SlotTo))
 			case *transport.FaceDirection:
-				processor.handleFaceDirection(&Player{ent}, Direction(cmd.Direction))
+				err = processor.handleFaceDirection(session.Player, Direction(cmd.Direction))
 			case *transport.ChangeMovementType:
-				processor.handleMovementTypeChange(&Player{ent}, MovementType(cmd.Type))
+				err = processor.handleMovementTypeChange(session.Player, MovementType(cmd.Type))
 			case *transport.MoveAvatar:
-				processor.handleAvatarMove(&Player{ent}, Direction(cmd.Direction))
+				err = processor.handleAvatarMove(session.Player, Direction(cmd.Direction))
 			case *transport.ClickTeleport:
-				processor.handleClickTeleport(&Player{ent}, int(cmd.MapX), int(cmd.MapZ), int(cmd.LocalX), int(cmd.LocalZ))
+				err = processor.handleClickTeleport(session.Player, int(cmd.MapX), int(cmd.MapZ), int(cmd.LocalX), int(cmd.LocalZ))
 			case *transport.SelectPlayerOption:
-				processor.handlePlayerOptionSelect(&Player{ent}, entity.ID(cmd.PID), int(cmd.Option))
+				err = processor.handlePlayerOptionSelect(session.Player, entity.ID(cmd.PID), int(cmd.Option))
 			case *transport.ContinueDialogue:
-				processor.handleContinueDialogue(&Player{ent})
+				err = processor.handleContinueDialogue(session.Player)
 			case *transport.InteractWithEntity:
-				processor.handleEntityInteraction(&Player{ent}, entity.ID(cmd.PID))
+				err = processor.handleEntityInteraction(session.Player, entity.ID(cmd.PID))
 			default:
-				processor.Logger.Errorf("Unexpected session command type of %v", reflect.TypeOf(cmd))
+				processor.Logger.Errorf("Unexpected session command of type %v", reflect.TypeOf(cmd))
+			}
+
+			if err != nil {
+				processor.Logger.Errorf("Error whilst processing command of type %v: %v", reflect.TypeOf(command), err)
 			}
 		}
 	}

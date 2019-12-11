@@ -1,8 +1,6 @@
 package game
 
 import (
-	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
-
 	"gitlab.com/pokesync/game-service/internal/game-service/account"
 	"gitlab.com/pokesync/game-service/internal/game-service/client"
 )
@@ -21,7 +19,7 @@ type Session struct {
 	config SessionConfig
 
 	Email  account.Email
-	Entity *entity.Entity
+	Player *Player
 
 	commands chan client.Message
 	events   chan client.Message
@@ -33,18 +31,38 @@ type SessionRegistry struct {
 }
 
 // NewSession constructs a new instance of a Session.
-func NewSession(cl *client.Client, config SessionConfig, email account.Email, entity *entity.Entity) *Session {
+func NewSession(cl *client.Client, config SessionConfig, email account.Email, player *Player) *Session {
 	session := &Session{
 		client: cl,
 
 		config: config,
 
 		Email:  email,
-		Entity: entity,
+		Player: player,
 
 		commands: make(chan client.Message, config.CommandLimit),
 		events:   make(chan client.Message, config.EventLimit),
 	}
+
+	return session
+}
+
+// NewInstalledSession constructs a new Session that installs listeners
+// into the given Player's components.
+func NewInstalledSession(cl *client.Client, config SessionConfig, email account.Email, plr *Player) *Session {
+	session := NewSession(cl, config, email, plr)
+
+	plr.
+		GetComponent(MapViewTag).(*MapViewComponent).MapView.
+		AddListener(&MapViewSessionListener{session: session})
+
+	plr.
+		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.
+		AddListener(&CoinBagSessionListener{session: session})
+
+	plr.
+		GetComponent(PartyBeltTag).(*PartyBeltComponent).PartyBelt.
+		AddListener(&PartyBeltSessionListener{session: session})
 
 	return session
 }

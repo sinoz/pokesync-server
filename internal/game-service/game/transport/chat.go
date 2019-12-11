@@ -23,7 +23,8 @@ func (message *SubmitChatCommand) Demarshal(packet *client.Packet) {
 
 	message.Trigger, _ = itr.ReadCString()
 	for i := 0; itr.IsReadable(); i++ {
-		message.Arguments[i], _ = itr.ReadCString()
+		argument, _ := itr.ReadCString()
+		message.Arguments = append(message.Arguments, argument)
 	}
 }
 

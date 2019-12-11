@@ -97,6 +97,7 @@ const (
 var messageTopicsOfInterest = []client.Topic{
 	AuthenticationEventTopic,
 	transport.AttachFollowerConfig.Topic,
+	transport.SwitchPartySlotsConfig.Topic,
 	transport.ChangeMovementTypeConfig.Topic,
 	transport.MoveAvatarConfig.Topic,
 	transport.ClearFollowerConfig.Topic,
@@ -164,7 +165,7 @@ func NewService(config Config, routing *client.Router, characterProvider Charact
 // NewGame constructs a new Game.
 func NewGame(config Config, assets *AssetBundle, logger *zap.SugaredLogger) *Game {
 	world := entity.NewWorld(config.EntityLimit)
-	entityFactory := NewEntityFactory(assets)
+	entityFactory := NewEntityFactory(world, assets)
 	eventBus := event.NewSerialBus()
 	chatCommands := NewChatCommandRegistry()
 
@@ -181,6 +182,7 @@ func NewGame(config Config, assets *AssetBundle, logger *zap.SugaredLogger) *Gam
 
 		withAttachFollowerHandler(attachFollower()),
 		withClearFollowerHandler(clearFollower()),
+		withSwitchPartySlotHandler(switchPartySlots()),
 		withClickTeleportHandler(clickTeleport()),
 		withContinueDialogueHandler(continueDialogue()),
 		withSelectPlayerOptionHandler(selectPlayerOption()),
@@ -292,32 +294,22 @@ func (service *Service) handleMail(mail client.Mail) {
 			return
 		}
 
-		service.game.RemovePlayer(session.Entity)
-		service.characterSaver(session.Email, service.transformEntityToCharacterProfile(session.Entity))
+		service.game.RemovePlayer(session.Player)
+		service.characterSaver(session.Email, service.transformPlayerToCharacterProfile(session.Player))
 
 	default:
 		service.logger.Errorf("unexpected message received of type %v", reflect.TypeOf(message))
 	}
 }
 
-// transformEntityToCharacterProfile transforms the given Entity instance
+// transformPlayerToCharacterProfile transforms the given Player instance
 // into a character Profile that can then be persisted.
-func (service *Service) transformEntityToCharacterProfile(entity *entity.Entity) *character.Profile {
-	usernameComponent := entity.GetComponent(UsernameTag).(*UsernameComponent)
-	displayName := usernameComponent.DisplayName
-
-	rankComponent := entity.GetComponent(RankTag).(*RankComponent)
-	userGroup := rankComponent.UserGroup
-
-	transformComponent := entity.GetComponent(TransformTag).(*TransformComponent)
-	position := transformComponent.MovementQueue.Position
-
-	bicycleComponent := entity.GetComponent(BicycleTag).(*BicycleComponent)
-	bicycleType := bicycleComponent.BicycleType
-
-	coinBagComponent := entity.GetComponent(CoinBagTag).(*CoinBagComponent)
-	pokedollars := coinBagComponent.CoinBag.Dollars
-	donatorPoints := coinBagComponent.CoinBag.DonatorPoints
+func (service *Service) transformPlayerToCharacterProfile(player *Player) *character.Profile {
+	displayName := player.DisplayName()
+	userGroup := player.Rank()
+	position := player.Position()
+	bicycleType := player.BicycleType()
+	coinBag := player.CoinBag()
 
 	lastLoggedIn := time.Now()
 
@@ -329,8 +321,8 @@ func (service *Service) transformEntityToCharacterProfile(entity *entity.Entity)
 		Gender:      0,
 		BicycleType: int(bicycleType),
 
-		PokeDollars:   pokedollars,
-		DonatorPoints: donatorPoints,
+		PokeDollars:   coinBag.Dollars,
+		DonatorPoints: coinBag.DonatorPoints,
 
 		MapX:   position.MapX,
 		MapZ:   position.MapZ,
@@ -383,31 +375,23 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 		LocalZ: character.LocalZ,
 	}
 
-	plr, ok := service.game.AddPlayer(position, Gender(character.Gender), character.DisplayName, character.UserGroup)
-	if !ok {
+	plr := service.game.CreatePlayer(position, Gender(character.Gender), character.DisplayName, character.UserGroup)
+	if ok := service.game.AddPlayer(plr); !ok {
 		cl.SendNow(&transport.WorldFull{})
 		cl.Terminate()
 
 		return
 	}
 
-	session := service.createNewInstalledSession(cl, service.config.SessionConfig, account.Email, plr)
+	session := NewInstalledSession(cl, service.config.SessionConfig, account.Email, plr)
 	service.sessions.Put(cl.ID, session)
 
 	plr.Add(&SessionComponent{session: session})
 
-	coinBagComponent := plr.GetComponent(CoinBagTag).(*CoinBagComponent)
-	coinBagComponent.CoinBag.AddPokeDollars(character.PokeDollars)
-	coinBagComponent.CoinBag.AddDonatorPoints(character.DonatorPoints)
+	plr.CoinBag().AddPokeDollars(character.PokeDollars)
+	plr.CoinBag().AddDonatorPoints(character.DonatorPoints)
 
-	plr.
-		GetComponent(PartyBeltTag).(*PartyBeltComponent).PartyBelt.
-		Add(&Monster{
-			ID: MonsterID(150),
-		})
-
-	bicycleComponent := plr.GetComponent(BicycleTag).(*BicycleComponent)
-	bicycleComponent.BicycleType = BicycleType(character.BicycleType)
+	plr.SetBicycleType(BicycleType(character.BicycleType))
 
 	cl.SendNow(&transport.LoginSuccess{
 		PID:         uint16(plr.ID),
@@ -430,72 +414,54 @@ func (service *Service) onCharacterLoaded(cl *client.Client, account account.Acc
 	})
 }
 
-// createNewInstalledSession constructs a new Session that installs listeners
-// into the given Entity's components.
-func (service *Service) createNewInstalledSession(cl *client.Client, config SessionConfig, email account.Email, entity *entity.Entity) *Session {
-	session := NewSession(cl, config, email, entity)
-
-	entity.
-		GetComponent(MapViewTag).(*MapViewComponent).MapView.
-		AddListener(&MapViewSessionListener{session: session})
-
-	entity.
-		GetComponent(CoinBagTag).(*CoinBagComponent).CoinBag.
-		AddListener(&CoinBagSessionListener{session: session})
-
-	entity.
-		GetComponent(PartyBeltTag).(*PartyBeltComponent).PartyBelt.
-		AddListener(&PartyBeltSessionListener{session: session})
-
-	return session
+// CreatePlayer creates a new Player-like Entity.
+func (game *Game) CreatePlayer(position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) *Player {
+	return PlayerBy(game.entityFactory.CreatePlayer(position, gender, displayName, userGroup))
 }
 
-// AddPlayer adds a player Entity with the specified details.
-func (game *Game) AddPlayer(position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) (*entity.Entity, bool) {
-	components := game.entityFactory.CreatePlayer(position, gender, displayName, userGroup)
-
-	return game.
-		world.
-		CreateEntity().
-		With(components...).
-		Build()
+// CreateNpc creates a new Npc-like Entity.
+func (game *Game) CreateNpc(modelID ModelID, position Position) *Npc {
+	return NpcBy(game.entityFactory.CreateNpc(position, modelID))
 }
 
-// AddNpc adds a npc-like Entity with the specified details.
-func (game *Game) AddNpc(modelID ModelID, position Position) (*entity.Entity, bool) {
-	components := game.entityFactory.CreateNpc(position, modelID)
-
-	return game.
-		world.
-		CreateEntity().
-		With(components...).
-		Build()
+// CreateMonster creates a new Monster-like Entity.
+func (game *Game) CreateMonster(position Position, data MonsterData) *Monster {
+	return MonsterBy(game.entityFactory.CreateMonster(position, data.ModelID), data)
 }
 
-// AddMonster adds a monster-like Entity with the specified details.
-func (game *Game) AddMonster(modelID ModelID, position Position) (*entity.Entity, bool) {
-	components := game.entityFactory.CreateMonster(position, modelID)
-
-	return game.
-		world.
-		CreateEntity().
-		With(components...).
-		Build()
+// AddPlayer attempts to add the given Player to the game world.
+func (game *Game) AddPlayer(plr *Player) bool {
+	return game.AddEntity(plr.Entity)
 }
 
 // RemovePlayer removes the given Player-like entity.
-func (game *Game) RemovePlayer(entity *entity.Entity) {
-	game.RemoveEntity(entity)
+func (game *Game) RemovePlayer(plr *Player) {
+	game.RemoveEntity(plr.Entity)
+}
+
+// AddNpc attempts to add the given Npc to the game world.
+func (game *Game) AddNpc(npc *Npc) bool {
+	return game.AddEntity(npc.Entity)
 }
 
 // RemoveNpc removes the given Npc-like entity.
-func (game *Game) RemoveNpc(entity *entity.Entity) {
-	game.RemoveEntity(entity)
+func (game *Game) RemoveNpc(npc *Npc) {
+	game.RemoveEntity(npc.Entity)
+}
+
+// AddMonster attempts to add the given Monster to the game world.
+func (game *Game) AddMonster(monster *Monster) bool {
+	return game.AddEntity(monster.Entity)
 }
 
 // RemoveMonster removes the given Monster-like entity.
-func (game *Game) RemoveMonster(entity *entity.Entity) {
-	game.RemoveEntity(entity)
+func (game *Game) RemoveMonster(monster *Monster) {
+	game.RemoveEntity(monster.Entity)
+}
+
+// AddEntity attempts to add the given Entity to the game world.
+func (game *Game) AddEntity(entity *entity.Entity) bool {
+	return game.world.AddEntity(entity)
 }
 
 // RemoveEntity removes the given Entity from the game world.

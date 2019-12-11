@@ -24,19 +24,23 @@ type MonsterColoration int
 // StatusCondition describes a condition a monster is in.
 type StatusCondition int
 
-// Monster is a type of Entity.
-type Monster struct {
-	*entity.Entity
-
-	ID              MonsterID
+// MonsterData holds data about a monster, duh.
+type MonsterData struct {
+	ModelID         ModelID
 	Gender          Gender
 	StatusCondition StatusCondition
 	Coloration      MonsterColoration
 }
 
+// Monster is a type of Entity.
+type Monster struct {
+	*entity.Entity
+	*MonsterData
+}
+
 // MonsterBy wraps the given Entity as a Monster.
-func MonsterBy(entity *entity.Entity, id MonsterID, gender Gender, condition StatusCondition, coloration MonsterColoration) *Monster {
-	return &Monster{entity, id, gender, condition, coloration}
+func MonsterBy(entity *entity.Entity, data MonsterData) *Monster {
+	return &Monster{entity, &data}
 }
 
 // Face updates the Monster's sprite to face the specified direction.

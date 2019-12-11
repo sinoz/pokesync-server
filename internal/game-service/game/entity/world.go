@@ -35,9 +35,15 @@ func NewWorld(capacity int) *World {
 	return world
 }
 
-// CreateEntity schedules the given Entity to be added to the world.
+// CreateEntity returns a Builder that can be used to create a new
+// Entity with.
 func (world *World) CreateEntity() *Builder {
 	return newBuilder(world)
+}
+
+// AddEntity schedules the given Entity to be added to the world.
+func (world *World) AddEntity(entity *Entity) bool {
+	return world.entityManager.add(entity)
 }
 
 // DestroyEntity schedules the given Entity to be removed from the world.

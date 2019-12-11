@@ -273,15 +273,6 @@ func takeMovementSimulationStep(ent *entity.Entity, movementQueue *MovementQueue
 	return nil
 }
 
-func cake(destination Position, routeFinder RouteFinder) (chan<- bool, <-chan Direction) {
-	abort := make(chan bool, 1)
-	steps := make(chan Direction)
-
-	// TODO
-
-	return abort, steps
-}
-
 // MoveTo sets the given point on the map as the target for the Entity
 // to walk towards. The route to reach the target destination is progressively
 // generated on every movement tick.

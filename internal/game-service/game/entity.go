@@ -27,56 +27,64 @@ type Gender int
 
 // EntityFactory is in charge of producing different types of entities.
 type EntityFactory struct {
+	world  *entity.World
 	assets *AssetBundle
 }
 
 // NewEntityFactory constructs a new EntityFactory to produce entities with.
-func NewEntityFactory(assets *AssetBundle) *EntityFactory {
-	return &EntityFactory{assets: assets}
+func NewEntityFactory(world *entity.World, assets *AssetBundle) *EntityFactory {
+	return &EntityFactory{
+		world:  world,
+		assets: assets,
+	}
 }
 
 // CreatePlayer creates the set of Component's to create a Player-like Entity from.
-func (factory *EntityFactory) CreatePlayer(position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) []entity.Component {
-	return []entity.Component{
-		&TransformComponent{MovementQueue: NewMovementQueue(position)},
-		&UsernameComponent{DisplayName: displayName},
-		&RankComponent{UserGroup: userGroup},
-		&TrackingComponent{},
-		&MapViewComponent{MapView: NewMapView()},
-		&BicycleComponent{BicycleType: NoBike},
-		&CanRunComponent{},
-		&KindComponent{Kind: PlayerKind},
-		&CoinBagComponent{CoinBag: NewCoinBag()},
-		&PartyBeltComponent{PartyBelt: NewPartyBelt()},
-		&WaryOfTimeComponent{},
-	}
+func (factory *EntityFactory) CreatePlayer(position Position, gender Gender, displayName character.DisplayName, userGroup character.UserGroup) *entity.Entity {
+	return factory.world.
+		CreateEntity().
+		With(&TransformComponent{MovementQueue: NewMovementQueue(position)}).
+		With(&UsernameComponent{DisplayName: displayName}).
+		With(&RankComponent{UserGroup: userGroup}).
+		With(&TrackingComponent{}).
+		With(&MapViewComponent{MapView: NewMapView()}).
+		With(&BicycleComponent{BicycleType: NoBike}).
+		With(&CanRunComponent{}).
+		With(&KindComponent{Kind: PlayerKind}).
+		With(&CoinBagComponent{CoinBag: NewCoinBag()}).
+		With(&PartyBeltComponent{PartyBelt: NewPartyBelt()}).
+		With(&WaryOfTimeComponent{}).
+		Build()
 }
 
 // CreateNpc creates the set of Component's to create a Npc-like Entity from.
-func (factory *EntityFactory) CreateNpc(position Position, modelID ModelID) []entity.Component {
-	return []entity.Component{
-		&ModelIDComponent{ModelID: modelID},
-		&TransformComponent{MovementQueue: NewMovementQueue(position)},
-		&KindComponent{Kind: NpcKind},
-		&BlockingComponent{},
-		&TrackingComponent{},
-	}
+func (factory *EntityFactory) CreateNpc(position Position, modelID ModelID) *entity.Entity {
+	return factory.world.
+		CreateEntity().
+		With(&ModelIDComponent{ModelID: modelID}).
+		With(&TransformComponent{MovementQueue: NewMovementQueue(position)}).
+		With(&KindComponent{Kind: NpcKind}).
+		With(&BlockingComponent{}).
+		With(&TrackingComponent{}).
+		Build()
 }
 
 // CreateMonster creates the set of Component's to create a Monster-like Entity from.
-func (factory *EntityFactory) CreateMonster(position Position, modelID ModelID) []entity.Component {
-	return []entity.Component{
-		&ModelIDComponent{ModelID: modelID},
-		&TransformComponent{MovementQueue: NewMovementQueue(position)},
-		&TrackingComponent{},
-		&HealthComponent{Max: 1, Current: 1}, // TODO
-		&KindComponent{Kind: MonsterKind},
-	}
+func (factory *EntityFactory) CreateMonster(position Position, modelID ModelID) *entity.Entity {
+	return factory.world.
+		CreateEntity().
+		With(&ModelIDComponent{ModelID: modelID}).
+		With(&TransformComponent{MovementQueue: NewMovementQueue(position)}).
+		With(&TrackingComponent{}).
+		With(&HealthComponent{Max: 1, Current: 1}). // TODO
+		With(&KindComponent{Kind: MonsterKind}).
+		Build()
 }
 
 // CreateObject creates the set of Component's to create a Object-like Entity from.
-func (factory *EntityFactory) CreateObject(position Position) []entity.Component {
-	return []entity.Component{
-		&TransformComponent{MovementQueue: NewMovementQueue(position)},
-	}
+func (factory *EntityFactory) CreateObject(position Position) *entity.Entity {
+	return factory.world.
+		CreateEntity().
+		With(&TransformComponent{MovementQueue: NewMovementQueue(position)}).
+		Build()
 }

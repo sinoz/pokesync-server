@@ -97,8 +97,14 @@ func newManager(capacity int) *Manager {
 	return &Manager{list: NewList(capacity)}
 }
 
-// With includes the given series of Component's in the building process of an Entity.
-func (bldr *Builder) With(components ...Component) *Builder {
+// With includes the given of Component in the building process of an Entity.
+func (bldr *Builder) With(component Component) *Builder {
+	bldr.components = append(bldr.components, component)
+	return bldr
+}
+
+// Include includes the given series of Component's in the building process of an Entity.
+func (bldr *Builder) Include(components ...Component) *Builder {
 	for _, component := range components {
 		bldr.components = append(bldr.components, component)
 	}
@@ -109,8 +115,8 @@ func (bldr *Builder) With(components ...Component) *Builder {
 // Build schedules the building-and registration process of an Entity to
 // be ran by the World. Returns the Entity that has been built and a boolean
 // on whether the Entity is going to be successfully added or not.
-func (bldr *Builder) Build() (*Entity, bool) {
-	return bldr.world.entityManager.add(bldr.components)
+func (bldr *Builder) Build() *Entity {
+	return bldr.world.entityManager.create(bldr.components)
 }
 
 // Add adds the given Component to this entity's typePack of components
@@ -206,25 +212,31 @@ func (entity *Entity) GetTypePack() int {
 	return entity.typePack
 }
 
-// add schedules the given Entity to be added to this entity manager.
-func (manager *Manager) add(components []Component) (*Entity, bool) {
-	id, ok := manager.list.GetAvailableID()
-	if !ok {
-		return nil, false
-	}
-
+// create creates a new entity with the specified components. Fails if
+// no ID is available for a new entity, which indicates that the world
+// has reached its capacity.
+func (manager *Manager) create(components []Component) *Entity {
 	entity := NewEntity()
-
-	entity.ID = id
-	entity.install(&componentListener{manager: manager})
-
 	for _, component := range components {
 		entity.Add(component)
 	}
 
+	return entity
+}
+
+// add schedules the given Entity to be added to this entity manager.
+// Fails if no ID is available for a new entity, which indicates that
+// the world has reached its capacity.
+func (manager *Manager) add(entity *Entity) bool {
+	id, ok := manager.list.GetAvailableID()
+	if !ok {
+		return false
+	}
+
+	entity.ID = id
 	manager.entitiesToAdd = append(manager.entitiesToAdd, addition{entity: entity})
 
-	return entity, true
+	return true
 }
 
 // remove schedules the given Entity to be removed from this entity manager.
@@ -269,6 +281,8 @@ func (manager *Manager) update(deltaTime time.Duration) error {
 		if !empty {
 			return fmt.Errorf("entity ID %v already in use", addition.entity.ID)
 		}
+
+		addition.entity.install(&componentListener{manager: manager})
 
 		manager.list.Insert(addition.entity.ID, addition.entity)
 		manager.notifyEntityAdded(addition.entity)

@@ -2,7 +2,6 @@ package game
 
 import (
 	"time"
-	"fmt"
 
 	"gitlab.com/pokesync/game-service/internal/game-service/game/entity"
 	"gitlab.com/pokesync/game-service/internal/game-service/game/transport"
@@ -135,7 +134,6 @@ func (processor *DayNightProcessor) Update(world *entity.World, deltaTime time.D
 	processor.clock.Pulse()
 
 	entities := world.GetEntitiesFor(processor)
-	fmt.Println(len(entities))
 	for _, ent := range entities {
 		sessionComponent := ent.GetComponent(SessionTag).(*SessionComponent)
 

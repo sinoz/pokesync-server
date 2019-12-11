@@ -7,4 +7,6 @@ import (
 // Module is an externally defined module to subscribe chat commands with.
 func Module(dk *game.DependencyKit) {
 	dk.OnCommand("pos", showPosition)
+	dk.OnCommand("addparty", addToParty)
+	dk.OnCommand("clearparty", clearParty)
 }

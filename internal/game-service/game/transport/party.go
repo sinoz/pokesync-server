@@ -6,6 +6,12 @@ import (
 )
 
 var (
+	SwitchPartySlotsConfig = client.MessageConfig{
+		Kind:  client.SwitchPartySlots,
+		Topic: "switch_party_slots",
+		New:   func() client.Message { return &SetPartySlot{} },
+	}
+
 	SetPartySlotConfig = client.MessageConfig{
 		Kind:  client.SetPartySlot,
 		Topic: "set_party_slot",
@@ -13,12 +19,37 @@ var (
 	}
 )
 
+type SwitchPartySlots struct {
+	SlotFrom byte
+	SlotTo   byte
+}
+
 type SetPartySlot struct {
 	Slot            byte
 	MonsterID       uint16
 	Gender          byte
 	Coloration      byte
 	StatusCondition byte
+}
+
+func (message *SwitchPartySlots) Demarshal(packet *client.Packet) {
+	itr := packet.Bytes.Iterator()
+
+	message.SlotFrom, _ = itr.ReadByte()
+	message.SlotTo, _ = itr.ReadByte()
+}
+
+func (message *SwitchPartySlots) Marshal() *bytes.String {
+	bldr := bytes.NewDefaultBuilder()
+
+	bldr.WriteByte(message.SlotFrom)
+	bldr.WriteByte(message.SlotTo)
+
+	return bldr.Build()
+}
+
+func (message *SwitchPartySlots) GetConfig() client.MessageConfig {
+	return SwitchPartySlotsConfig
 }
 
 func (message *SetPartySlot) Demarshal(packet *client.Packet) {
